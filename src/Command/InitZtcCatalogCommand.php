@@ -298,6 +298,7 @@ class InitZtcCatalogCommand extends Command
             /** @var Product $product */
             $product = $this->productFactory->createNew();
             $product->setCode($code);
+            $product->setEnabled(true);
             $product->setMainTaxon($taxon);
 
             foreach ($translations as $locale => $data) {
@@ -331,6 +332,13 @@ class InitZtcCatalogCommand extends Command
 
             $this->entityManager->persist($product);
         } else {
+            $product->setEnabled(true);
+            $product->setMainTaxon($taxon);
+
+            if ($channel && !$product->hasChannel($channel)) {
+                $product->addChannel($channel);
+            }
+
             foreach ($translations as $locale => $data) {
                 $this->addProductTranslation($product, $locale, $data['name'], $data['description']);
             }
@@ -348,18 +356,21 @@ class InitZtcCatalogCommand extends Command
             $variant = $this->productVariantFactory->createNew();
             $variant->setCode($code . '-default');
             $variant->setProduct($product);
+            $product->addVariant($variant);
+            $this->entityManager->persist($variant);
+        }
 
-            if ($channel) {
+        /** @var ProductVariantInterface $variant */
+        foreach ($product->getVariants() as $variant) {
+            if ($channel && !$variant->hasChannelPricingForChannel($channel)) {
                 /** @var ChannelPricingInterface $channelPricing */
                 $channelPricing = $this->channelPricingFactory->createNew();
                 $channelPricing->setChannelCode($channel->getCode());
                 $channelPricing->setPrice($priceInCents);
                 $channelPricing->setProductVariant($variant);
                 $variant->addChannelPricing($channelPricing);
+                $this->entityManager->persist($channelPricing);
             }
-
-            $product->addVariant($variant);
-            $this->entityManager->persist($variant);
         }
     }
 
