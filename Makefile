@@ -8,11 +8,7 @@ ENV ?= "dev"
 
 init:
 	@make -s docker-compose-check
-	@if [ "$$(id -u)" = "0" ]; then \
-		echo "Running as root (WSL2/Linux) - preparing permissions for Docker containers..."; \
-		chmod -R 777 var/ public/ 2>/dev/null || true; \
-		chown -R 1000:1000 vendor/ node_modules/ 2>/dev/null || true; \
-	fi
+	@chmod -R 777 var/ public/ 2>/dev/null || true
 	@if [ ! -e compose.override.yml ]; then \
 		cp compose.override.dist.yml compose.override.yml; \
 	fi
@@ -35,7 +31,8 @@ down:
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) down
 
 install:
-	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php bin/console sylius:install -s default -n
+	@chmod -R 777 var/ public/ 2>/dev/null || true
+	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) run --rm php bin/console sylius:install -s ztc -n
 
 clean:
 	@ENV=$(ENV) DOCKER_USER=$(DOCKER_USER) $(DOCKER_COMPOSE) down -v

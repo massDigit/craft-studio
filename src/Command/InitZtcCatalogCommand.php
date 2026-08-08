@@ -6,6 +6,7 @@ namespace App\Command;
 
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductAudio;
+use App\Entity\Product\ProductImage;
 use App\Entity\Product\ProductTaxon;
 use App\Entity\Product\ProductTranslation;
 use App\Entity\Taxonomy\TaxonTranslation;
@@ -23,7 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(
     name: 'ztc:catalog:init',
-    description: 'Initialise les taxons et créations de démonstration ZEN TOO Craft (traductions fr & en)'
+    description: 'Initialise les taxons, images et créations ZEN TOO Craft'
 )]
 class InitZtcCatalogCommand extends Command
 {
@@ -43,7 +44,7 @@ class InitZtcCatalogCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Initialisation du catalogue ZEN TOO Craft (Français & Anglais)...</info>');
+        $output->writeln('<info>Initialisation du catalogue et des visuels ZEN TOO Craft...</info>');
 
         /** @var ChannelInterface|null $channel */
         $channel = $this->channelRepository->findOneBy([]);
@@ -111,6 +112,7 @@ class InitZtcCatalogCommand extends Command
             $instrumentsTaxon,
             $channel,
             18000,
+            'flute_shakuhachi.jpeg',
             'demo_shakuhachi.mp3'
         );
 
@@ -129,7 +131,8 @@ class InitZtcCatalogCommand extends Command
             ],
             $luminairesTaxon,
             $channel,
-            24000
+            24000,
+            'luminaire_ombre.jpeg'
         );
 
         // Sample Product 3: Totem Végétal
@@ -152,7 +155,7 @@ class InitZtcCatalogCommand extends Command
 
         $this->entityManager->flush();
 
-        $output->writeln('<info>Catalogue ZEN TOO Craft bilingue (fr & en) initialisé avec succès !</info>');
+        $output->writeln('<info>Catalogue et visuels produits ZEN TOO Craft initialisés avec succès !</info>');
 
         return Command::SUCCESS;
     }
@@ -195,6 +198,7 @@ class InitZtcCatalogCommand extends Command
         TaxonInterface $taxon,
         ?ChannelInterface $channel,
         int $priceInCents = 10000,
+        ?string $imageFileName = null,
         ?string $audioFileName = null
     ): void {
         /** @var Product|null $product */
@@ -218,6 +222,13 @@ class InitZtcCatalogCommand extends Command
                 $product->addChannel($channel);
             }
 
+            if ($imageFileName) {
+                $image = new ProductImage();
+                $image->setPath($imageFileName);
+                $image->setType('main');
+                $product->addImage($image);
+            }
+
             if ($audioFileName) {
                 $audio = new ProductAudio();
                 $audio->setPath($audioFileName);
@@ -229,9 +240,15 @@ class InitZtcCatalogCommand extends Command
 
             $this->entityManager->persist($product);
         } else {
-            // Update translations if product exists
             foreach ($translations as $locale => $data) {
                 $this->addProductTranslation($product, $locale, $data['name'], $data['description']);
+            }
+
+            if ($imageFileName && $product->getImages()->isEmpty()) {
+                $image = new ProductImage();
+                $image->setPath($imageFileName);
+                $image->setType('main');
+                $product->addImage($image);
             }
         }
 
