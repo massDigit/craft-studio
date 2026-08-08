@@ -2,6 +2,40 @@ sylius_fixtures:
     suites:
         default:
             fixtures:
+                locale:
+                    options:
+                        locales:
+                            - fr
+                            - en
+                            - en_US
+                currency:
+                    options:
+                        currencies:
+                            - EUR
+                            - USD
+                channel:
+                    options:
+                        custom:
+                            default:
+                                code: ZTC_STORE
+                                name: "ZEN TOO Craft"
+                                locales:
+                                    - fr
+                                    - en
+                                    - en_US
+                                default_locale: fr
+                                currencies:
+                                    - EUR
+                                    - USD
+                                base_currency: EUR
+                admin_user:
+                    options:
+                        custom:
+                            admin:
+                                email: "sylius@example.com"
+                                username: "sylius"
+                                password: "sylius"
+                                enabled: true
                 ztc_catalog:
                     name: ztc_catalog
 
@@ -12,23 +46,26 @@ sylius_fixtures:
                         locales:
                             - fr
                             - en
+                            - en_US
                 currency:
                     options:
                         currencies:
                             - EUR
+                            - USD
                 channel:
                     options:
                         custom:
                             default:
                                 code: ZTC_STORE
                                 name: "ZEN TOO Craft"
-                                hostname: "localhost"
                                 locales:
                                     - fr
                                     - en
+                                    - en_US
                                 default_locale: fr
                                 currencies:
                                     - EUR
+                                    - USD
                                 base_currency: EUR
                 admin_user:
                     options:

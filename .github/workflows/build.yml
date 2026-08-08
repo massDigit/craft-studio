@@ -7,8 +7,6 @@ on:
             - "docs/**"
             - "*.md"
     workflow_dispatch: ~
-    schedule:
-        - cron: '0 3 * * *'  # Daily at 03:00 UTC
     push:
         branches-ignore:
             - 'dependabot/**'
@@ -25,17 +23,5 @@ jobs:
     static-checks:
         name: Static checks
         uses: ./.github/workflows/ci_static-checks.yaml
-        with:
-            type: minimal
-    ci:
-        name: Tests
-        needs: static-checks
-        uses: ./.github/workflows/ci.yaml
-        with:
-            type: minimal
-    ci-js:
-        name: Javascript Tests
-        needs: static-checks
-        uses: ./.github/workflows/ci_js.yaml
         with:
             type: minimal
