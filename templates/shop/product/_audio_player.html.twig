@@ -1,0 +1,73 @@
+{% set primaryAudio = product.primaryAudio %}
+{% if primaryAudio is not null and primaryAudio.path is not empty %}
+    <div class="ztc-audio-player" id="ztc-audio-{{ product.id }}">
+        <audio id="audio-element-{{ product.id }}" src="{{ asset('media/audio/' ~ primaryAudio.path) }}" preload="metadata"></audio>
+        
+        <button type="button" class="ztc-play-btn" onclick="toggleZtcAudio('{{ product.id }}')">
+            <svg id="play-icon-{{ product.id }}" width="14" height="16" viewBox="0 0 14 16" fill="currentColor">
+                <path d="M0 0L14 8L0 16V0Z"/>
+            </svg>
+        </button>
+        
+        <div class="ztc-audio-info">
+            <div class="ztc-audio-title">🎵 {{ primaryAudio.originalName|default('Extrait Sonore Flûte Bambou') }}</div>
+            <div class="ztc-audio-progress-bg" onclick="seekZtcAudio('{{ product.id }}', event)">
+                <div class="ztc-audio-progress-fill" id="progress-fill-{{ product.id }}"></div>
+            </div>
+        </div>
+        
+        <div class="ztc-audio-time" id="time-display-{{ product.id }}">0:00</div>
+    </div>
+
+    <script>
+        if (typeof toggleZtcAudio === 'undefined') {
+            function toggleZtcAudio(id) {
+                const audio = document.getElementById('audio-element-' + id);
+                const icon = document.getElementById('play-icon-' + id);
+                
+                if (audio.paused) {
+                    audio.play();
+                    icon.innerHTML = '<path d="M0 0H4V16H0V0ZM8 0H12V16H8V0Z"/>';
+                } else {
+                    audio.pause();
+                    icon.innerHTML = '<path d="M0 0L14 8L0 16V0Z"/>';
+                }
+            }
+
+            function seekZtcAudio(id, event) {
+                const audio = document.getElementById('audio-element-' + id);
+                const bg = event.currentTarget;
+                const rect = bg.getBoundingClientRect();
+                const pos = (event.clientX - rect.left) / rect.width;
+                if (audio.duration) {
+                    audio.currentTime = pos * audio.duration;
+                }
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('audio[id^="audio-element-"]').forEach(function(audio) {
+                    const id = audio.id.replace('audio-element-', '');
+                    const fill = document.getElementById('progress-fill-' + id);
+                    const display = document.getElementById('time-display-' + id);
+
+                    audio.addEventListener('timeupdate', function() {
+                        if (audio.duration) {
+                            const percent = (audio.currentTime / audio.duration) * 100;
+                            if (fill) fill.style.width = percent + '%';
+                            
+                            const mins = Math.floor(audio.currentTime / 60);
+                            const secs = Math.floor(audio.currentTime % 60);
+                            if (display) display.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+                        }
+                    });
+
+                    audio.addEventListener('ended', function() {
+                        const icon = document.getElementById('play-icon-' + id);
+                        if (icon) icon.innerHTML = '<path d="M0 0L14 8L0 16V0Z"/>';
+                        if (fill) fill.style.width = '0%';
+                    });
+                });
+            });
+        }
+    </script>
+{% endif %}
