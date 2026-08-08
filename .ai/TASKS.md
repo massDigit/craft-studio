@@ -20,9 +20,10 @@
 - [x] Enregistrement de la ressource Sylius `app.product_audio` dans `sylius_resource.yaml`
 - [x] Validation empirique des mappings Doctrine (`doctrine:schema:validate`)
 - [x] Validation empirique de l'injection de dépendances (`lint:container`)
-- [ ] Formulaire d'upload `ProductAudioType` et listener d'événements pour le stockage/nettoyage des fichiers audio
+- [x] Formulaire d'upload `ProductAudioType` et listener d'événements `ProductAudioUploadListener` (stockage & nettoyage `public/media/audio`)
 - [ ] Configuration des Taxons natifs (Familles : Instruments, Décoration, Luminaires)
 - [ ] Configuration des Attributs Produit natifs (Essence de bambou, Dimensions, Accordage Hz)
+
 
 
 ### Phase 4 : Design System & Theme "Sombre Obsidienne & Or"
