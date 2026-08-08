@@ -11,6 +11,7 @@ sylius_fixtures:
                     options:
                         locales:
                             - fr
+                            - en
                 currency:
                     options:
                         currencies:
@@ -24,6 +25,7 @@ sylius_fixtures:
                                 hostname: "localhost"
                                 locales:
                                     - fr
+                                    - en
                                 default_locale: fr
                                 currencies:
                                     - EUR
