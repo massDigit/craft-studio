@@ -7,12 +7,10 @@ sylius_fixtures:
                         locales:
                             - fr
                             - en
-                            - en_US
                 currency:
                     options:
                         currencies:
                             - EUR
-                            - USD
                 channel:
                     options:
                         custom:
@@ -22,11 +20,9 @@ sylius_fixtures:
                                 locales:
                                     - fr
                                     - en
-                                    - en_US
                                 default_locale: fr
                                 currencies:
                                     - EUR
-                                    - USD
                                 base_currency: EUR
                 admin_user:
                     options:
@@ -46,12 +42,10 @@ sylius_fixtures:
                         locales:
                             - fr
                             - en
-                            - en_US
                 currency:
                     options:
                         currencies:
                             - EUR
-                            - USD
                 channel:
                     options:
                         custom:
@@ -61,11 +55,9 @@ sylius_fixtures:
                                 locales:
                                     - fr
                                     - en
-                                    - en_US
                                 default_locale: fr
                                 currencies:
                                     - EUR
-                                    - USD
                                 base_currency: EUR
                 admin_user:
                     options:
