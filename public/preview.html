@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZEN TOO Craft — Artisanat du Bambou, Instruments & Luminaires</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-obsidian: #0D0F0E;
+            --bg-card: rgba(19, 24, 21, 0.85);
+            --bg-card-hover: rgba(28, 36, 31, 0.95);
+            --gold-accent: #D4AF37;
+            --gold-light: #E5C158;
+            --gold-glow: rgba(212, 175, 55, 0.25);
+            --text-primary: #F4EFE6;
+            --text-secondary: #A0A8A2;
+            --text-muted: #656E68;
+            --border-subtle: rgba(212, 175, 55, 0.15);
+            --border-highlight: rgba(212, 175, 55, 0.4);
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --font-heading: 'Outfit', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-obsidian);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(30, 50, 38, 0.2) 0%, transparent 50%);
+        }
+
+        /* Ambient Glow & Bamboo Silhouettes */
+        .bg-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: repeating-linear-gradient(45deg, var(--gold-accent) 0, var(--gold-accent) 1px, transparent 0, transparent 50px);
+        }
+
+        /* Header Navigation */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(13, 15, 14, 0.85);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-subtle);
+            padding: 1.25rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid var(--gold-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px var(--gold-glow);
+            position: relative;
+        }
+
+        .logo-circle::after {
+            content: '';
+            width: 6px;
+            height: 18px;
+            background: var(--gold-accent);
+            border-radius: 3px;
+        }
+
+        .brand-name {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            color: var(--text-primary);
+            text-transform: uppercase;
+        }
+
+        .brand-name span {
+            color: var(--gold-accent);
+            font-weight: 300;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 400;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--gold-light);
+        }
+
+        nav a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gold-accent);
+            border-radius: 2px;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, var(--gold-accent), #b38f20);
+            color: #0d0f0e;
+            padding: 0.65rem 1.4rem;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px var(--gold-glow);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Hero Banner */
+        .hero {
+            position: relative;
+            z-index: 1;
+            padding: 6rem 2rem 4rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .badge-nature {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid var(--border-subtle);
+            border-radius: 20px;
+            color: var(--gold-light);
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 3.5rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 1.25rem;
+            background: linear-gradient(180deg, #FFFFFF 0%, #C5C0B6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            max-width: 680px;
+            margin: 0 auto 2.5rem;
+            color: var(--text-secondary);
+            font-size: 1.15rem;
+            font-weight: 300;
+        }
+
+        /* Family Filters */
+        .filter-section {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            padding: 0.65rem 1.5rem;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-pill:hover, .filter-pill.active {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: var(--gold-accent);
+            color: var(--gold-light);
+        }
+
+        /* Product Catalog Grid */
+        .catalog-grid {
+            max-width: 1200px;
+            margin: 0 auto 6rem;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 2rem;
+        }
+
+        .product-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--border-highlight);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(212, 175, 55, 0.1);
+        }
+
+        .card-image-wrap {
+            position: relative;
+            height: 260px;
+            width: 100%;
+            overflow: hidden;
+            background: #151b17;
+        }
+
+        .card-image-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .product-card:hover .card-image-wrap img {
+            transform: scale(1.06);
+        }
+
+        .card-tag {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(13, 15, 14, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-subtle);
+            color: var(--gold-light);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-title {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 1.25rem;
+            flex-grow: 1;
+        }
+
+        .card-specs {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Audio Player Bar */
+        .audio-player-box {
+            background: rgba(10, 12, 11, 0.9);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
+            padding: 0.75rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .play-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--gold-accent);
+            border: none;
+            color: #0d0f0e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .play-btn:hover {
+            transform: scale(1.08);
+            background: var(--gold-light);
+        }
+
+        .audio-info {
+            flex-grow: 1;
+        }
+
+        .audio-title {
+            font-size: 0.8rem;
+            color: var(--gold-light);
+            font-weight: 500;
+        }
+
+        .audio-bar-bg {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            margin-top: 0.35rem;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .audio-bar-fill {
+            width: 35%;
+            height: 100%;
+            background: var(--gold-accent);
+            border-radius: 2px;
+        }
+
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .status-badge {
+            font-size: 0.8rem;
+            color: #81c784;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #81c784;
+            box-shadow: 0 0 8px #81c784;
+        }
+
+        .btn-inquire {
+            background: transparent;
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-inquire:hover {
+            border-color: var(--gold-accent);
+            color: var(--gold-light);
+            background: rgba(212, 175, 55, 0.08);
+        }
+
+        /* Craft Story Section */
+        .craft-story {
+            max-width: 1200px;
+            margin: 0 auto 6rem;
+            padding: 4rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-lg);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .story-text h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .story-text p {
+            color: var(--text-secondary);
+            margin-bottom: 1.25rem;
+            font-size: 1rem;
+        }
+
+        .story-visual {
+            height: 340px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            background: #18201a;
+            position: relative;
+        }
+
+        .story-visual img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border-subtle);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--gold-accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-pattern"></div>
+
+    <!-- Header Navigation -->
+    <header>
+        <a href="#" class="brand-logo">
+            <div class="logo-circle"></div>
+            <div class="brand-name">ZEN TOO <span>Craft</span></div>
+        </a>
+        <nav>
+            <a href="#" class="active">Créations</a>
+            <a href="#">Instruments</a>
+            <a href="#">Luminaires</a>
+            <a href="#">Savoir-Faire</a>
+            <a href="#">L'Artisan</a>
+            <a href="#" class="cta-btn">Prise de Contact</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="badge-nature">🎋 Bambou & Matériaux Naturels Artisanaux</div>
+        <h1>Matière Brute. Geste Artisanal.<br><span>Créations Singulières.</span></h1>
+        <p>Découvrez nos instruments de musique à vent, flûtes artisanales, luminaires artistiques à jeux de lumière et objets de décoration conçus faits main dans le respect du bambou.</p>
+    </section>
+
+    <!-- Category Filters -->
+    <div class="filter-section">
+        <button class="filter-pill active">Toutes les Créations</button>
+        <button class="filter-pill">🎵 Instruments à Vent</button>
+        <button class="filter-pill">💡 Luminaires Ajourés</button>
+        <button class="filter-pill">🌿 Décoration Naturelle</button>
+    </div>
+
+    <!-- Catalogue Product Grid -->
+    <section class="catalog-grid">
+
+        <!-- Product 1: Shakuhachi Bambou -->
+        <article class="product-card">
+            <div class="card-image-wrap">
+                <span class="card-tag">🎵 Instruments</span>
+                <img src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=800&q=80" alt="Flûte Shakuhachi Bambou">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Flûte Shakuhachi Meditative</h3>
+                <p class="card-desc">Flûte traditionnelle en tige de bambou séchée naturellement. Sonorité profonde et spirituelle accordée en La 440 Hz.</p>
+
+                <!-- Audio Player Widget -->
+                <div class="audio-player-box">
+                    <button class="play-btn" onclick="togglePlay(this)">
+                        <svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor">
+                            <path d="M0 0L14 8L0 16V0Z"/>
+                        </svg>
+                    </button>
+                    <div class="audio-info">
+                        <div class="audio-title">Extrait Sonore — Meditative Meditation.mp3</div>
+                        <div class="audio-bar-bg">
+                            <div class="audio-bar-fill"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-specs">
+                    <span>📏 54 cm</span>
+                    <span>🎋 Bambou Madake</span>
+                    <span>🎶 Accord 440Hz</span>
+                </div>
+
+                <div class="card-footer">
+                    <span class="status-badge"><span class="status-dot"></span> Pièce Unique</span>
+                    <a href="#" class="btn-inquire">Se Renseigner</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Product 2: Luminaire Bambou Ajouré -->
+        <article class="product-card">
+            <div class="card-image-wrap">
+                <span class="card-tag">💡 Luminaires</span>
+                <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80" alt="Luminaire Bambou Ajouré">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Luminaire Ombre & Bambou</h3>
+                <p class="card-desc">Structure en bambou ajouré ciselée à la main. Projette des motifs d'ombres dorées chaleureuses sur vos murs.</p>
+
+                <div class="card-specs">
+                    <span>📏 H 45cm x Ø 18cm</span>
+                    <span>💡 LED 2700K Warm</span>
+                </div>
+
+                <div class="card-footer">
+                    <span class="status-badge"><span class="status-dot"></span> Sur Commande</span>
+                    <a href="#" class="btn-inquire">Se Renseigner</a>
+                </div>
+            </div>
+        </article>
+
+        <!-- Product 3: Sculpture Décorative -->
+        <article class="product-card">
+            <div class="card-image-wrap">
+                <span class="card-tag">🌿 Décoration</span>
+                <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80" alt="Sculpture Bambou Zen">
+            </div>
+            <div class="card-content">
+                <h3 class="card-title">Totem Végétal Équilibre</h3>
+                <p class="card-desc">Création décorative épurée assemblant différentes variétés de bambou poli à la cire naturelle.</p>
+
+                <div class="card-specs">
+                    <span>📏 H 60 cm</span>
+                    <span>🌿 Cire d'Abeille</span>
+                </div>
+
+                <div class="card-footer">
+                    <span class="status-badge"><span class="status-dot"></span> Disponible</span>
+                    <a href="#" class="btn-inquire">Se Renseigner</a>
+                </div>
+            </div>
+        </article>
+
+    </section>
+
+    <!-- Craft Story Section -->
+    <section class="craft-story">
+        <div class="story-text">
+            <h2>L'Art du Bambou & Philosophie</h2>
+            <p>Chaque pièce façonnée dans l'atelier ZEN TOO Craft est le fruit d'une sélection rigoureuse des tiges de bambou et d'un travail manuel minutieux.</p>
+            <p>De la transformation de la matière brute au travail de la résonance acoustique et de la lumière, nous préservons l'authenticité et le caractère unique de chaque tige.</p>
+            <a href="#" class="cta-btn" style="display: inline-block; margin-top: 1rem;">Découvrir l'Atelier</a>
+        </div>
+        <div class="story-visual">
+            <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80" alt="Atelier de fabrication du bambou">
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2026 ZEN TOO Craft — Artisanat du Bambou, Instruments & Luminaires. Tous droits réservés.</p>
+        <p style="margin-top: 0.5rem;"><a href="#">Mentions Légales</a> | <a href="#">Politique de Confidentialité</a> | <a href="#">Back-Office Sylius Admin</a></p>
+    </footer>
+
+    <script>
+        function togglePlay(btn) {
+            const isPlaying = btn.classList.contains('playing');
+            if (isPlaying) {
+                btn.classList.remove('playing');
+                btn.innerHTML = '<svg width="14" height="16" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>';
+            } else {
+                btn.classList.add('playing');
+                btn.innerHTML = '<svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor"><path d="M0 0H4V16H0V0ZM8 0H12V16H8V0Z"/></svg>';
+            }
+        }
+    </script>
+</body>
+</html>
