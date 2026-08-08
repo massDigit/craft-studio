@@ -10,6 +10,7 @@ use App\Entity\Product\ProductImage;
 use App\Entity\Product\ProductTaxon;
 use App\Entity\Product\ProductTranslation;
 use App\Entity\Taxonomy\TaxonTranslation;
+use App\Entity\User\AdminUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ChannelPricingInterface;
@@ -21,6 +22,8 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
     name: 'ztc:catalog:init',
@@ -42,6 +45,13 @@ class InitZtcCatalogCommand extends Command
         private RepositoryInterface $currencyRepository,
         private FactoryInterface $localeFactory,
         private FactoryInterface $currencyFactory,
+        #[Target('sylius.factory.admin_user')]
+        private FactoryInterface $adminUserFactory,
+        #[Target('sylius.repository.admin_user')]
+        private RepositoryInterface $adminUserRepository,
+        private UserPasswordHasherInterface $passwordHasher,
+        /** @phpstan-ignore property.onlyWritten */
+        private string $projectDir = '',
     ) {
         parent::__construct();
     }
@@ -95,6 +105,27 @@ class InitZtcCatalogCommand extends Command
             $channel->setBaseCurrency($eurCurrency);
             $this->entityManager->persist($channel);
             $this->entityManager->flush();
+        }
+
+        /** @var AdminUser|null $adminUser */
+        $adminUser = $this->adminUserRepository->findOneBy(['email' => 'sylius@example.com']);
+        if (!$adminUser) {
+            /** @var AdminUser $adminUser */
+            $adminUser = $this->adminUserFactory->createNew();
+            $adminUser->setEmail('sylius@example.com');
+            $adminUser->setUsername('sylius');
+            $adminUser->setPlainPassword('sylius');
+            $adminUser->setEnabled(true);
+            $adminUser->setLocaleCode('fr');
+            $adminUser->setFirstName('ZEN');
+            $adminUser->setLastName('Artisan');
+
+            $hashedPassword = $this->passwordHasher->hashPassword($adminUser, 'sylius');
+            $adminUser->setPassword($hashedPassword);
+
+            $this->entityManager->persist($adminUser);
+            $this->entityManager->flush();
+            $output->writeln('<comment>Compte Administrateur Back-Office (sylius@example.com / sylius) créé avec succès !</comment>');
         }
 
         // Root Taxon "category"
