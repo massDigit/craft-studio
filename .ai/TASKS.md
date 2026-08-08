@@ -28,9 +28,9 @@
 
 
 ### Phase 4 : Design System & Theme "Sombre Obsidienne & Or"
-- [ ] Création du Thème Sylius Storefront (Twig)
-- [ ] Intégration du CSS Design System (obsidienne `#0D0F0E`, or végétal `#D4AF37`, glassmorphism, choix typographique)
-- [ ] Integration de Symfony UX pour les composants réactifs (modales photos, filtres interactifs, lecteur audio)
+- [x] Création du Thème Sylius Storefront (Twig) & Design System CSS (`assets/shop/styles/zen_too_craft.css`)
+- [x] Intégration du CSS Design System (obsidienne `#0D0F0E`, or végétal `#D4AF37`, typographies Google Fonts *Outfit* + *Inter*)
+- [x] Création du composant Twig du lecteur audio HTML5 sur-mesure (`templates/shop/product/_audio_player.html.twig`)
 - [ ] Layout public : Header bambou, Navigation, Footer, Breakpoints mobiles
 
 ### Phase 5 : Vitrine Publique V1 (Pages & Composants)
