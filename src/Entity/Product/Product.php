@@ -18,9 +18,7 @@ class Product extends BaseProduct implements ProductInterface
 {
     use ProductTrait;
 
-    /**
-     * @var Collection<int, ProductAudio>
-     */
+    /** @var Collection<int, ProductAudio> */
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductAudio::class, cascade: ['all'], orphanRemoval: true)]
     private Collection $audios;
 

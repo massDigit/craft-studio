@@ -30,7 +30,7 @@ class ZtcCatalogFixture extends AbstractFixture
         private FactoryInterface $taxonFactory,
         private FactoryInterface $productFactory,
         private FactoryInterface $productVariantFactory,
-        private FactoryInterface $channelPricingFactory
+        private FactoryInterface $channelPricingFactory,
     ) {
     }
 
@@ -67,7 +67,7 @@ class ZtcCatalogFixture extends AbstractFixture
                 'fr' => ['name' => 'Instruments à Vent & Créations Sonores', 'slug' => 'instruments-a-vent'],
                 'en' => ['name' => 'Wind Instruments & Sound Creations', 'slug' => 'wind-instruments'],
             ],
-            $rootTaxon
+            $rootTaxon,
         );
 
         // 2. Taxon Luminaires
@@ -77,7 +77,7 @@ class ZtcCatalogFixture extends AbstractFixture
                 'fr' => ['name' => 'Luminaires Artistiques Ajourés', 'slug' => 'luminaires-ajoures'],
                 'en' => ['name' => 'Artistic Openwork Lighting', 'slug' => 'artistic-lighting'],
             ],
-            $rootTaxon
+            $rootTaxon,
         );
 
         // 3. Taxon Décoration
@@ -87,7 +87,7 @@ class ZtcCatalogFixture extends AbstractFixture
                 'fr' => ['name' => 'Objets Décoratifs', 'slug' => 'objets-decoratifs'],
                 'en' => ['name' => 'Decorative Objects', 'slug' => 'decorative-objects'],
             ],
-            $rootTaxon
+            $rootTaxon,
         );
 
         $this->entityManager->flush();
@@ -109,7 +109,7 @@ class ZtcCatalogFixture extends AbstractFixture
             $channel,
             18000,
             'flute_shakuhachi.jpeg',
-            'demo_shakuhachi.mp3'
+            'demo_shakuhachi.mp3',
         );
 
         // Sample Product 2: Luminaire Bambou
@@ -128,7 +128,7 @@ class ZtcCatalogFixture extends AbstractFixture
             $luminairesTaxon,
             $channel,
             24000,
-            'luminaire_ombre.jpeg'
+            'luminaire_ombre.jpeg',
         );
 
         // Sample Product 3: Totem Végétal
@@ -146,12 +146,15 @@ class ZtcCatalogFixture extends AbstractFixture
             ],
             $decorationsTaxon,
             $channel,
-            15000
+            15000,
         );
 
         $this->entityManager->flush();
     }
 
+    /**
+     * @param array<string, array{name: string, slug: string}> $translations
+     */
     private function getOrCreateTaxon(string $code, array $translations, TaxonInterface $parent): TaxonInterface
     {
         /** @var TaxonInterface|null $taxon */
@@ -184,6 +187,9 @@ class ZtcCatalogFixture extends AbstractFixture
         $translation->setSlug($slug);
     }
 
+    /**
+     * @param array<string, array{name: string, description: string}> $translations
+     */
     private function createSampleProduct(
         string $code,
         array $translations,
@@ -191,7 +197,7 @@ class ZtcCatalogFixture extends AbstractFixture
         ?ChannelInterface $channel,
         int $priceInCents = 10000,
         ?string $imageFileName = null,
-        ?string $audioFileName = null
+        ?string $audioFileName = null,
     ): void {
         /** @var Product|null $product */
         $product = $this->productRepository->findOneBy(['code' => $code]);
