@@ -6,10 +6,10 @@
 **Branche Courante** : `main`
 
 ## 🚀 Phase Actuelle
-Phase 5 : Intégration des Pages Vitrine & Formulaire de Contact (EN COURS).
+Phase 6 : Pages Éditoriales CMS & Finalisation de la Vitrine (EN COURS).
 
 ## 🎯 Focus Courant
-Création et intégration des templates d'affichage vitrine Twig (Page d'accueil, Fiche Création avec lecteur audio, Histoire du Savoir-Faire, Formulaire de Contact).
+Création des pages éditoriales CMS avec `sylius/cms-plugin` (Histoire du Savoir-Faire du Bambou, Charte Éco-Responsable, Mentions Légales).
 
 ## ✅ Réalisé
 - [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
@@ -24,17 +24,15 @@ Création et intégration des templates d'affichage vitrine Twig (Page d'accueil
 - [x] Raccordement des visuels uploadés (`flute_shakuhachi.jpeg`, `luminaire_ombre.jpeg`) aux créations et validation de la génération des vignettes LiipImagine (`HTTP 200 OK`).
 - [x] Intégration du Design System CSS "Sombre Obsidienne & Or Végétal" (`assets/shop/styles/zen_too_craft.css`) et des typographies Google Fonts (*Outfit* + *Inter*).
 - [x] Création du composant lecteur audio HTML5 sur-mesure (`templates/shop/product/_audio_player.html.twig`).
+- [x] Surcharge de la page d'accueil vitrine (`templates/bundles/SyliusShopBundle/homepage/index.html.twig`) avec bannière héro, cartes de créations et lecteur audio embarqué.
+- [x] Surcharge de la fiche création produit (`templates/bundles/SyliusShopBundle/product/show.html.twig`) avec galerie d'images et extrait sonore.
+- [x] Surcharge du formulaire de contact artisan (`templates/bundles/SyliusShopBundle/contact/request.html.twig`) dans le thème Obsidienne & Or.
 
 ## 🔄 En Cours
-- [ ] Surcharge des templates de fiche produit et de liste pour intégrer le lecteur audio et les cartes Obsidienne.
-- [ ] Création du formulaire de contact et des pages éditoriales CMS.
+- [ ] Création des pages éditoriales CMS (`sylius/cms-plugin`) pour l'histoire de l'artisanat du bambou et la charte éco-responsable.
 
 ## ⚠️ Points de Vigilance
 - Exécuter la suite des tests et des commandes de validation via Docker Compose (`docker compose exec php ...`).
 
 ## 🏁 Prochaine Étape / Milestone
-Finaliser la surcharge des fiches créations Twig et créer la page vitrine de l'artisanat du bambou.
-
-
-
-
+Mettre en place les blocs et pages CMS éditoriales via `sylius/cms-plugin`.
