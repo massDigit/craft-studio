@@ -1,22 +1,25 @@
-# DEPLOYMENT.md - Procédures de Déploiement & Git Workflow
+# DEPLOYMENT.md - Déploiement & Git Branching Workflow
 
-## 🐳 Environnement Docker Compose Reference
+## 🌿 Protection de `main` & Workflow Git
 
-L'environnement de développement repose intégralement sur Docker Compose.
+- La branche `main` représente la version stable et déployable.
+- Tout développement s'effectue sur des branches de fonctionnalités courtes (`feat/...`, `fix/...`, `docs/...`).
+- Les intégrations sur `main` s'effectuent par Pull Requests validées avec description complète (Summary, Changes, Verification, Documentation, Risks).
+
+---
+
+## 🐳 Déploiement & Execution Docker Compose
 
 ```bash
 # Démarrage des conteneurs
 docker compose up -d
 
-# Commandes d'exploitation dans le conteneur php
+# Migrations Doctrine
 docker compose exec php bin/console doctrine:migrations:migrate --no-interaction
+
+# Vidage et réchauffement du cache Symfony
 docker compose exec php bin/console cache:clear
+
+# Installation des assets du thème Sylius
 docker compose exec php bin/console sylius:install:assets
 ```
-
----
-
-## 📌 Politique de Contribution & Git Workflow
-- Les modifications de code sont livrées sous forme d'incréments atomiques.
-- Chaque commit doit utiliser un préfixe **Conventional Commits** (`feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`, `build:`).
-- Aucun secret, fichier temporaire ou code cassé ne doit être committé sur la branche principale.

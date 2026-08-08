@@ -2,27 +2,32 @@
 
 Bienvenue sur le projet **ZEN TOO Craft** !
 
-## 📜 Règles du Git Workflow & Commits Structurés
+## 🌿 1. Protection de `main` & Stratégie de Branchement
 
-### 1. Commits Atomiques & Conventional Commits
-Chaque commit doit représenter un incrément petit, cohérent et testable.
+La branche `main` est protégée. **Développez uniquement sur des branches dédiées** créées à partir d'un `main` à jour.
 
-Les messages doivent suivre la norme Conventional Commits :
-- `feat:` Nouvelle fonctionnalité
-- `fix:` Correction de bug
-- `refactor:` Amélioration de la structure du code
-- `test:` Ajout ou modification de tests
-- `docs:` Documentation
-- `chore:` Configuration et maintenance
-- `build:` Docker, Composer, dépendances
+### Nommage des Branches :
+- `feat/product-audio` : Nouvelle fonctionnalité
+- `feat/cms-pages` : Nouvelles pages CMS
+- `fix/audio-validation` : Correctif
+- `docs/update-architecture` : Documentation
 
-**Exemples** :
-- `build: initialize dockerized Sylius environment`
-- `chore: configure Sylius CMS plugin`
-- `feat: add ProductAudio domain model`
+---
 
-### 2. Contrôle Avant Commit
-Avant tout commit :
-1. Inspecter les fichiers modifiés (`git status` & `git diff`).
-2. Valider le conteneur (`docker compose exec php bin/console lint:container`).
-3. Ne jamais committer de clés secrètes, d'identifiants sensibles ou de code défectueux.
+## 🔀 2. Workflow d'une Tâche & Pull Requests
+
+Pour chaque tâche :
+1. `git checkout main && git pull origin main`
+2. `git checkout -b feat/nom-de-la-branche`
+3. Implémenter par incréments atomiques au format **Conventional Commits** (`feat:`, `fix:`, `docs:`, `build:`, `refactor:`, `test:`).
+4. Effectuer les contrôles Docker (`docker compose exec php bin/console lint:container`, `phpunit`).
+5. Préparer une Pull Request avec la structure obligatoire (Summary, Changes, Verification, Documentation, Risks).
+6. Merger sur `main` une fois toutes les vérifications au vert.
+7. Revenir sur `main`, synchroniser, et supprimer la branche locale.
+
+---
+
+## 🛑 3. Contrôle Avant Commit & Merge
+- Inspecter `git diff`.
+- Garantir qu'aucun secret, fichier temporaire ou code cassé n'est inclus.
+- Exécuter la suite de tests et de validation dans l'environnement Docker.
