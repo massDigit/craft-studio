@@ -45,7 +45,7 @@ class ZtcCatalogFixture extends AbstractFixture
     {
         /** @var ChannelInterface|null $channel */
         $channel = $this->channelRepository->findOneBy([]);
-        $locale = $channel ? $channel->getDefaultLocale()->getCode() : 'fr_FR';
+        $locale = $channel ? $channel->getDefaultLocale()->getCode() : 'fr';
 
         // Root Taxon "category"
         /** @var TaxonInterface|null $rootTaxon */
