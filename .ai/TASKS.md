@@ -21,8 +21,9 @@
 - [x] Validation empirique des mappings Doctrine (`doctrine:schema:validate`)
 - [x] Validation empirique de l'injection de dépendances (`lint:container`)
 - [x] Formulaire d'upload `ProductAudioType` et listener d'événements `ProductAudioUploadListener` (stockage & nettoyage `public/media/audio`)
-- [ ] Configuration des Taxons natifs (Familles : Instruments, Décoration, Luminaires)
+- [x] Configuration des Taxons natifs de référence via `ztc:catalog:init` (Instruments à vent, Décoration, Luminaires ajourés)
 - [ ] Configuration des Attributs Produit natifs (Essence de bambou, Dimensions, Accordage Hz)
+
 
 
 
