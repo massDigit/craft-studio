@@ -10,8 +10,7 @@ sylius_fixtures:
                 locale:
                     options:
                         locales:
-                            - en_US
-                            - fr_FR
+                            - fr
                 currency:
                     options:
                         currencies:
@@ -24,9 +23,8 @@ sylius_fixtures:
                                 name: "ZEN TOO Craft"
                                 hostname: "localhost"
                                 locales:
-                                    - fr_FR
-                                    - en_US
-                                default_locale: fr_FR
+                                    - fr
+                                default_locale: fr
                                 currencies:
                                     - EUR
                                 base_currency: EUR
