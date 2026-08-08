@@ -21,7 +21,8 @@ final class ProductAudioUploadListener
     private string $uploadDir;
 
     public function __construct(
-        #[Autowire('%kernel.project_dir%')] string $projectDir
+        #[Autowire('%kernel.project_dir%')]
+        string $projectDir,
     ) {
         $this->uploadDir = $projectDir . '/public/media/audio';
     }
