@@ -1,0 +1,133 @@
+/* ZEN TOO Craft — Design System "Sombre Obsidienne & Or Végétal" */
+
+:root {
+    --bg-obsidian: #0D0F0E;
+    --bg-card: rgba(19, 24, 21, 0.88);
+    --bg-card-hover: rgba(28, 36, 31, 0.95);
+    --gold-accent: #D4AF37;
+    --gold-light: #E5C158;
+    --gold-glow: rgba(212, 175, 55, 0.25);
+    --text-primary: #F4EFE6;
+    --text-secondary: #A0A8A2;
+    --text-muted: #656E68;
+    --border-subtle: rgba(212, 175, 55, 0.18);
+    --border-highlight: rgba(212, 175, 55, 0.45);
+    --radius-lg: 20px;
+    --radius-md: 12px;
+    --font-heading: 'Outfit', sans-serif;
+    --font-body: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-obsidian) !important;
+    color: var(--text-primary) !important;
+    font-family: var(--font-body);
+}
+
+h1, h2, h3, h4, h5, h6, .ui.header {
+    font-family: var(--font-heading) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Custom HTML5 Audio Player Component */
+.ztc-audio-player {
+    background: rgba(10, 12, 11, 0.92);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 0.85rem 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    transition: border-color 0.3s ease;
+}
+
+.ztc-audio-player:hover {
+    border-color: var(--border-highlight);
+}
+
+.ztc-play-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-accent), #b38f20);
+    border: none;
+    color: #0d0f0e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    flex-shrink: 0;
+}
+
+.ztc-play-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 15px var(--gold-glow);
+}
+
+.ztc-audio-info {
+    flex-grow: 1;
+}
+
+.ztc-audio-title {
+    font-size: 0.85rem;
+    color: var(--gold-light);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.ztc-audio-progress-bg {
+    height: 5px;
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+
+.ztc-audio-progress-fill {
+    width: 0%;
+    height: 100%;
+    background: var(--gold-accent);
+    border-radius: 3px;
+    transition: width 0.1s linear;
+}
+
+.ztc-audio-time {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    min-width: 45px;
+    text-align: right;
+}
+
+/* Product Badges */
+.ztc-badge-nature {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.9rem;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid var(--border-subtle);
+    border-radius: 20px;
+    color: var(--gold-light);
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+}
+
+.ztc-badge-unique {
+    color: #81c784;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.ztc-badge-unique-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #81c784;
+    box-shadow: 0 0 8px #81c784;
+}
