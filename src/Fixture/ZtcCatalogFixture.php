@@ -6,6 +6,7 @@ namespace App\Fixture;
 
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductAudio;
+use App\Entity\Product\ProductImage;
 use App\Entity\Product\ProductTaxon;
 use App\Entity\Product\ProductTranslation;
 use App\Entity\Taxonomy\TaxonTranslation;
@@ -107,6 +108,7 @@ class ZtcCatalogFixture extends AbstractFixture
             $instrumentsTaxon,
             $channel,
             18000,
+            'flute_shakuhachi.jpeg',
             'demo_shakuhachi.mp3'
         );
 
@@ -125,7 +127,8 @@ class ZtcCatalogFixture extends AbstractFixture
             ],
             $luminairesTaxon,
             $channel,
-            24000
+            24000,
+            'luminaire_ombre.jpeg'
         );
 
         // Sample Product 3: Totem Végétal
@@ -187,6 +190,7 @@ class ZtcCatalogFixture extends AbstractFixture
         TaxonInterface $taxon,
         ?ChannelInterface $channel,
         int $priceInCents = 10000,
+        ?string $imageFileName = null,
         ?string $audioFileName = null
     ): void {
         /** @var Product|null $product */
@@ -210,6 +214,13 @@ class ZtcCatalogFixture extends AbstractFixture
                 $product->addChannel($channel);
             }
 
+            if ($imageFileName) {
+                $image = new ProductImage();
+                $image->setPath($imageFileName);
+                $image->setType('main');
+                $product->addImage($image);
+            }
+
             if ($audioFileName) {
                 $audio = new ProductAudio();
                 $audio->setPath($audioFileName);
@@ -223,6 +234,13 @@ class ZtcCatalogFixture extends AbstractFixture
         } else {
             foreach ($translations as $locale => $data) {
                 $this->addProductTranslation($product, $locale, $data['name'], $data['description']);
+            }
+
+            if ($imageFileName && $product->getImages()->isEmpty()) {
+                $image = new ProductImage();
+                $image->setPath($imageFileName);
+                $image->setType('main');
+                $product->addImage($image);
             }
         }
 
