@@ -2,6 +2,36 @@ sylius_fixtures:
     suites:
         default:
             fixtures:
+                locale:
+                    options:
+                        locales:
+                            - fr
+                            - en
+                currency:
+                    options:
+                        currencies:
+                            - EUR
+                channel:
+                    options:
+                        custom:
+                            default:
+                                code: ZTC_STORE
+                                name: "ZEN TOO Craft"
+                                locales:
+                                    - fr
+                                    - en
+                                default_locale: fr
+                                currencies:
+                                    - EUR
+                                base_currency: EUR
+                admin_user:
+                    options:
+                        custom:
+                            admin:
+                                email: "sylius@example.com"
+                                username: "sylius"
+                                password: "sylius"
+                                enabled: true
                 ztc_catalog:
                     name: ztc_catalog
 
@@ -22,7 +52,6 @@ sylius_fixtures:
                             default:
                                 code: ZTC_STORE
                                 name: "ZEN TOO Craft"
-                                hostname: "localhost"
                                 locales:
                                     - fr
                                     - en
