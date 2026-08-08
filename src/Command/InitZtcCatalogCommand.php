@@ -37,6 +37,11 @@ class InitZtcCatalogCommand extends Command
         private FactoryInterface $productFactory,
         private FactoryInterface $productVariantFactory,
         private FactoryInterface $channelPricingFactory,
+        private FactoryInterface $channelFactory,
+        private RepositoryInterface $localeRepository,
+        private RepositoryInterface $currencyRepository,
+        private FactoryInterface $localeFactory,
+        private FactoryInterface $currencyFactory,
     ) {
         parent::__construct();
     }
@@ -45,9 +50,52 @@ class InitZtcCatalogCommand extends Command
     {
         $output->writeln('<info>Initialisation du catalogue et des visuels ZEN TOO Craft...</info>');
 
+        /** @var \Sylius\Component\Locale\Model\LocaleInterface|null $frLocale */
+        $frLocale = $this->localeRepository->findOneBy(['code' => 'fr']);
+        if (!$frLocale) {
+            /** @var \Sylius\Component\Locale\Model\LocaleInterface $frLocale */
+            $frLocale = $this->localeFactory->createNew();
+            $frLocale->setCode('fr');
+            $this->entityManager->persist($frLocale);
+        }
+
+        /** @var \Sylius\Component\Locale\Model\LocaleInterface|null $enLocale */
+        $enLocale = $this->localeRepository->findOneBy(['code' => 'en']);
+        if (!$enLocale) {
+            /** @var \Sylius\Component\Locale\Model\LocaleInterface $enLocale */
+            $enLocale = $this->localeFactory->createNew();
+            $enLocale->setCode('en');
+            $this->entityManager->persist($enLocale);
+        }
+
+        /** @var \Sylius\Component\Currency\Model\CurrencyInterface|null $eurCurrency */
+        $eurCurrency = $this->currencyRepository->findOneBy(['code' => 'EUR']);
+        if (!$eurCurrency) {
+            /** @var \Sylius\Component\Currency\Model\CurrencyInterface $eurCurrency */
+            $eurCurrency = $this->currencyFactory->createNew();
+            $eurCurrency->setCode('EUR');
+            $this->entityManager->persist($eurCurrency);
+        }
+
+        $this->entityManager->flush();
+
         /** @var ChannelInterface|null $channel */
         $channel = $this->channelRepository->findOneBy([]);
-        $defaultLocale = ($channel && $channel->getDefaultLocale()) ? $channel->getDefaultLocale()->getCode() : 'fr';
+        if (!$channel) {
+            /** @var ChannelInterface $channel */
+            $channel = $this->channelFactory->createNew();
+            $channel->setCode('ZTC_STORE');
+            $channel->setName('ZEN TOO Craft');
+            $channel->setHostname(null);
+            $channel->setEnabled(true);
+            $channel->addLocale($frLocale);
+            $channel->addLocale($enLocale);
+            $channel->setDefaultLocale($frLocale);
+            $channel->addCurrency($eurCurrency);
+            $channel->setBaseCurrency($eurCurrency);
+            $this->entityManager->persist($channel);
+            $this->entityManager->flush();
+        }
 
         // Root Taxon "category"
         /** @var TaxonInterface|null $rootTaxon */
