@@ -9,6 +9,8 @@ use App\Entity\Product\ProductAudio;
 use App\Entity\Product\ProductTaxon;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
+use Sylius\Component\Core\Model\ChannelPricingInterface;
+use Sylius\Component\Core\Model\ProductVariantInterface;
 use Sylius\Component\Core\Model\TaxonInterface;
 use Sylius\Component\Resource\Factory\FactoryInterface;
 use Sylius\Component\Resource\Repository\RepositoryInterface;
@@ -29,7 +31,9 @@ class InitZtcCatalogCommand extends Command
         private RepositoryInterface $productRepository,
         private RepositoryInterface $channelRepository,
         private FactoryInterface $taxonFactory,
-        private FactoryInterface $productFactory
+        private FactoryInterface $productFactory,
+        private FactoryInterface $productVariantFactory,
+        private FactoryInterface $channelPricingFactory
     ) {
         parent::__construct();
     }
@@ -77,6 +81,7 @@ class InitZtcCatalogCommand extends Command
             $instrumentsTaxon,
             $channel,
             $locale,
+            18000,
             'demo_shakuhachi.mp3'
         );
 
@@ -87,7 +92,8 @@ class InitZtcCatalogCommand extends Command
             'Structure en bambou ajouré ciselée à la main. Projette des motifs d\'ombres dorées chaleureuses sur vos murs.',
             $luminairesTaxon,
             $channel,
-            $locale
+            $locale,
+            24000
         );
 
         // Sample Product 3: Totem Végétal
@@ -97,7 +103,8 @@ class InitZtcCatalogCommand extends Command
             'Création décorative épurée assemblant différentes variétés de bambou poli à la cire naturelle.',
             $decorationsTaxon,
             $channel,
-            $locale
+            $locale,
+            15000
         );
 
         $this->entityManager->flush();
@@ -133,43 +140,62 @@ class InitZtcCatalogCommand extends Command
         TaxonInterface $taxon,
         ?ChannelInterface $channel,
         string $locale,
+        int $priceInCents = 10000,
         ?string $audioFileName = null
     ): void {
-        /** @var Product|null $existing */
-        $existing = $this->productRepository->findOneBy(['code' => $code]);
-        if ($existing) {
-            return;
+        /** @var Product|null $product */
+        $product = $this->productRepository->findOneBy(['code' => $code]);
+        if (!$product) {
+            /** @var Product $product */
+            $product = $this->productFactory->createNew();
+            $product->setCode($code);
+            $product->setCurrentLocale($locale);
+            $product->setFallbackLocale($locale);
+            $product->setName($name);
+            $product->setSlug($code);
+            $product->setDescription($description);
+            $product->setShortDescription(mb_substr($description, 0, 100) . '...');
+            $product->setMainTaxon($taxon);
+
+            $productTaxon = new ProductTaxon();
+            $productTaxon->setProduct($product);
+            $productTaxon->setTaxon($taxon);
+            $product->addProductTaxon($productTaxon);
+
+            if ($channel) {
+                $product->addChannel($channel);
+            }
+
+            if ($audioFileName) {
+                $audio = new ProductAudio();
+                $audio->setPath($audioFileName);
+                $audio->setOriginalName('Extrait Sonore — ' . $name . '.mp3');
+                $audio->setMimeType('audio/mpeg');
+                $audio->setIsPrimary(true);
+                $product->addAudio($audio);
+            }
+
+            $this->entityManager->persist($product);
         }
 
-        /** @var Product $product */
-        $product = $this->productFactory->createNew();
-        $product->setCode($code);
-        $product->setCurrentLocale($locale);
-        $product->setFallbackLocale($locale);
-        $product->setName($name);
-        $product->setSlug($code);
-        $product->setDescription($description);
-        $product->setShortDescription(mb_substr($description, 0, 100) . '...');
-        $product->setMainTaxon($taxon);
+        if ($product->getVariants()->isEmpty()) {
+            /** @var ProductVariantInterface $variant */
+            $variant = $this->productVariantFactory->createNew();
+            $variant->setCode($code . '-default');
+            $variant->setName($name);
+            $variant->setProduct($product);
 
-        $productTaxon = new ProductTaxon();
-        $productTaxon->setProduct($product);
-        $productTaxon->setTaxon($taxon);
-        $product->addProductTaxon($productTaxon);
+            if ($channel) {
+                /** @var ChannelPricingInterface $channelPricing */
+                $channelPricing = $this->channelPricingFactory->createNew();
+                $channelPricing->setChannelCode($channel->getCode());
+                $channelPricing->setPrice($priceInCents);
+                $channelPricing->setProductVariant($variant);
+                $variant->addChannelPricing($channelPricing);
+            }
 
-        if ($channel) {
-            $product->addChannel($channel);
+            $product->addVariant($variant);
+            $this->entityManager->persist($variant);
         }
-
-        if ($audioFileName) {
-            $audio = new ProductAudio();
-            $audio->setPath($audioFileName);
-            $audio->setOriginalName('Extrait Sonore — ' . $name . '.mp3');
-            $audio->setMimeType('audio/mpeg');
-            $audio->setIsPrimary(true);
-            $product->addAudio($audio);
-        }
-
-        $this->entityManager->persist($product);
     }
 }
