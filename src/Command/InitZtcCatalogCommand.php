@@ -138,6 +138,13 @@ class InitZtcCatalogCommand extends Command
             $this->addTaxonTranslation($rootTaxon, 'fr', 'Catégories ZEN TOO Craft', 'categories');
             $this->addTaxonTranslation($rootTaxon, 'en', 'ZEN TOO Craft Categories', 'categories');
             $this->entityManager->persist($rootTaxon);
+            $this->entityManager->flush();
+        }
+
+        if (!$channel->getMenuTaxon()) {
+            $channel->setMenuTaxon($rootTaxon);
+            $this->entityManager->persist($channel);
+            $this->entityManager->flush();
         }
 
         // 1. Taxon Instruments
