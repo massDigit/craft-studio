@@ -1,22 +1,20 @@
 # ASSUMPTIONS.md - Hypothèses & Propositions à Valider
 
-> **Ce fichier isole les hypothèses techniques et propositions émises par l'IA en attente de confirmation explicite par l'utilisateur.**
+> **Ce fichier isole les choix techniques non encore définitivement arrêtés.**
 
 ---
 
 ## ⚠️ Classification & Règles
 
-Tout élément figurant ici est une **PROPOSITION** et ne doit pas être considéré comme une contrainte d'architecture définitive tant qu'il n'a pas été validé par l'utilisateur.
-
-### Format d'une hypothèse / proposition :
-- **ID** : `ASSUMP-001`
-- **Sujet** : [ex: Choix du SGBD / Stratégie d'authentification]
-- **Proposition** : [ex: PostgreSQL + Prisma ORM]
-- **Raisonnement** : [Pourquoi cette solution est suggérée]
-- **Statut** : `PROPOSED` | `UNDER_REVIEW` | `APPROVED` | `REJECTED`
+Tout élément figurant ici est une **PROPOSITION** et ne doit pas être considéré comme une décision définitive tant qu'il n'est pas validé.
 
 ---
 
-## 📋 Hypothèses et Propositions Actives
+## 📋 Propositions Actives
 
-*(Fichier vierge lors de l'initialisation du template - alimenté pendant la phase `project-bootstrap` ou lors du design de fonctionnalités).*
+### ASSUMP-001 : Choix de la Paire Typographique "Zen & Contemporain"
+- **Sujet** : Sélection des typographies pour le Design System (titres, sous-titres, corps de texte).
+- **Statut** : `PROPOSED` (À déterminer lors de la conception du design system à partir du logo et des photos)
+- **Option A (Outfit + Inter)** : Titres géométriques modernes (*Outfit*) + corps de texte neutre lisible (*Inter*).
+- **Option B (Cormorant Garamond / Cinzel + Plus Jakarta Sans)** : Titres sérifs élégants/méditatifs (*Cinzel*) + sans-serif contemporain.
+- **Règle de décision** : Le choix définitif sera fait en observant l'harmonisation visuelle avec les photographies réelles des créations en bambou et le logo ZEN TOO Craft.

@@ -1,7 +1,13 @@
-# TESTING.md - Stratégie de Tests
+# TESTING.md - Stratégie de Test & Assurance Qualité
 
-## 🧪 Niveaux de Test
+## 🧪 Strategie de Tests Sylius / Symfony
 
-- **Unit Tests** : Couverture minimale requise 80% sur la logique métier.
-- **Integration Tests** : Tests des routes d'API critiques et de la DB.
-- **End-to-End Tests** : Scénarios utilisateurs clés.
+1. **Tests d'Intégration & Unitaires (PHPUnit / Symfony TestPack)** :
+   - Validation des entités et des extensions Sylius (`Product` avec extension audio).
+   - Validation des règles métier de masquage audio et de contact pré-rempli.
+
+2. **Tests Comportementaux (Behat / Sylius Native Test Suite)** :
+   - Validation des scénarios d'administration (Ajout d'une création par l'artisan, attribution d'un taxon, masquage).
+
+3. **Tests Ergonomiques & Responsive (Mobile & Audio)** :
+   - Recette sur smartphone et tablette (restitution du lecteur audio, fluidité du carousel de photos HD, réactivité des formulaires).
