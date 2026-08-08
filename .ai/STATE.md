@@ -3,12 +3,14 @@
 > **Ce fichier donne une image précise de l'état du projet ZEN TOO Craft.**
 
 **Dernière mise à jour** : 2026-08-08
+**Branche Courante** : `feat/product-audio-admin`
 
 ## 🚀 Phase Actuelle
-Phase 3 : Implémentation du Modèle `ProductAudio` & Configuration Médias / CMS (EN COURS).
+Phase 3 : Implémentation du Formulaire Admin `ProductAudio` & Intégration Médias.
 
 ## 🎯 Focus Courant
-Création du formulaire d'upload `ProductAudioType` dans Sylius Admin et intégration de l'écoute des instruments.
+Développement du formulaire d'administration Sylius Admin pour la saisie et l'upload des fichiers audio d'instruments (`ProductAudioType` & extension du `ProductType`).
+
 
 ## ✅ Réalisé
 - [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
