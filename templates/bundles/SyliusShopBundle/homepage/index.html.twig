@@ -1,0 +1,146 @@
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
+
+{% block title %}ZEN TOO Craft — Créations Artisanales & Instruments en Bambou{% endblock %}
+
+{% block content %}
+    <!-- Hero Banner "Sombre Obsidienne & Or Végétal" -->
+    <section class="ztc-hero position-relative overflow-hidden mb-5 py-5 text-center" style="background: radial-gradient(circle at center, rgba(212, 175, 55, 0.15) 0%, rgba(13, 15, 14, 0.95) 70%), url('{{ asset('media/image/luminaire_ombre.jpeg') }}') center/cover no-repeat; border-bottom: 1px solid var(--border-subtle, rgba(212, 175, 55, 0.2)); border-radius: 0 0 24px 24px;">
+        <div class="container py-4 position-relative" style="z-index: 2;">
+            <span class="ztc-badge-nature mb-3 d-inline-flex align-items-center">
+                ✨ Artisanat d'Art & Éco-Responsabilité
+            </span>
+            <h1 class="display-3 fw-bold my-3 text-uppercase" style="color: var(--text-primary, #F4EFE6); letter-spacing: 0.08em; text-shadow: 0 4px 15px rgba(0,0,0,0.8);">
+                ZEN TOO CRAFT
+            </h1>
+            <p class="lead mx-auto mb-4" style="max-width: 680px; color: var(--text-secondary, #A0A8A2); font-size: 1.2rem; line-height: 1.6;">
+                Créations végétales uniques en bambou ciselé à la main. Instruments à vent méditatifs, luminaires ajourés d'ambiance et sculptures poétiques.
+            </p>
+            <div class="d-flex justify-content-center gap-3">
+                <a href="#creations" class="btn btn-lg px-4 py-3 fw-semibold text-dark" style="background: linear-gradient(135deg, #D4AF37, #E5C158); border: none; border-radius: 30px; box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);">
+                    Explorez les Créations
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Créations d'Artisanat -->
+    <section id="creations" class="container py-4">
+        <div class="d-flex justify-content-between align-items-end mb-4 border-bottom pb-3" style="border-color: rgba(212, 175, 55, 0.15) !important;">
+            <div>
+                <span class="text-uppercase fw-semibold" style="color: var(--gold-accent, #D4AF37); font-size: 0.85rem; letter-spacing: 0.1em;">Collection Permanente</span>
+                <h2 class="h2 fw-bold mb-0" style="color: var(--text-primary, #F4EFE6);">Créations Signature</h2>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Produit 1: Flûte Shakuhachi -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0" style="background: rgba(19, 24, 21, 0.88); border: 1px solid rgba(212, 175, 55, 0.18) !important; border-radius: 16px; overflow: hidden; transition: transform 0.3s ease;">
+                    <div class="position-relative overflow-hidden" style="height: 260px; background: #0a0c0b;">
+                        <img src="{{ asset('media/image/flute_shakuhachi.jpeg') }}" class="w-100 h-100 object-fit-cover" alt="Flûte Shakuhachi Méditative">
+                        <span class="position-absolute top-0 start-0 m-3 badge" style="background: rgba(13, 15, 14, 0.85); color: #D4AF37; border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 20px;">
+                            🎵 Instrument & Audio
+                        </span>
+                    </div>
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="text-muted small mb-1" style="color: #A0A8A2 !important;">Instruments à Vent</div>
+                        <h3 class="h5 card-title fw-bold" style="color: #F4EFE6;">Flûte Shakuhachi Méditative</h3>
+                        <p class="card-text small mb-3" style="color: #A0A8A2;">
+                            Flûte artisanale en tige de bambou séchée naturellement. Sonorité profonde et spirituelle accordée en La 440 Hz.
+                        </p>
+                        
+                        <!-- Lecteur Audio HTML5 Embarqué -->
+                        <div class="mt-auto">
+                            <div class="ztc-audio-player mb-3" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 10px; padding: 0.65rem 0.9rem;">
+                                <audio id="preview-audio-flute" src="{{ asset('media/audio/demo_shakuhachi.mp3') }}" preload="metadata"></audio>
+                                <button type="button" class="ztc-play-btn" onclick="toggleZtcAudio('flute')" style="width: 34px; height: 34px; min-width: 34px; border-radius: 50%; background: #D4AF37; border: none; color: #0d0f0e;">
+                                    <svg id="play-icon-flute" width="12" height="14" viewBox="0 0 14 16" fill="currentColor">
+                                        <path d="M0 0L14 8L0 16V0Z"/>
+                                    </svg>
+                                </button>
+                                <div class="ms-2 flex-grow-1">
+                                    <div class="small fw-semibold" style="color: #E5C158; font-size: 0.78rem;">Extrait Sonore (La 440 Hz)</div>
+                                    <div style="height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; overflow: hidden; margin-top: 3px;">
+                                        <div id="progress-fill-flute" style="width: 0%; height: 100%; background: #D4AF37;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="h5 fw-bold mb-0" style="color: #D4AF37;">180,00 €</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produit 2: Luminaire Ombre & Bambou -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0" style="background: rgba(19, 24, 21, 0.88); border: 1px solid rgba(212, 175, 55, 0.18) !important; border-radius: 16px; overflow: hidden;">
+                    <div class="position-relative overflow-hidden" style="height: 260px; background: #0a0c0b;">
+                        <img src="{{ asset('media/image/luminaire_ombre.jpeg') }}" class="w-100 h-100 object-fit-cover" alt="Luminaire Ombre & Bambou">
+                        <span class="position-absolute top-0 start-0 m-3 badge" style="background: rgba(13, 15, 14, 0.85); color: #81c784; border: 1px solid rgba(129, 199, 132, 0.3); border-radius: 20px;">
+                            ✨ Pièce Unique
+                        </span>
+                    </div>
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="text-muted small mb-1" style="color: #A0A8A2 !important;">Luminaires Artistiques</div>
+                        <h3 class="h5 card-title fw-bold" style="color: #F4EFE6;">Luminaire Ombre & Bambou</h3>
+                        <p class="card-text small mb-3" style="color: #A0A8A2;">
+                            Structure en bambou ajouré ciselée à la main. Projette des motifs d'ombres dorées chaleureuses sur vos murs.
+                        </p>
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <span class="h5 fw-bold mb-0" style="color: #D4AF37;">240,00 €</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Produit 3: Totem Végétal Équilibre -->
+            <div class="col-md-4">
+                <div class="card h-100 border-0" style="background: rgba(19, 24, 21, 0.88); border: 1px solid rgba(212, 175, 55, 0.18) !important; border-radius: 16px; overflow: hidden;">
+                    <div class="position-relative overflow-hidden" style="height: 260px; background: #0a0c0b; display: flex; align-items: center; justify-content: center;">
+                        <div class="text-center p-4">
+                            <span style="font-size: 3rem;">🎋</span>
+                            <div class="small mt-2" style="color: #D4AF37;">Finition Cire Bio</div>
+                        </div>
+                    </div>
+                    <div class="card-body d-flex flex-column p-4">
+                        <div class="text-muted small mb-1" style="color: #A0A8A2 !important;">Objets Décoratifs</div>
+                        <h3 class="h5 card-title fw-bold" style="color: #F4EFE6;">Totem Végétal Équilibre</h3>
+                        <p class="card-text small mb-3" style="color: #A0A8A2;">
+                            Création décorative épurée assemblant différentes variétés de bambou poli à la cire naturelle.
+                        </p>
+                        <div class="mt-auto d-flex justify-content-between align-items-center">
+                            <span class="h5 fw-bold mb-0" style="color: #D4AF37;">150,00 €</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section Philosophie & Savoir-Faire Artisan -->
+    <section class="container py-5 my-4">
+        <div class="p-5" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px;">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <span class="text-uppercase fw-semibold" style="color: #D4AF37; font-size: 0.85rem; letter-spacing: 0.1em;">Savoir-Faire & Philosophie</span>
+                    <h2 class="display-6 fw-bold my-3" style="color: #F4EFE6;">L'Harmonie du Bambou & du Son</h2>
+                    <p style="color: #A0A8A2; line-height: 1.7;">
+                        Chaque création ZEN TOO Craft naît d'une sélection rigoureuse de tiges de bambou séchées naturellement au soleil. Taillées, perforées et polies à la cire naturelle d'abeille, nos flûtes et structures lumineuses apportent sérénité et esthétique zen dans votre intérieur.
+                    </p>
+                </div>
+                <div class="col-lg-5 text-center">
+                    <div class="p-4" style="background: rgba(212, 175, 55, 0.05); border: 1px dashed rgba(212, 175, 55, 0.3); border-radius: 16px;">
+                        <span style="font-size: 2.5rem;">🧘‍♂️</span>
+                        <h4 class="h5 mt-2 fw-semibold" style="color: #E5C158;">Conception Sur-Mesure</h4>
+                        <p class="small mb-0" style="color: #A0A8A2;">
+                            Vous recherchez une tonalité spécifique ou une sculpture d'ambiance unique ? Nous réalisons vos projets sur commande.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
