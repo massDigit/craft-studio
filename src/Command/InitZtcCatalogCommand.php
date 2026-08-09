@@ -249,7 +249,7 @@ class InitZtcCatalogCommand extends Command
             15000,
         );
 
-        // 4. Pages CMS Éditoriales
+        // 4. Pages CMS Éditoriales (Blog)
         $pageArtisan = $this->createCmsPage(
             'artisan-zen-too-craft',
             [
@@ -284,8 +284,43 @@ class InitZtcCatalogCommand extends Command
             $channel,
         );
 
-        // 5. Collections CMS (Footer & Blog)
-        $this->getOrCreateCmsCollection('footer_menu', 'Footer — Liens Utiles', [$pageArtisan, $pageSavoirFaire]);
+        // 5. Pages Institutionnelles & Légales (Footer)
+        $pageMentions = $this->createCmsPage(
+            'mentions-legales',
+            [
+                'fr' => [
+                    'title' => 'Mentions Légales',
+                    'slug' => 'mentions-legales',
+                    'content' => '<h2>Mentions Légales & Crédits</h2><p>Éditeur du site : Studio ZEN TOO Craft. Tous droits réservés.</p>',
+                ],
+                'en' => [
+                    'title' => 'Legal Notice',
+                    'slug' => 'legal-notice',
+                    'content' => '<h2>Legal Notice & Credits</h2><p>Publisher: ZEN TOO Craft Studio. All rights reserved.</p>',
+                ],
+            ],
+            $channel,
+        );
+
+        $pageCgv = $this->createCmsPage(
+            'conditions-generales-de-vente',
+            [
+                'fr' => [
+                    'title' => 'Conditions Générales de Vente (CGV)',
+                    'slug' => 'cgv',
+                    'content' => '<h2>Conditions Générales de Vente</h2><p>Les présentes conditions régissent l\'achat d\'objets artisanaux sur l\'atelier en ligne ZEN TOO Craft.</p>',
+                ],
+                'en' => [
+                    'title' => 'Terms & Conditions',
+                    'slug' => 'terms-conditions',
+                    'content' => '<h2>Terms & Conditions</h2><p>These terms govern the purchase of handcrafted creations on ZEN TOO Craft online studio.</p>',
+                ],
+            ],
+            $channel,
+        );
+
+        // 6. Collections CMS (Footer & Blog)
+        $this->getOrCreateCmsCollection('footer_menu', 'Footer — Informations Légales', [$pageMentions, $pageCgv]);
         $this->getOrCreateCmsCollection('blog', 'Le Journal de l\'Artisan (Blog)', [$pageArtisan, $pageSavoirFaire]);
 
         $this->entityManager->flush();
