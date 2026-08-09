@@ -48,7 +48,7 @@ class BlogPostType extends AbstractResourceType
             ->add('content', TextareaType::class, [
                 'label' => 'Corps de l\'article (Éditeur de texte riche)',
                 'attr' => [
-                    'class' => 'sylius-html-editor',
+                    'data-controller' => 'wysiwyg',
                     'rows' => 12,
                 ],
             ])

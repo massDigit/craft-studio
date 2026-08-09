@@ -9,8 +9,5 @@ app_admin_blog_post:
         templates: "@SyliusAdmin/shared/crud"
         only: ['index', 'create', 'update', 'delete']
         grid: app_admin_blog_post
-        vars:
-            templates:
-                form: "admin/blog_post/_form.html.twig"
     type: sylius.resource
     prefix: '/admin'
