@@ -10,6 +10,7 @@ use App\Entity\Product\ProductImage;
 use App\Entity\Product\ProductTaxon;
 use App\Entity\Product\ProductTranslation;
 use App\Entity\Taxonomy\TaxonTranslation;
+use App\Entity\User\AdminUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ChannelPricingInterface;
@@ -21,6 +22,8 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\Target;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
     name: 'ztc:catalog:init',
@@ -37,6 +40,18 @@ class InitZtcCatalogCommand extends Command
         private FactoryInterface $productFactory,
         private FactoryInterface $productVariantFactory,
         private FactoryInterface $channelPricingFactory,
+        private FactoryInterface $channelFactory,
+        private RepositoryInterface $localeRepository,
+        private RepositoryInterface $currencyRepository,
+        private FactoryInterface $localeFactory,
+        private FactoryInterface $currencyFactory,
+        #[Target('sylius.factory.admin_user')]
+        private FactoryInterface $adminUserFactory,
+        #[Target('sylius.repository.admin_user')]
+        private RepositoryInterface $adminUserRepository,
+        private UserPasswordHasherInterface $passwordHasher,
+        /** @phpstan-ignore property.onlyWritten */
+        private string $projectDir = '',
     ) {
         parent::__construct();
     }
@@ -45,9 +60,73 @@ class InitZtcCatalogCommand extends Command
     {
         $output->writeln('<info>Initialisation du catalogue et des visuels ZEN TOO Craft...</info>');
 
+        /** @var \Sylius\Component\Locale\Model\LocaleInterface|null $frLocale */
+        $frLocale = $this->localeRepository->findOneBy(['code' => 'fr']);
+        if (!$frLocale) {
+            /** @var \Sylius\Component\Locale\Model\LocaleInterface $frLocale */
+            $frLocale = $this->localeFactory->createNew();
+            $frLocale->setCode('fr');
+            $this->entityManager->persist($frLocale);
+        }
+
+        /** @var \Sylius\Component\Locale\Model\LocaleInterface|null $enLocale */
+        $enLocale = $this->localeRepository->findOneBy(['code' => 'en']);
+        if (!$enLocale) {
+            /** @var \Sylius\Component\Locale\Model\LocaleInterface $enLocale */
+            $enLocale = $this->localeFactory->createNew();
+            $enLocale->setCode('en');
+            $this->entityManager->persist($enLocale);
+        }
+
+        /** @var \Sylius\Component\Currency\Model\CurrencyInterface|null $eurCurrency */
+        $eurCurrency = $this->currencyRepository->findOneBy(['code' => 'EUR']);
+        if (!$eurCurrency) {
+            /** @var \Sylius\Component\Currency\Model\CurrencyInterface $eurCurrency */
+            $eurCurrency = $this->currencyFactory->createNew();
+            $eurCurrency->setCode('EUR');
+            $this->entityManager->persist($eurCurrency);
+        }
+
+        $this->entityManager->flush();
+
         /** @var ChannelInterface|null $channel */
         $channel = $this->channelRepository->findOneBy([]);
-        $defaultLocale = ($channel && $channel->getDefaultLocale()) ? $channel->getDefaultLocale()->getCode() : 'fr';
+        if (!$channel) {
+            /** @var ChannelInterface $channel */
+            $channel = $this->channelFactory->createNew();
+            $channel->setCode('ZTC_STORE');
+            $channel->setName('ZEN TOO Craft');
+            $channel->setHostname(null);
+            $channel->setEnabled(true);
+            $channel->addLocale($frLocale);
+            $channel->addLocale($enLocale);
+            $channel->setDefaultLocale($frLocale);
+            $channel->addCurrency($eurCurrency);
+            $channel->setBaseCurrency($eurCurrency);
+            $this->entityManager->persist($channel);
+            $this->entityManager->flush();
+        }
+
+        /** @var AdminUser|null $adminUser */
+        $adminUser = $this->adminUserRepository->findOneBy(['email' => 'sylius@example.com']);
+        if (!$adminUser) {
+            /** @var AdminUser $adminUser */
+            $adminUser = $this->adminUserFactory->createNew();
+            $adminUser->setEmail('sylius@example.com');
+            $adminUser->setUsername('sylius');
+            $adminUser->setPlainPassword('sylius');
+            $adminUser->setEnabled(true);
+            $adminUser->setLocaleCode('fr');
+            $adminUser->setFirstName('ZEN');
+            $adminUser->setLastName('Artisan');
+
+            $hashedPassword = $this->passwordHasher->hashPassword($adminUser, 'sylius');
+            $adminUser->setPassword($hashedPassword);
+
+            $this->entityManager->persist($adminUser);
+            $this->entityManager->flush();
+            $output->writeln('<comment>Compte Administrateur Back-Office (sylius@example.com / sylius) créé avec succès !</comment>');
+        }
 
         // Root Taxon "category"
         /** @var TaxonInterface|null $rootTaxon */
@@ -59,6 +138,13 @@ class InitZtcCatalogCommand extends Command
             $this->addTaxonTranslation($rootTaxon, 'fr', 'Catégories ZEN TOO Craft', 'categories');
             $this->addTaxonTranslation($rootTaxon, 'en', 'ZEN TOO Craft Categories', 'categories');
             $this->entityManager->persist($rootTaxon);
+            $this->entityManager->flush();
+        }
+
+        if (!$channel->getMenuTaxon()) {
+            $channel->setMenuTaxon($rootTaxon);
+            $this->entityManager->persist($channel);
+            $this->entityManager->flush();
         }
 
         // 1. Taxon Instruments
@@ -212,6 +298,7 @@ class InitZtcCatalogCommand extends Command
             /** @var Product $product */
             $product = $this->productFactory->createNew();
             $product->setCode($code);
+            $product->setEnabled(true);
             $product->setMainTaxon($taxon);
 
             foreach ($translations as $locale => $data) {
@@ -245,6 +332,13 @@ class InitZtcCatalogCommand extends Command
 
             $this->entityManager->persist($product);
         } else {
+            $product->setEnabled(true);
+            $product->setMainTaxon($taxon);
+
+            if ($channel && !$product->hasChannel($channel)) {
+                $product->addChannel($channel);
+            }
+
             foreach ($translations as $locale => $data) {
                 $this->addProductTranslation($product, $locale, $data['name'], $data['description']);
             }
@@ -262,18 +356,21 @@ class InitZtcCatalogCommand extends Command
             $variant = $this->productVariantFactory->createNew();
             $variant->setCode($code . '-default');
             $variant->setProduct($product);
+            $product->addVariant($variant);
+            $this->entityManager->persist($variant);
+        }
 
-            if ($channel) {
+        /** @var ProductVariantInterface $variant */
+        foreach ($product->getVariants() as $variant) {
+            if ($channel && !$variant->hasChannelPricingForChannel($channel)) {
                 /** @var ChannelPricingInterface $channelPricing */
                 $channelPricing = $this->channelPricingFactory->createNew();
                 $channelPricing->setChannelCode($channel->getCode());
                 $channelPricing->setPrice($priceInCents);
                 $channelPricing->setProductVariant($variant);
                 $variant->addChannelPricing($channelPricing);
+                $this->entityManager->persist($channelPricing);
             }
-
-            $product->addVariant($variant);
-            $this->entityManager->persist($variant);
         }
     }
 

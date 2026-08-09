@@ -3,15 +3,17 @@
 {% block title %}ZEN TOO Craft — Créations Artisanales & Instruments en Bambou{% endblock %}
 
 {% block content %}
-    <!-- Hero Banner "Sombre Obsidienne & Or Végétal" -->
+    <!-- Hero Banner "Sombre Obsidienne & Or Végétal" avec Logo Officiel -->
     <section class="ztc-hero position-relative overflow-hidden mb-5 py-5 text-center" style="background: radial-gradient(circle at center, rgba(212, 175, 55, 0.15) 0%, rgba(13, 15, 14, 0.95) 70%), url('{{ asset('media/image/luminaire_ombre.jpeg') }}') center/cover no-repeat; border-bottom: 1px solid var(--border-subtle, rgba(212, 175, 55, 0.2)); border-radius: 0 0 24px 24px;">
         <div class="container py-4 position-relative" style="z-index: 2;">
+            <div class="mb-4">
+                <img src="{{ asset('media/image/logo-gold-dark.png') }}" alt="ZEN TOO Craft — Logo Officiel" class="img-fluid" style="max-height: 140px; width: auto; filter: drop-shadow(0 6px 15px rgba(0, 0, 0, 0.6));">
+            </div>
+
             <span class="ztc-badge-nature mb-3 d-inline-flex align-items-center">
                 ✨ Artisanat d'Art & Éco-Responsabilité
             </span>
-            <h1 class="display-3 fw-bold my-3 text-uppercase" style="color: var(--text-primary, #F4EFE6); letter-spacing: 0.08em; text-shadow: 0 4px 15px rgba(0,0,0,0.8);">
-                ZEN TOO CRAFT
-            </h1>
+
             <p class="lead mx-auto mb-4" style="max-width: 680px; color: var(--text-secondary, #A0A8A2); font-size: 1.2rem; line-height: 1.6;">
                 Créations végétales uniques en bambou ciselé à la main. Instruments à vent méditatifs, luminaires ajourés d'ambiance et sculptures poétiques.
             </p>
@@ -133,7 +135,7 @@
                 </div>
                 <div class="col-lg-5 text-center">
                     <div class="p-4" style="background: rgba(212, 175, 55, 0.05); border: 1px dashed rgba(212, 175, 55, 0.3); border-radius: 16px;">
-                        <span style="font-size: 2.5rem;">🧘‍♂️</span>
+                        <img src="{{ asset('media/image/logo-symbol.png') }}" alt="ZEN TOO Craft — Emblème" class="img-fluid mb-2" style="max-height: 60px; width: auto;">
                         <h4 class="h5 mt-2 fw-semibold" style="color: #E5C158;">Conception Sur-Mesure</h4>
                         <p class="small mb-0" style="color: #A0A8A2;">
                             Vous recherchez une tonalité spécifique ou une sculpture d'ambiance unique ? Nous réalisons vos projets sur commande.
