@@ -15,8 +15,10 @@ sylius_grid:
                     type: string
                     label: Slug (URL)
                 published:
-                    type: boolean
+                    type: twig
                     label: Publie
+                    options:
+                        template: "@SyliusUi/Grid/Field/boolean.html.twig"
                 createdAt:
                     type: datetime
                     label: Date de creation
