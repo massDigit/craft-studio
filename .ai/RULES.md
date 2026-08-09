@@ -14,8 +14,10 @@
    - Tout développement est découpé en incréments petits, cohérents et vérifiables.
    - Les messages de commit respectent la spécification Conventional Commits (`feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`, `build:`, `style:`).
 10. **Protection de `main`, Branching & PR CI Policy** :
-    - La branche `main` est strictement protégée. Aucun développement ni merge direct local ne doit se faire sur `main`.
+    - La branche `main` est strictly protégée. Aucun développement ni merge direct local ne doit se faire sur `main`.
     - Chaque tâche s'exécute sur une branche dédiée (`feat/...`, `fix/...`).
     - La création de PR et le merge se font obligatoirement via `gh` CLI avec l'authentification `GH_TOKEN` du fichier `.env.dev` (`GH_TOKEN=$GITHUB_TOKEN gh pr create`).
     - **INTERDICTION STRICTE** de merger localement sur `main` sans que les vérifications automatisées (CI) de la Pull Request sur GitHub ne soient validées et vertes.
     - Après chaque merge à distance, revenir sur `main`, synchroniser (`git pull origin main`), supprimer la branche locale et mettre à jour `.ai/STATE.md` et `.ai/TASKS.md`.
+11. **Autorisation Explicite pour les Commits (`git add` / `git commit`)** :
+    - **INTERDICTION STRICTE** d'exécuter `git add` ou `git commit` sans demander l'autorisation préalable explicite et recevoir le feu vert de l'utilisateur.
