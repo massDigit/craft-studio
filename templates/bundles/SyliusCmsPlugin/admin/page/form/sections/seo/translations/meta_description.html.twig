@@ -1,0 +1,11 @@
+{% set form = hookable_metadata.context.form %}
+
+<div class="col-12 col-md-12">
+    {{ form_row(form.metaDescription, sylius_test_form_attribute('meta-description')|sylius_merge_recursive({
+        'label': 'Contenu Juridique / Texte de la Page Légale (Éditeur Visuel WYSIWYG)',
+        'attr': {
+            'data-controller': 'wysiwyg',
+            'rows': 12
+        }
+    })) }}
+</div>
