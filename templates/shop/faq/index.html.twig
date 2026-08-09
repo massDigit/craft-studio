@@ -1,0 +1,66 @@
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
+
+{% block title %}Foire Aux Questions (FAQ) — ZEN TOO Craft{% endblock %}
+
+{% block content %}
+    <div class="container py-5 my-3" style="max-width: 900px;">
+        <header class="text-center mb-5 p-4 p-md-5" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
+            <span class="ztc-badge-nature mb-3 d-inline-block">💡 Réponses & Conseils d'Entretien</span>
+            <h1 class="display-4 fw-bold mt-2" style="color: var(--text-primary, #F4EFE6); letter-spacing: 0.03em;">Foire Aux Questions</h1>
+            <p class="lead mt-3 mx-auto" style="color: var(--text-secondary, #A0A8A2); max-width: 700px;">
+                Retrouvez toutes les réponses concernant l'entretien des flûtes en bambou, la livraison et les créations sur-mesure.
+            </p>
+        </header>
+
+        <div class="accordion accordion-flush" id="faqAccordion">
+            <!-- Question 1 -->
+            <div class="accordion-item mb-3" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px; overflow: hidden;">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed py-4 px-4 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background: transparent; color: var(--text-primary, #F4EFE6); font-size: 1.15rem;">
+                        🎋 Comment entretenir ma flûte Shakuhachi en bambou ?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body px-4 pb-4" style="color: var(--text-secondary, #A0A8A2); line-height: 1.8;">
+                        Le bambou est un matériau vivant. Après chaque session de jeu, essuyez l'intérieur avec un chiffon doux sec. Conservez la flûte à l'abri des variations brutales de température et d'humidité. Un nourrissage à la cire d'abeille bio 1 à 2 fois par an est recommandé.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="accordion-item mb-3" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px; overflow: hidden;">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed py-4 px-4 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background: transparent; color: var(--text-primary, #F4EFE6); font-size: 1.15rem;">
+                        ✨ Proposez-vous des créations sur-mesure ?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body px-4 pb-4" style="color: var(--text-secondary, #A0A8A2); line-height: 1.8;">
+                        Oui ! Chaque projet sur-mesure (accordage particulier en 432 Hz, motif d'ajourage spécifique pour luminaire) peut être étudié directement via notre formulaire de devis en ligne.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="accordion-item mb-3" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px; overflow: hidden;">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed py-4 px-4 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background: transparent; color: var(--text-primary, #F4EFE6); font-size: 1.15rem;">
+                        📦 Quels sont les délais et modes de livraison ?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body px-4 pb-4" style="color: var(--text-secondary, #A0A8A2); line-height: 1.8;">
+                        Chaque création est expédiée dans un emballage renforcé et sécurisé sous 3 à 5 jours ouvrés. Vous recevrez un numéro de suivi dès la prise en charge par le transporteur.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 text-center p-4" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px;">
+            <p class="mb-3" style="color: var(--text-secondary, #A0A8A2);">Vous avez une autre question ?</p>
+            <a href="{{ path('sylius_shop_contact_request') }}" class="btn px-4 py-3 fw-bold text-dark" style="background: linear-gradient(135deg, #D4AF37, #E5C158); border: none; border-radius: 30px;">
+                ✉️ Contacter l'Artisan
+            </a>
+        </div>
+    </div>
+{% endblock %}
