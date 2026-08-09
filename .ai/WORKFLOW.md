@@ -88,7 +88,24 @@ Risques ou limitations identifiés (le cas échéant).
 
 ---
 
-## 🛑 4. Règle de Merge & Autonomie
-- Avant merge, inspecter le diff complet pour garantir l'absence de secrets, de code mort ou de fichiers temporaires non souhaités.
-- Privilégier un historique propre (squash merge ou rebase si nécessaire).
-- Ne jamais forcer un push sur `main` (`git push --force`).
+## 🤖 5. Procédure GitHub CLI (`gh`) & Validation CI Obligatoire
+
+Pour automatiser la gestion des Pull Requests et garantir l'intégration continue :
+
+1. **Authentification GitHub CLI (`gh`) avec Jetons du projet** :
+   Les commandes `gh` doivent systématiquement consommer le jeton présent dans l'environnement de développement (`.env.dev` / `.env.local`) :
+   ```bash
+   # Création de la Pull Request avec la CLI GitHub
+   GH_TOKEN=$GITHUB_TOKEN gh pr create --title "feat: my feature" --body-file description.md
+
+   # Vérification du statut des checks automatisés (CI)
+   GH_TOKEN=$GITHUB_TOKEN gh pr checks
+   ```
+
+2. **Séquence Obligatoire d'Intégration Distante** :
+   - **Étape 1** : Pousser la branche de fonctionnalité (`git push -u origin feat/...`).
+   - **Étape 2** : Créer la Pull Request via `gh` CLI avec `GH_TOKEN=$GITHUB_TOKEN`.
+   - **Étape 3** : Attendre que le pipeline de la CI distante passe au **VERT** (`GH_TOKEN=$GITHUB_TOKEN gh pr checks`).
+   - **Étape 4** : Ne merger la Pull Request qu'une fois la CI 100% verte.
+   - **INTERDICTION STRICTE** de fusionner localement la branche sur `main` pour contourner la PR ou la CI.
+

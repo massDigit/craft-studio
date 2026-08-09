@@ -13,8 +13,9 @@
 9. **Politique de Commits Atomiques & Conventional Commits** :
    - Tout développement est découpé en incréments petits, cohérents et vérifiables.
    - Les messages de commit respectent la spécification Conventional Commits (`feat:`, `fix:`, `refactor:`, `test:`, `docs:`, `chore:`, `build:`, `style:`).
-10. **Protection de `main`, Branching & Merge Policy** :
-    - La branche `main` est strictement protégée. Aucun développement ne se fait directement sur `main`.
-    - Chaque tâche s'exécute sur une branche dédiée explicitement nommée (`feat/product-audio`, `feat/cms-pages`, `fix/...`, `docs/...`).
-    - L'intégration sur `main` se fait uniquement via des Pull Requests (ou branches de PR) après vérification complète du diff et des tests automatisés dans le conteneur Docker.
-    - Après chaque merge, revenir sur `main`, synchroniser, supprimer la branche locale et mettre à jour `.ai/STATE.md` et `.ai/TASKS.md`.
+10. **Protection de `main`, Branching & PR CI Policy** :
+    - La branche `main` est strictement protégée. Aucun développement ni merge direct local ne doit se faire sur `main`.
+    - Chaque tâche s'exécute sur une branche dédiée (`feat/...`, `fix/...`).
+    - La création de PR et le merge se font obligatoirement via `gh` CLI avec l'authentification `GH_TOKEN` du fichier `.env.dev` (`GH_TOKEN=$GITHUB_TOKEN gh pr create`).
+    - **INTERDICTION STRICTE** de merger localement sur `main` sans que les vérifications automatisées (CI) de la Pull Request sur GitHub ne soient validées et vertes.
+    - Après chaque merge à distance, revenir sur `main`, synchroniser (`git pull origin main`), supprimer la branche locale et mettre à jour `.ai/STATE.md` et `.ai/TASKS.md`.
