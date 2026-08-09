@@ -18,7 +18,7 @@ sylius_grid:
                     type: twig
                     label: Publie
                     options:
-                        template: "@SyliusUi/Grid/Field/boolean.html.twig"
+                        template: "@SyliusAdmin/shared/grid/field/boolean.html.twig"
                 createdAt:
                     type: datetime
                     label: Date de creation
