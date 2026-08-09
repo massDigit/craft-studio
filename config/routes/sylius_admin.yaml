@@ -1,3 +1,13 @@
 sylius_admin:
     resource: "@SyliusAdminBundle/Resources/config/routing.yml"
     prefix: '/%sylius_admin.path_name%'
+
+app_admin_blog_post:
+    resource: |
+        alias: app.blog_post
+        section: admin
+        templates: "@SyliusAdmin/shared/crud"
+        only: ['index', 'create', 'update', 'delete']
+        grid: app_admin_blog_post
+    type: sylius.resource
+    prefix: '/admin'

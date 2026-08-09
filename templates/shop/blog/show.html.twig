@@ -1,0 +1,87 @@
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
+
+{% block title %}{{ post.title }} — Le Journal ZEN TOO Craft{% endblock %}
+
+{% block metatags %}
+    <meta name="description" content="{{ (post.excerpt|default(post.title)|striptags)|u.truncate(160, '...') }}">
+    <meta property="og:title" content="{{ post.title }} — Le Journal ZEN TOO Craft">
+    <meta property="og:description" content="{{ (post.excerpt|default(post.title)|striptags)|u.truncate(160, '...') }}">
+    <meta property="og:type" content="article">
+    {% if post.coverImage is not empty %}
+        <meta property="og:image" content="{{ absolute_url(asset('media/image/' ~ post.coverImage)) }}">
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <!-- Structured Data JSON-LD pour Google Analytics / Googlebot -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "{{ post.title|e('js') }}",
+      "description": "{{ (post.excerpt|default(post.title)|striptags)|e('js') }}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ post.author|default('ZEN TOO Craft')|e('js') }}"
+      },
+      "datePublished": "{{ (post.publishedAt ? post.publishedAt : post.createdAt)|date('c') }}"
+    }
+    </script>
+
+    <div class="container py-5 my-3" style="max-width: 900px;">
+        <!-- Fil d'Ariane Sémantique -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="{{ path('sylius_shop_homepage') }}" itemprop="item" style="color: var(--gold-light, #E5C158); text-decoration: none;">
+                        <span itemprop="name">Accueil</span>
+                    </a>
+                    <meta itemprop="position" content="1" />
+                </li>
+                <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                    <a href="{{ path('app_blog_index') }}" itemprop="item" style="color: var(--gold-light, #E5C158); text-decoration: none;">
+                        <span itemprop="name">Journal</span>
+                    </a>
+                    <meta itemprop="position" content="2" />
+                </li>
+                <li class="breadcrumb-item active" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem" style="color: var(--text-primary, #F4EFE6);">
+                    <span itemprop="name">{{ post.title }}</span>
+                    <meta itemprop="position" content="3" />
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Article Sémantique HTML5 (article, header, main content, footer) -->
+        <article class="p-4 p-md-5" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+            <header class="text-center mb-5 pb-4 border-bottom" style="border-color: rgba(212, 175, 55, 0.2) !important;">
+                <span class="ztc-badge-nature mb-3 d-inline-block">Le Journal de l'Artisan</span>
+                <h1 class="display-4 fw-bold mt-2 mb-4" style="color: var(--text-primary, #F4EFE6); letter-spacing: 0.03em;">{{ post.title }}</h1>
+                <div class="small" style="color: #A0A8A2;">
+                    <span>Publié le <time datetime="{{ (post.publishedAt ? post.publishedAt : post.createdAt)|date('Y-m-d') }}">{{ (post.publishedAt ? post.publishedAt : post.createdAt)|date("d/m/Y") }}</time></span>
+                    <span class="mx-2">•</span>
+                    <span>Par {{ post.author|default('ZEN TOO Craft') }}</span>
+                </div>
+            </header>
+
+            {% if post.coverImage is not empty %}
+                <div class="mb-5 rounded-4 overflow-hidden" style="max-height: 450px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <img src="{{ asset('media/image/' ~ post.coverImage) }}" alt="{{ post.title }}" class="w-100 h-100 object-fit-cover" loading="eager">
+                </div>
+            {% endif %}
+
+            <!-- Contenu Rédactionnel avec Rendu des Balises HTML5 (h2, h3, p, ul, ol, strong, em, a, img) -->
+            <div class="ztc-cms-content" style="color: var(--text-secondary, #A0A8A2); line-height: 1.8; font-size: 1.1rem;">
+                {{ post.content|raw }}
+            </div>
+
+            <footer class="mt-5 pt-4 border-top text-center d-flex flex-wrap justify-content-between align-items-center gap-3" style="border-color: rgba(212, 175, 55, 0.15) !important;">
+                <a href="{{ path('app_blog_index') }}" class="btn btn-outline-light px-4 py-2" style="border-color: rgba(212, 175, 55, 0.3); color: #D4AF37;">
+                    &larr; Retour au Journal
+                </a>
+                <a href="{{ path('sylius_shop_contact_request') }}" class="btn px-4 py-3 fw-bold text-dark" style="background: linear-gradient(135deg, #D4AF37, #E5C158); border: none; border-radius: 30px;">
+                    Échanger avec l'Artisan pour un Projet Sur-Mesure
+                </a>
+            </footer>
+        </article>
+    </div>
+{% endblock %}

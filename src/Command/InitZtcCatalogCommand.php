@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Entity\Blog\BlogPost;
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductAudio;
 use App\Entity\Product\ProductImage;
@@ -12,6 +13,9 @@ use App\Entity\Product\ProductTranslation;
 use App\Entity\Taxonomy\TaxonTranslation;
 use App\Entity\User\AdminUser;
 use Doctrine\ORM\EntityManagerInterface;
+use Sylius\CmsPlugin\Entity\Collection;
+use Sylius\CmsPlugin\Entity\Page;
+use Sylius\CmsPlugin\Entity\PageTranslation;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ChannelPricingInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
@@ -50,6 +54,14 @@ class InitZtcCatalogCommand extends Command
         #[Target('sylius.repository.admin_user')]
         private RepositoryInterface $adminUserRepository,
         private UserPasswordHasherInterface $passwordHasher,
+        #[Target('sylius_cms.factory.page')]
+        private FactoryInterface $pageFactory,
+        #[Target('sylius_cms.repository.page')]
+        private RepositoryInterface $pageRepository,
+        #[Target('sylius_cms.factory.collection')]
+        private FactoryInterface $collectionFactory,
+        #[Target('sylius_cms.repository.collection')]
+        private RepositoryInterface $collectionRepository,
         /** @phpstan-ignore property.onlyWritten */
         private string $projectDir = '',
     ) {
@@ -238,11 +250,156 @@ class InitZtcCatalogCommand extends Command
             15000,
         );
 
+        // 4. Pages Institutionnelles & Légales (Footer)
+
+        $pageMentions = $this->createCmsPage(
+            'mentions-legales',
+            [
+                'fr' => [
+                    'title' => 'Mentions Légales',
+                    'slug' => 'mentions-legales',
+                    'content' => '<h2>Mentions Légales & Crédits</h2><p>Éditeur du site : Studio ZEN TOO Craft. Tous droits réservés.</p>',
+                ],
+                'en' => [
+                    'title' => 'Legal Notice',
+                    'slug' => 'legal-notice',
+                    'content' => '<h2>Legal Notice & Credits</h2><p>Publisher: ZEN TOO Craft Studio. All rights reserved.</p>',
+                ],
+            ],
+            $channel,
+        );
+
+        $pageCgv = $this->createCmsPage(
+            'conditions-generales-de-vente',
+            [
+                'fr' => [
+                    'title' => 'Conditions Générales de Vente (CGV)',
+                    'slug' => 'cgv',
+                    'content' => '<h2>Conditions Générales de Vente</h2><p>Les présentes conditions régissent l\'achat d\'objets artisanaux sur l\'atelier en ligne ZEN TOO Craft.</p>',
+                ],
+                'en' => [
+                    'title' => 'Terms & Conditions',
+                    'slug' => 'terms-conditions',
+                    'content' => '<h2>Terms & Conditions</h2><p>These terms govern the purchase of handcrafted creations on ZEN TOO Craft online studio.</p>',
+                ],
+            ],
+            $channel,
+        );
+
+        // 6. Articles du Journal (Blog Dédié)
+        $this->createBlogPost(
+            'artisan-zen-too-craft',
+            'L\'Artisan ZEN TOO Craft',
+            'l-artisan-zen-too-craft',
+            'L\'atelier ZEN TOO Craft façonne des pièces uniques sculptées à la main dans le respect de la matière brute et de la nature.',
+            '<h2>L\'Art du Bambou & du Son</h2><p>L\'atelier ZEN TOO Craft façonne des pièces uniques sculptées à la main dans le respect de la matière brute et de la nature.</p>',
+            'flute_shakuhachi.jpeg',
+        );
+
+        $this->createBlogPost(
+            'savoir-faire-bambou',
+            'Savoir-Faire & Charte Éco-Responsable',
+            'savoir-faire-bambou',
+            'Sélection naturelle des tiges de bambou, séchage au soleil, polissage à la cire bio d\'abeille et accordage acoustique de précision (La 440 Hz / 432 Hz).',
+            '<h2>Artisanat Éco-Responsable</h2><p>Sélection naturelle des tiges de bambou, séchage au soleil, polissage à la cire bio d\'abeille et accordage acoustique de précision (La 440 Hz / 432 Hz).</p>',
+            'luminaire_ombre.jpeg',
+        );
+
+        // 7. Collections CMS (Footer)
+        $this->getOrCreateCmsCollection('footer_menu', 'Footer — Informations Légales', [$pageMentions, $pageCgv]);
+
         $this->entityManager->flush();
 
-        $output->writeln('<info>Catalogue et visuels produits ZEN TOO Craft initialisés avec succès !</info>');
+        $output->writeln('<info>Catalogue, visuels, pages CMS et articles du journal initialisés avec succès !</info>');
 
         return Command::SUCCESS;
+    }
+
+    private function createBlogPost(
+        string $code,
+        string $title,
+        string $slug,
+        string $excerpt,
+        string $content,
+        ?string $coverImage = null,
+    ): void {
+        $blogPost = $this->entityManager->getRepository(BlogPost::class)->findOneBy(['code' => $code]);
+        if (!$blogPost) {
+            $blogPost = new BlogPost();
+            $blogPost->setCode($code);
+            $blogPost->setTitle($title);
+            $blogPost->setSlug($slug);
+            $blogPost->setExcerpt($excerpt);
+            $blogPost->setContent($content);
+            $blogPost->setCoverImage($coverImage);
+            $blogPost->setAuthor('ZEN TOO Craft');
+            $blogPost->setPublished(true);
+            $blogPost->setPublishedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($blogPost);
+        }
+    }
+
+    /**
+     * @param array<Page|null> $pages
+     */
+    private function getOrCreateCmsCollection(string $code, string $name, array $pages): void
+    {
+        /** @var Collection|null $collection */
+        $collection = $this->collectionRepository->findOneBy(['code' => $code]);
+        if (!$collection) {
+            /** @var Collection $collection */
+            $collection = $this->collectionFactory->createNew();
+            $collection->setCode($code);
+            $collection->setName($name);
+            $this->entityManager->persist($collection);
+        } else {
+            $collection->setName($name);
+            $collection->getPages()?->clear();
+        }
+
+        foreach ($pages as $page) {
+            if ($page && !$collection->hasPage($page)) {
+                $collection->addPage($page);
+            }
+        }
+    }
+
+    /**
+     * @param array<string, array{title: string, slug: string, content: string}> $translations
+     */
+    private function createCmsPage(string $code, array $translations, ?ChannelInterface $channel): Page
+    {
+        /** @var Page|null $page */
+        $page = $this->pageRepository->findOneBy(['code' => $code]);
+        if (!$page) {
+            /** @var Page $page */
+            $page = $this->pageFactory->createNew();
+            $page->setCode($code);
+            $page->setName($translations['fr']['title'] ?? $code);
+            $page->setEnabled(true);
+
+            if ($channel) {
+                $page->addChannel($channel);
+            }
+
+            foreach ($translations as $locale => $data) {
+                $translation = new PageTranslation();
+                $translation->setLocale($locale);
+                $translation->setTitle($data['title']);
+                $translation->setSlug($data['slug']);
+                $translation->setMetaDescription(strip_tags($data['content']));
+                $page->addTranslation($translation);
+            }
+
+            $this->entityManager->persist($page);
+        } else {
+            $page->setEnabled(true);
+            if ($channel && !$page->hasChannel($channel)) {
+                $page->addChannel($channel);
+            }
+        }
+
+        return $page;
     }
 
     /**

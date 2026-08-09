@@ -1,0 +1,126 @@
+<div class="container-xl" {{ attributes }}>
+    {{ form_start(form, {'attr': {'class': 'ui loadable form', 'novalidate': 'novalidate', 'id': form.vars.id}}) }}
+    {% if hookable_metadata.configuration.method is defined %}
+        <input type="hidden" name="_method" value="{{ hookable_metadata.configuration.method }}" />
+    {% endif %}
+    {{ form_errors(form) }}
+    {{ form_widget(form._token) }}
+
+    {% set locale_names = {
+        'fr_FR': 'Français',
+        'fr': 'Français',
+        'en_US': 'English',
+        'en': 'English'
+    } %}
+
+    <div class="row">
+        <!-- Colonne Principale : Contenu du Document par Langue -->
+        <div class="col-12 col-lg-8">
+            <!-- Carte En-tete : Identite Technique du Document -->
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold py-3">
+                    Identite Technique du Document Legal
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        {{ form_row(form.name, {
+                            'label': 'Nom Interne de la Page',
+                            'label_attr': {'class': 'form-label fw-bold mb-2'}
+                        }) }}
+                        <div class="form-text text-muted mt-2">Nom de référence affiché dans l'administration (ex: Conditions Générales de Vente).</div>
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.code, {
+                            'label': 'Code Unique de Reference',
+                            'label_attr': {'class': 'form-label fw-bold mb-2'}
+                        }) }}
+                        <div class="form-text text-muted mt-2">Identifiant unique technique (ex: cgv, mentions-legales).</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Blocs de Redaction Isoles par Langue avec Toggles Repliables et Espacement Aere -->
+            {% for locale, translation in form.translations %}
+                {% set display_language = locale_names[locale] is defined ? locale_names[locale] : locale|sylius_locale_name|default(locale|upper) %}
+                {% set is_default_locale = (locale == 'fr_FR' or locale == 'fr' or loop.first) %}
+                
+                <div class="card mb-4 shadow-sm border border-secondary" data-controller="toggle" data-toggle-open-value="{{ is_default_locale ? 'true' : 'false' }}">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-3" style="cursor: pointer;" data-action="click->toggle#toggle">
+                        <div class="d-flex align-items-center gap-2">
+                            <span data-toggle-target="icon" class="text-warning fw-bold font-monospace me-2">[-]</span>
+                            <span class="fw-bold fs-6">Redaction du Document Legal</span>
+                        </div>
+                        <span class="badge bg-warning text-dark fw-bold px-3 py-2" style="letter-spacing: 0.05em;">
+                            Langue : {{ display_language }}
+                        </span>
+                    </div>
+                    
+                    <div class="card-body p-4" data-toggle-target="content">
+                        <div class="mb-4">
+                            {{ form_row(translation.title, {
+                                'label': 'Titre du Document (' ~ display_language ~ ')',
+                                'label_attr': {'class': 'form-label fw-bold mb-2'}
+                            }) }}
+                            <div class="form-text text-muted mt-2">Titre de la page visible par les clients (ex: Conditions Générales de Vente).</div>
+                        </div>
+
+                        <div class="mb-4">
+                            {{ form_row(translation.slug, {
+                                'label': 'Slug / URL Publique (' ~ display_language ~ ')',
+                                'label_attr': {'class': 'form-label fw-bold mb-2'}
+                            }) }}
+                            <div class="form-text text-muted mt-2">Adresse web d'accès à la page (ex: cgv, mentions-legales).</div>
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_row(translation.metaDescription, {
+                                'label': 'Contenu Juridique / Texte de la Page Légale (' ~ display_language ~ ')',
+                                'label_attr': {'class': 'form-label fw-bold mb-2'},
+                                'attr': {
+                                    'data-controller': 'wysiwyg',
+                                    'rows': 12
+                                }
+                            }) }}
+                            <div class="form-text text-muted mt-2">Rédigez les clauses juridiques de cette langue. Utilisez la barre d'outils WYSIWYG pour formater les articles.</div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Colonne Laterale : Emplacement & Publication -->
+        <div class="col-12 col-lg-4">
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold py-3">
+                    Parametres d'Affichage & Publication
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        {{ form_row(form.enabled, {
+                            'label': 'Activer et publier cette page sur le site',
+                            'label_attr': {'class': 'form-label fw-bold mb-2'}
+                        }) }}
+                        <div class="form-text text-muted mt-2">Si coché, la page sera immédiatement accessible aux visiteurs.</div>
+                    </div>
+
+                    <div class="mb-4">
+                        {{ form_row(form.collections, {
+                            'label': 'Emplacement dans le site',
+                            'label_attr': {'class': 'form-label fw-bold mb-2'}
+                        }) }}
+                        <div class="form-text text-muted mt-2">Sélectionnez "footer_menu" pour lier cette page dans le pied de page.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form_row(form.channels, {
+                            'label': 'Canaux de Diffusion',
+                            'label_attr': {'class': 'form-label fw-bold mb-2'}
+                        }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ form_end(form, {render_rest: false}) }}
+</div>

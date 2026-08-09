@@ -1,0 +1,10 @@
+{% set form = hookable_metadata.context.form %}
+
+<div class="col-12 col-md-12">
+    {{ form_row(form.teaserContent, sylius_test_form_attribute('teaser-content')|sylius_merge_recursive({
+        'attr': {
+            'data-controller': 'wysiwyg',
+            'rows': 10
+        }
+    })) }}
+</div>
