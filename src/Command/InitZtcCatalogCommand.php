@@ -343,6 +343,9 @@ class InitZtcCatalogCommand extends Command
             $collection->setCode($code);
             $collection->setName($name);
             $this->entityManager->persist($collection);
+        } else {
+            $collection->setName($name);
+            $collection->getPages()?->clear();
         }
 
         foreach ($pages as $page) {
