@@ -31,10 +31,11 @@ class AdminMenuListener
                 $pages->setLabel('Pages Legales & Footer');
             }
 
-            // Masquage des sections complexes (Blocs et Modeles) pour simplifier l'interface client
+            // Masquage des sections complexes et obsoletes (Blocs, Modeles, Collections et Medias)
             $cmsMenu->removeChild('blocks');
             $cmsMenu->removeChild('templates');
             $cmsMenu->removeChild('collections');
+            $cmsMenu->removeChild('media');
         }
     }
 }
