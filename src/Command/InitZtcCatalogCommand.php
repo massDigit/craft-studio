@@ -12,6 +12,7 @@ use App\Entity\Product\ProductTranslation;
 use App\Entity\Taxonomy\TaxonTranslation;
 use App\Entity\User\AdminUser;
 use Doctrine\ORM\EntityManagerInterface;
+use Sylius\CmsPlugin\Entity\Collection;
 use Sylius\CmsPlugin\Entity\Page;
 use Sylius\CmsPlugin\Entity\PageTranslation;
 use Sylius\Component\Core\Model\ChannelInterface;
@@ -56,6 +57,10 @@ class InitZtcCatalogCommand extends Command
         private FactoryInterface $pageFactory,
         #[Target('sylius_cms.repository.page')]
         private RepositoryInterface $pageRepository,
+        #[Target('sylius_cms.factory.collection')]
+        private FactoryInterface $collectionFactory,
+        #[Target('sylius_cms.repository.collection')]
+        private RepositoryInterface $collectionRepository,
         /** @phpstan-ignore property.onlyWritten */
         private string $projectDir = '',
     ) {
@@ -245,7 +250,7 @@ class InitZtcCatalogCommand extends Command
         );
 
         // 4. Pages CMS Éditoriales
-        $this->createCmsPage(
+        $pageArtisan = $this->createCmsPage(
             'artisan-zen-too-craft',
             [
                 'fr' => [
@@ -262,7 +267,7 @@ class InitZtcCatalogCommand extends Command
             $channel,
         );
 
-        $this->createCmsPage(
+        $pageSavoirFaire = $this->createCmsPage(
             'savoir-faire-bambou',
             [
                 'fr' => [
@@ -279,17 +284,43 @@ class InitZtcCatalogCommand extends Command
             $channel,
         );
 
+        // 5. Collections CMS (Footer & Blog)
+        $this->getOrCreateCmsCollection('footer_menu', 'Footer — Liens Utiles', [$pageArtisan, $pageSavoirFaire]);
+        $this->getOrCreateCmsCollection('blog', 'Le Journal de l\'Artisan (Blog)', [$pageArtisan, $pageSavoirFaire]);
+
         $this->entityManager->flush();
 
-        $output->writeln('<info>Catalogue, visuels et pages CMS ZEN TOO Craft initialisés avec succès !</info>');
+        $output->writeln('<info>Catalogue, visuels, pages CMS et collections ZEN TOO Craft initialisés avec succès !</info>');
 
         return Command::SUCCESS;
     }
 
     /**
+     * @param array<Page|null> $pages
+     */
+    private function getOrCreateCmsCollection(string $code, string $name, array $pages): void
+    {
+        /** @var Collection|null $collection */
+        $collection = $this->collectionRepository->findOneBy(['code' => $code]);
+        if (!$collection) {
+            /** @var Collection $collection */
+            $collection = $this->collectionFactory->createNew();
+            $collection->setCode($code);
+            $collection->setName($name);
+            $this->entityManager->persist($collection);
+        }
+
+        foreach ($pages as $page) {
+            if ($page && !$collection->hasPage($page)) {
+                $collection->addPage($page);
+            }
+        }
+    }
+
+    /**
      * @param array<string, array{title: string, slug: string, content: string}> $translations
      */
-    private function createCmsPage(string $code, array $translations, ?ChannelInterface $channel): void
+    private function createCmsPage(string $code, array $translations, ?ChannelInterface $channel): Page
     {
         /** @var Page|null $page */
         $page = $this->pageRepository->findOneBy(['code' => $code]);
@@ -320,6 +351,8 @@ class InitZtcCatalogCommand extends Command
                 $page->addChannel($channel);
             }
         }
+
+        return $page;
     }
 
     /**
