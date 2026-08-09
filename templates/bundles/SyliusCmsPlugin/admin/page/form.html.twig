@@ -1,4 +1,4 @@
-<div class="container-xl" {{ attributes }}>
+<div class="container-xl" {{ attributes }} data-controller="legal-sections">
     {{ form_start(form, {'attr': {'class': 'ui loadable form', 'novalidate': 'novalidate', 'id': form.vars.id}}) }}
     {% if hookable_metadata.configuration.method is defined %}
         <input type="hidden" name="_method" value="{{ hookable_metadata.configuration.method }}" />
@@ -7,51 +7,81 @@
     {{ form_widget(form._token) }}
 
     <div class="row">
+        <!-- Colonne Principale : Informations Generales & Articles -->
         <div class="col-12 col-lg-8">
+            <!-- Carte En-tete de la Page Legale -->
             <div class="card mb-4 shadow-sm border-0">
                 <div class="card-header bg-dark text-white fw-bold">
-                    Rédaction de la Page Légale
+                    Identite du Document Legal
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        {{ form_row(form.name, {'label': 'Titre de la Page Légale'}) }}
+                        {{ form_row(form.name, {'label': 'Titre Global du Document'}) }}
+                        <div class="form-text text-muted">Exemple : Conditions Generales de Vente (CGV), Mentions Legales, ou Politique de Confidentialite.</div>
                     </div>
                     <div class="mb-3">
-                        {{ form_row(form.code) }}
+                        {{ form_row(form.code, {'label': 'Code Unique de Reference'}) }}
+                        <div class="form-text text-muted">Identifiant unique du document (ex: cgv, mentions-legales).</div>
                     </div>
 
                     {% for translation in form.translations %}
                         <div class="mb-3">
-                            {{ form_row(translation.slug, {'label': 'Slug (URL)'}) }}
-                        </div>
-                        <div class="mb-3">
-                            {{ form_row(translation.metaDescription, {
-                                'label': 'Contenu Juridique / Texte de la Page Légale (Éditeur Visuel WYSIWYG)',
-                                'attr': {
-                                    'data-controller': 'wysiwyg',
-                                    'rows': 14
-                                }
-                            }) }}
+                            {{ form_row(translation.slug, {'label': 'Slug (URL Publique)'}) }}
+                            <div class="form-text text-muted">L'adresse web d'acces a la page (ex: cgv, mentions-legales).</div>
                         </div>
                     {% endfor %}
                 </div>
             </div>
+
+            <!-- Conteneur des Sections / Articles Juridiques Ordonnes -->
+            <div class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="fw-bold mb-0">Decoupage par Articles & Sections Juridiques</h5>
+                    <button type="button" class="btn btn-primary" data-action="click->legal-sections#addSection">
+                        + Ajouter un Article Juridique
+                    </button>
+                </div>
+
+                <div data-legal-sections-target="container">
+                    <!-- Article 1 par defaut -->
+                    <div class="card mb-4 border-secondary shadow-sm legal-section-item">
+                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                            <span class="fw-bold">Article / Section 1</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Titre de l'Article ou du Chapitre</label>
+                                <input type="text" name="page[sections][1][title]" class="form-control" placeholder="Ex: Article 1 - Objet et Champ d'application">
+                                <div class="form-text text-muted">Indiquez l'intitule de cet article (ex: Article 1 - Objet, Article 2 - Tarifs).</div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Contenu Juridique de cet Article (Editeur Visuel WYSIWYG)</label>
+                                <textarea name="page[sections][1][content]" class="form-control legal-section-content" rows="8"></textarea>
+                                <div class="form-text text-muted">Redigez les clauses de cet article. Utilisez la barre d'outils pour la mise en forme.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- Colonne Laterale : Emplacement & Publication -->
         <div class="col-12 col-lg-4">
             <div class="card mb-4 shadow-sm border-0">
                 <div class="card-header bg-dark text-white fw-bold">
-                    Paramètres & Emplacement
+                    Parametres d'Affichage & Publication
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        {{ form_row(form.enabled, {'label': 'Activer et publier cette page'}) }}
+                        {{ form_row(form.enabled, {'label': 'Activer et publier cette page sur le site'}) }}
+                        <div class="form-text text-muted">Si coche, la page sera accessible par les visiteurs du site.</div>
                     </div>
                     <div class="mb-3">
-                        {{ form_row(form.collections, {'label': 'Emplacement (ex: footer_menu)'}) }}
+                        {{ form_row(form.collections, {'label': 'Emplacement de la Page'}) }}
+                        <div class="form-text text-muted">Selectionnez "footer_menu" pour faire apparaitre cette page dans le pied de page.</div>
                     </div>
                     <div class="mb-3">
-                        {{ form_row(form.channels) }}
+                        {{ form_row(form.channels, {'label': 'Canal de Diffusion'}) }}
                     </div>
                 </div>
             </div>
