@@ -1,0 +1,92 @@
+<!-- Quill.js Stylesheet -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<div class="row">
+    <div class="col-12 col-lg-8">
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">
+                Publication & Contenu de l'Article
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    {{ form_row(form.title) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.slug) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.code) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.excerpt) }}
+                </div>
+
+                <!-- Éditeur de texte riche WYSIWYG pour le contenu -->
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Corps de l'article (Éditeur Visuel WYSIWYG)</label>
+                    <div id="quill-editor-container" style="min-height: 320px; background: #ffffff; color: #212529; border-radius: 0 0 8px 8px;"></div>
+                    <div class="d-none">
+                        {{ form_widget(form.content, {'attr': {'id': 'ztc-blog-content-textarea'}}) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-lg-4">
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">
+                Image & Statut
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    {{ form_row(form.coverImageFile) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.published) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script Quill.js WYSIWYG -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var textarea = document.getElementById('ztc-blog-content-textarea');
+        var editorContainer = document.getElementById('quill-editor-container');
+
+        if (textarea && editorContainer) {
+            // Remplir l'éditeur avec la valeur initiale du textarea
+            editorContainer.innerHTML = textarea.value || '';
+
+            var quill = new Quill('#quill-editor-container', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Synchroniser les modifications vers le textarea lors de la soumission
+            var formElement = textarea.closest('form');
+            if (formElement) {
+                formElement.addEventListener('submit', function() {
+                    textarea.value = quill.root.innerHTML;
+                });
+            }
+
+            quill.on('text-change', function() {
+                textarea.value = quill.root.innerHTML;
+            });
+        }
+    });
+</script>
