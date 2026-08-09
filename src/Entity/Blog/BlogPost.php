@@ -7,11 +7,12 @@ namespace App\Entity\Blog;
 use App\Repository\BlogPostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Sylius\Resource\Model\ResourceInterface;
 
 #[ORM\Entity(repositoryClass: BlogPostRepository::class)]
 #[ORM\Table(name: 'ztc_blog_post')]
 #[ORM\HasLifecycleCallbacks]
-class BlogPost
+class BlogPost implements ResourceInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
