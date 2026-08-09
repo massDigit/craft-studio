@@ -12,6 +12,8 @@ use App\Entity\Product\ProductTranslation;
 use App\Entity\Taxonomy\TaxonTranslation;
 use App\Entity\User\AdminUser;
 use Doctrine\ORM\EntityManagerInterface;
+use Sylius\CmsPlugin\Entity\Page;
+use Sylius\CmsPlugin\Entity\PageTranslation;
 use Sylius\Component\Core\Model\ChannelInterface;
 use Sylius\Component\Core\Model\ChannelPricingInterface;
 use Sylius\Component\Core\Model\ProductVariantInterface;
@@ -50,6 +52,10 @@ class InitZtcCatalogCommand extends Command
         #[Target('sylius.repository.admin_user')]
         private RepositoryInterface $adminUserRepository,
         private UserPasswordHasherInterface $passwordHasher,
+        #[Target('sylius_cms.factory.page')]
+        private FactoryInterface $pageFactory,
+        #[Target('sylius_cms.repository.page')]
+        private RepositoryInterface $pageRepository,
         /** @phpstan-ignore property.onlyWritten */
         private string $projectDir = '',
     ) {
@@ -238,11 +244,82 @@ class InitZtcCatalogCommand extends Command
             15000,
         );
 
+        // 4. Pages CMS Éditoriales
+        $this->createCmsPage(
+            'artisan-zen-too-craft',
+            [
+                'fr' => [
+                    'title' => 'L\'Artisan ZEN TOO Craft',
+                    'slug' => 'l-artisan-zen-too-craft',
+                    'content' => '<h2>L\'Art du Bambou & du Son</h2><p>L\'atelier ZEN TOO Craft façonne des pièces uniques sculptées à la main dans le respect de la matière brute et de la nature.</p>',
+                ],
+                'en' => [
+                    'title' => 'The ZEN TOO Craft Artisan',
+                    'slug' => 'the-zen-too-craft-artisan',
+                    'content' => '<h2>The Art of Bamboo & Sound</h2><p>The ZEN TOO Craft workshop creates unique hand-carved pieces respecting raw materials and nature.</p>',
+                ],
+            ],
+            $channel,
+        );
+
+        $this->createCmsPage(
+            'savoir-faire-bambou',
+            [
+                'fr' => [
+                    'title' => 'Savoir-Faire & Charte Éco-Responsable',
+                    'slug' => 'savoir-faire-bambou',
+                    'content' => '<h2>Artisanat Éco-Responsable</h2><p>Sélection naturelle des tiges de bambou, séchage au soleil, polissage à la cire bio d\'abeille et accordage acoustique de précision (La 440 Hz / 432 Hz).</p>',
+                ],
+                'en' => [
+                    'title' => 'Craftsmanship & Eco-Responsible Charter',
+                    'slug' => 'craftsmanship-bamboo',
+                    'content' => '<h2>Eco-Friendly Craftsmanship</h2><p>Natural selection of bamboo stalks, sun drying, organic beeswax polishing, and precision acoustic tuning (A 440 Hz / 432 Hz).</p>',
+                ],
+            ],
+            $channel,
+        );
+
         $this->entityManager->flush();
 
-        $output->writeln('<info>Catalogue et visuels produits ZEN TOO Craft initialisés avec succès !</info>');
+        $output->writeln('<info>Catalogue, visuels et pages CMS ZEN TOO Craft initialisés avec succès !</info>');
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * @param array<string, array{title: string, slug: string, content: string}> $translations
+     */
+    private function createCmsPage(string $code, array $translations, ?ChannelInterface $channel): void
+    {
+        /** @var Page|null $page */
+        $page = $this->pageRepository->findOneBy(['code' => $code]);
+        if (!$page) {
+            /** @var Page $page */
+            $page = $this->pageFactory->createNew();
+            $page->setCode($code);
+            $page->setName($translations['fr']['title'] ?? $code);
+            $page->setEnabled(true);
+
+            if ($channel) {
+                $page->addChannel($channel);
+            }
+
+            foreach ($translations as $locale => $data) {
+                $translation = new PageTranslation();
+                $translation->setLocale($locale);
+                $translation->setTitle($data['title']);
+                $translation->setSlug($data['slug']);
+                $translation->setMetaDescription(strip_tags($data['content']));
+                $page->addTranslation($translation);
+            }
+
+            $this->entityManager->persist($page);
+        } else {
+            $page->setEnabled(true);
+            if ($channel && !$page->hasChannel($channel)) {
+                $page->addChannel($channel);
+            }
+        }
     }
 
     /**
