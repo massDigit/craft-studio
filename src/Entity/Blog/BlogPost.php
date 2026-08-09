@@ -8,6 +8,8 @@ use App\Repository\BlogPostRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Resource\Model\ResourceInterface;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: BlogPostRepository::class)]
 #[ORM\Table(name: 'ztc_blog_post')]
@@ -35,6 +37,8 @@ class BlogPost implements ResourceInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $coverImage = null;
 
+    private ?File $coverImageFile = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $excerpt = null;
 
@@ -59,9 +63,24 @@ class BlogPost implements ResourceInterface
         $this->publishedAt = new \DateTimeImmutable();
     }
 
+    #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function onPreUpdate(): void
+    public function uploadCoverImage(): void
     {
+        if ($this->coverImageFile instanceof UploadedFile) {
+            $uploadDir = __DIR__ . '/../../../public/media/image';
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0777, true);
+            }
+
+            $extension = $this->coverImageFile->guessExtension() ?? 'jpg';
+            $filename = sprintf('%s_%s.%s', $this->slug ?? 'post', md5(uniqid('', true)), $extension);
+
+            $this->coverImageFile->move($uploadDir, $filename);
+            $this->coverImage = $filename;
+            $this->coverImageFile = null;
+        }
+
         $this->updatedAt = new \DateTime();
     }
 
@@ -118,6 +137,16 @@ class BlogPost implements ResourceInterface
     public function setCoverImage(?string $coverImage): void
     {
         $this->coverImage = $coverImage;
+    }
+
+    public function getCoverImageFile(): ?File
+    {
+        return $this->coverImageFile;
+    }
+
+    public function setCoverImageFile(?File $coverImageFile): void
+    {
+        $this->coverImageFile = $coverImageFile;
     }
 
     public function getExcerpt(): ?string
