@@ -5,19 +5,10 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Blog\BlogPost;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
-/**
- * @extends ServiceEntityRepository<BlogPost>
- */
-class BlogPostRepository extends ServiceEntityRepository
+class BlogPostRepository extends EntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, BlogPost::class);
-    }
-
     /**
      * @return array<int, BlogPost>
      */
