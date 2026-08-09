@@ -1,0 +1,62 @@
+<div class="container-xl" {{ attributes }}>
+    {{ form_start(form, {'attr': {'class': 'ui loadable form', 'novalidate': 'novalidate', 'id': form.vars.id}}) }}
+    {% if hookable_metadata.configuration.method is defined %}
+        <input type="hidden" name="_method" value="{{ hookable_metadata.configuration.method }}" />
+    {% endif %}
+    {{ form_errors(form) }}
+    {{ form_widget(form._token) }}
+
+    <div class="row">
+        <div class="col-12 col-lg-8">
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold">
+                    Rédaction de la Page Légale
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        {{ form_row(form.name, {'label': 'Titre de la Page Légale'}) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.code) }}
+                    </div>
+
+                    {% for translation in form.translations %}
+                        <div class="mb-3">
+                            {{ form_row(translation.slug, {'label': 'Slug (URL)'}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_row(translation.metaDescription, {
+                                'label': 'Contenu Juridique / Texte de la Page Légale (Éditeur Visuel WYSIWYG)',
+                                'attr': {
+                                    'data-controller': 'wysiwyg',
+                                    'rows': 14
+                                }
+                            }) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-4">
+            <div class="card mb-4 shadow-sm border-0">
+                <div class="card-header bg-dark text-white fw-bold">
+                    Paramètres & Emplacement
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        {{ form_row(form.enabled, {'label': 'Activer et publier cette page'}) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.collections, {'label': 'Emplacement (ex: footer_menu)'}) }}
+                    </div>
+                    <div class="mb-3">
+                        {{ form_row(form.channels) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ form_end(form, {render_rest: false}) }}
+</div>
