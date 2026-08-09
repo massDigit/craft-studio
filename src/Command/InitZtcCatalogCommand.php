@@ -250,42 +250,8 @@ class InitZtcCatalogCommand extends Command
             15000,
         );
 
-        // 4. Pages CMS Éditoriales (Blog)
-        $pageArtisan = $this->createCmsPage(
-            'artisan-zen-too-craft',
-            [
-                'fr' => [
-                    'title' => 'L\'Artisan ZEN TOO Craft',
-                    'slug' => 'l-artisan-zen-too-craft',
-                    'content' => '<h2>L\'Art du Bambou & du Son</h2><p>L\'atelier ZEN TOO Craft façonne des pièces uniques sculptées à la main dans le respect de la matière brute et de la nature.</p>',
-                ],
-                'en' => [
-                    'title' => 'The ZEN TOO Craft Artisan',
-                    'slug' => 'the-zen-too-craft-artisan',
-                    'content' => '<h2>The Art of Bamboo & Sound</h2><p>The ZEN TOO Craft workshop creates unique hand-carved pieces respecting raw materials and nature.</p>',
-                ],
-            ],
-            $channel,
-        );
+        // 4. Pages Institutionnelles & Légales (Footer)
 
-        $pageSavoirFaire = $this->createCmsPage(
-            'savoir-faire-bambou',
-            [
-                'fr' => [
-                    'title' => 'Savoir-Faire & Charte Éco-Responsable',
-                    'slug' => 'savoir-faire-bambou',
-                    'content' => '<h2>Artisanat Éco-Responsable</h2><p>Sélection naturelle des tiges de bambou, séchage au soleil, polissage à la cire bio d\'abeille et accordage acoustique de précision (La 440 Hz / 432 Hz).</p>',
-                ],
-                'en' => [
-                    'title' => 'Craftsmanship & Eco-Responsible Charter',
-                    'slug' => 'craftsmanship-bamboo',
-                    'content' => '<h2>Eco-Friendly Craftsmanship</h2><p>Natural selection of bamboo stalks, sun drying, organic beeswax polishing, and precision acoustic tuning (A 440 Hz / 432 Hz).</p>',
-                ],
-            ],
-            $channel,
-        );
-
-        // 5. Pages Institutionnelles & Légales (Footer)
         $pageMentions = $this->createCmsPage(
             'mentions-legales',
             [
