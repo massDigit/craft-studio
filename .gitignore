@@ -1,7 +1,15 @@
 # Dependencies
-node_modules/
+/node_modules/
+/vendor/
+
+# Symfony & Sylius temporary cache & logs
+/var/
+/public/bundles/
+/public/media/cache/
+/.phpunit.result.cache
 
 # Build outputs
+/public/build/
 dist/
 build/
 .next/
@@ -15,6 +23,7 @@ out/
 .DS_Store
 Thumbs.db
 .idea/
+.vscode/
 
 # Logs
 *.log
