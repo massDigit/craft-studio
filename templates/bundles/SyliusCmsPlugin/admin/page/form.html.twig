@@ -1,4 +1,4 @@
-<div class="container-xl" {{ attributes }} data-controller="legal-sections">
+<div class="container-xl" {{ attributes }}>
     {{ form_start(form, {'attr': {'class': 'ui loadable form', 'novalidate': 'novalidate', 'id': form.vars.id}}) }}
     {% if hookable_metadata.configuration.method is defined %}
         <input type="hidden" name="_method" value="{{ hookable_metadata.configuration.method }}" />
@@ -7,62 +7,56 @@
     {{ form_widget(form._token) }}
 
     <div class="row">
-        <!-- Colonne Principale : Informations Generales & Articles -->
+        <!-- Colonne Principale : Contenu du Document par Langue -->
         <div class="col-12 col-lg-8">
-            <!-- Carte En-tete de la Page Legale -->
+            <!-- Carte En-tete : Identite du Document -->
             <div class="card mb-4 shadow-sm border-0">
                 <div class="card-header bg-dark text-white fw-bold">
-                    Identite du Document Legal
+                    Identite Technique du Document Legal
                 </div>
                 <div class="card-body">
                     <div class="mb-3">
-                        {{ form_row(form.name, {'label': 'Titre Global du Document'}) }}
-                        <div class="form-text text-muted">Exemple : Conditions Generales de Vente (CGV), Mentions Legales, ou Politique de Confidentialite.</div>
+                        {{ form_row(form.name, {'label': 'Nom Interne de la Page'}) }}
+                        <div class="form-text text-muted">Nom de référence affiché dans l'administration (ex: Conditions Générales de Vente).</div>
                     </div>
                     <div class="mb-3">
                         {{ form_row(form.code, {'label': 'Code Unique de Reference'}) }}
-                        <div class="form-text text-muted">Identifiant unique du document (ex: cgv, mentions-legales).</div>
+                        <div class="form-text text-muted">Identifiant unique technique (ex: cgv, mentions-legales).</div>
                     </div>
+                </div>
+            </div>
 
-                    {% for translation in form.translations %}
+            <!-- Blocs de Redaction Isoles par Langue avec Badges Textiles Clairs -->
+            {% for locale, translation in form.translations %}
+                <div class="card mb-4 shadow-sm border border-secondary">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <span class="fw-bold">Redaction du Document Legal</span>
+                        <span class="badge bg-warning text-dark fw-bold px-3 py-2" style="letter-spacing: 0.05em;">
+                            Langue : {{ locale|upper }}
+                        </span>
+                    </div>
+                    <div class="card-body">
                         <div class="mb-3">
-                            {{ form_row(translation.slug, {'label': 'Slug (URL Publique)'}) }}
-                            <div class="form-text text-muted">L'adresse web d'acces a la page (ex: cgv, mentions-legales).</div>
+                            {{ form_row(translation.title, {'label': 'Titre du Document (' ~ locale|upper ~ ')'}) }}
+                            <div class="form-text text-muted">Titre de la page visible par les clients (ex: Conditions Générales de Vente).</div>
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-
-            <!-- Conteneur des Sections / Articles Juridiques Ordonnes -->
-            <div class="mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0">Decoupage par Articles & Sections Juridiques</h5>
-                    <button type="button" class="btn btn-primary" data-action="click->legal-sections#addSection">
-                        + Ajouter un Article Juridique
-                    </button>
-                </div>
-
-                <div data-legal-sections-target="container">
-                    <!-- Article 1 par defaut -->
-                    <div class="card mb-4 border-secondary shadow-sm legal-section-item">
-                        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                            <span class="fw-bold">Article / Section 1</span>
+                        <div class="mb-3">
+                            {{ form_row(translation.slug, {'label': 'Slug / URL Publique (' ~ locale|upper ~ ')'}) }}
+                            <div class="form-text text-muted">Adresse web d'accès à la page (ex: cgv, mentions-legales).</div>
                         </div>
-                        <div class="card-body">
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Titre de l'Article ou du Chapitre</label>
-                                <input type="text" name="page[sections][1][title]" class="form-control" placeholder="Ex: Article 1 - Objet et Champ d'application">
-                                <div class="form-text text-muted">Indiquez l'intitule de cet article (ex: Article 1 - Objet, Article 2 - Tarifs).</div>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label fw-bold">Contenu Juridique de cet Article (Editeur Visuel WYSIWYG)</label>
-                                <textarea name="page[sections][1][content]" class="form-control legal-section-content" rows="8"></textarea>
-                                <div class="form-text text-muted">Redigez les clauses de cet article. Utilisez la barre d'outils pour la mise en forme.</div>
-                            </div>
+                        <div class="mb-3">
+                            {{ form_row(translation.metaDescription, {
+                                'label': 'Contenu Juridique / Texte de la Page Légale (' ~ locale|upper ~ ')',
+                                'attr': {
+                                    'data-controller': 'wysiwyg',
+                                    'rows': 12
+                                }
+                            }) }}
+                            <div class="form-text text-muted">Rédigez les clauses juridiques de cette langue. Utilisez la barre d'outils WYSIWYG pour formater les articles.</div>
                         </div>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
 
         <!-- Colonne Laterale : Emplacement & Publication -->
@@ -74,14 +68,14 @@
                 <div class="card-body">
                     <div class="mb-3">
                         {{ form_row(form.enabled, {'label': 'Activer et publier cette page sur le site'}) }}
-                        <div class="form-text text-muted">Si coche, la page sera accessible par les visiteurs du site.</div>
+                        <div class="form-text text-muted">Si coché, la page sera immédiatement accessible aux visiteurs.</div>
                     </div>
                     <div class="mb-3">
-                        {{ form_row(form.collections, {'label': 'Emplacement de la Page'}) }}
-                        <div class="form-text text-muted">Selectionnez "footer_menu" pour faire apparaitre cette page dans le pied de page.</div>
+                        {{ form_row(form.collections, {'label': 'Emplacement dans le site'}) }}
+                        <div class="form-text text-muted">Sélectionnez "footer_menu" pour lier cette page dans le pied de page.</div>
                     </div>
                     <div class="mb-3">
-                        {{ form_row(form.channels, {'label': 'Canal de Diffusion'}) }}
+                        {{ form_row(form.channels, {'label': 'Canaux de Diffusion'}) }}
                     </div>
                 </div>
             </div>
