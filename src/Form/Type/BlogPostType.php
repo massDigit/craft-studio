@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
+use App\Entity\Blog\BlogPost;
 use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -12,6 +13,16 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class BlogPostType extends AbstractResourceType
 {
+    /**
+     * @param array<string> $validationGroups
+     */
+    public function __construct(
+        string $dataClass = BlogPost::class,
+        array $validationGroups = [],
+    ) {
+        parent::__construct($dataClass, $validationGroups);
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
