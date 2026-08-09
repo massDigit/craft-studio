@@ -6,6 +6,13 @@
     {{ form_errors(form) }}
     {{ form_widget(form._token) }}
 
+    {% set locale_names = {
+        'fr_FR': 'Français',
+        'fr': 'Français',
+        'en_US': 'English',
+        'en': 'English'
+    } %}
+
     <div class="row">
         <!-- Colonne Principale : Contenu du Document par Langue -->
         <div class="col-12 col-lg-8">
@@ -26,27 +33,28 @@
                 </div>
             </div>
 
-            <!-- Blocs de Redaction Isoles par Langue avec Badges Textiles Clairs -->
+            <!-- Blocs de Redaction Isoles par Langue avec Noms de Langues Complets -->
             {% for locale, translation in form.translations %}
+                {% set display_language = locale_names[locale] is defined ? locale_names[locale] : locale|sylius_locale_name|default(locale|upper) %}
                 <div class="card mb-4 shadow-sm border border-secondary">
                     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
                         <span class="fw-bold">Redaction du Document Legal</span>
                         <span class="badge bg-warning text-dark fw-bold px-3 py-2" style="letter-spacing: 0.05em;">
-                            Langue : {{ locale|upper }}
+                            Langue : {{ display_language }}
                         </span>
                     </div>
                     <div class="card-body">
                         <div class="mb-3">
-                            {{ form_row(translation.title, {'label': 'Titre du Document (' ~ locale|upper ~ ')'}) }}
+                            {{ form_row(translation.title, {'label': 'Titre du Document (' ~ display_language ~ ')'}) }}
                             <div class="form-text text-muted">Titre de la page visible par les clients (ex: Conditions Générales de Vente).</div>
                         </div>
                         <div class="mb-3">
-                            {{ form_row(translation.slug, {'label': 'Slug / URL Publique (' ~ locale|upper ~ ')'}) }}
+                            {{ form_row(translation.slug, {'label': 'Slug / URL Publique (' ~ display_language ~ ')'}) }}
                             <div class="form-text text-muted">Adresse web d'accès à la page (ex: cgv, mentions-legales).</div>
                         </div>
                         <div class="mb-3">
                             {{ form_row(translation.metaDescription, {
-                                'label': 'Contenu Juridique / Texte de la Page Légale (' ~ locale|upper ~ ')',
+                                'label': 'Contenu Juridique / Texte de la Page Légale (' ~ display_language ~ ')',
                                 'attr': {
                                     'data-controller': 'wysiwyg',
                                     'rows': 12
