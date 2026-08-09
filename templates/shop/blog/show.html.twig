@@ -1,0 +1,48 @@
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
+
+{% block title %}{{ post.title }} — Le Journal ZEN TOO Craft{% endblock %}
+
+{% block content %}
+    <div class="container py-5 my-3" style="max-width: 900px;">
+        <!-- Fil d'Ariane -->
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ path('sylius_shop_homepage') }}" style="color: var(--gold-light, #E5C158); text-decoration: none;">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{{ path('app_blog_index') }}" style="color: var(--gold-light, #E5C158); text-decoration: none;">Journal</a></li>
+                <li class="breadcrumb-item active" style="color: var(--text-primary, #F4EFE6);">{{ post.title }}</li>
+            </ol>
+        </nav>
+
+        <!-- Article Sombre Obsidienne & Or -->
+        <article class="p-4 p-md-5" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);">
+            <header class="text-center mb-5 pb-4 border-bottom" style="border-color: rgba(212, 175, 55, 0.2) !important;">
+                <span class="ztc-badge-nature mb-3 d-inline-block">Le Journal de l'Artisan</span>
+                <h1 class="display-4 fw-bold mt-2 mb-4" style="color: var(--text-primary, #F4EFE6); letter-spacing: 0.03em;">{{ post.title }}</h1>
+                <div class="small" style="color: #A0A8A2;">
+                    <span>Publié le {{ post.publishedAt ? post.publishedAt|date("d/m/Y") : post.createdAt|date("d/m/Y") }}</span>
+                    <span class="mx-2">•</span>
+                    <span>Par {{ post.author|default('ZEN TOO Craft') }}</span>
+                </div>
+            </header>
+
+            {% if post.coverImage is not empty %}
+                <div class="mb-5 rounded-4 overflow-hidden" style="max-height: 450px; border: 1px solid rgba(212, 175, 55, 0.2);">
+                    <img src="{{ asset('media/image/' ~ post.coverImage) }}" alt="{{ post.title }}" class="w-100 h-100 object-fit-cover">
+                </div>
+            {% endif %}
+
+            <div class="ztc-cms-content" style="color: var(--text-secondary, #A0A8A2); line-height: 1.8; font-size: 1.1rem;">
+                {{ post.content|raw }}
+            </div>
+
+            <footer class="mt-5 pt-4 border-top text-center d-flex flex-wrap justify-content-between align-items-center gap-3" style="border-color: rgba(212, 175, 55, 0.15) !important;">
+                <a href="{{ path('app_blog_index') }}" class="btn btn-outline-light px-4 py-2" style="border-color: rgba(212, 175, 55, 0.3); color: #D4AF37;">
+                    &larr; Retour au Journal
+                </a>
+                <a href="{{ path('sylius_shop_contact_request') }}" class="btn px-4 py-3 fw-bold text-dark" style="background: linear-gradient(135deg, #D4AF37, #E5C158); border: none; border-radius: 30px;">
+                    Échanger avec l'Artisan pour un Projet Sur-Mesure
+                </a>
+            </footer>
+        </article>
+    </div>
+{% endblock %}

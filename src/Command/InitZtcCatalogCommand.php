@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Entity\Blog\BlogPost;
 use App\Entity\Product\Product;
 use App\Entity\Product\ProductAudio;
 use App\Entity\Product\ProductImage;
@@ -319,15 +320,57 @@ class InitZtcCatalogCommand extends Command
             $channel,
         );
 
-        // 6. Collections CMS (Footer & Blog)
+        // 6. Articles du Journal (Blog Dédié)
+        $this->createBlogPost(
+            'artisan-zen-too-craft',
+            'L\'Artisan ZEN TOO Craft',
+            'l-artisan-zen-too-craft',
+            'L\'atelier ZEN TOO Craft façonne des pièces uniques sculptées à la main dans le respect de la matière brute et de la nature.',
+            '<h2>L\'Art du Bambou & du Son</h2><p>L\'atelier ZEN TOO Craft façonne des pièces uniques sculptées à la main dans le respect de la matière brute et de la nature.</p>',
+            'flute_shakuhachi.jpeg',
+        );
+
+        $this->createBlogPost(
+            'savoir-faire-bambou',
+            'Savoir-Faire & Charte Éco-Responsable',
+            'savoir-faire-bambou',
+            'Sélection naturelle des tiges de bambou, séchage au soleil, polissage à la cire bio d\'abeille et accordage acoustique de précision (La 440 Hz / 432 Hz).',
+            '<h2>Artisanat Éco-Responsable</h2><p>Sélection naturelle des tiges de bambou, séchage au soleil, polissage à la cire bio d\'abeille et accordage acoustique de précision (La 440 Hz / 432 Hz).</p>',
+            'luminaire_ombre.jpeg',
+        );
+
+        // 7. Collections CMS (Footer)
         $this->getOrCreateCmsCollection('footer_menu', 'Footer — Informations Légales', [$pageMentions, $pageCgv]);
-        $this->getOrCreateCmsCollection('blog', 'Le Journal de l\'Artisan (Blog)', [$pageArtisan, $pageSavoirFaire]);
 
         $this->entityManager->flush();
 
-        $output->writeln('<info>Catalogue, visuels, pages CMS et collections ZEN TOO Craft initialisés avec succès !</info>');
+        $output->writeln('<info>Catalogue, visuels, pages CMS et articles du journal initialisés avec succès !</info>');
 
         return Command::SUCCESS;
+    }
+
+    private function createBlogPost(
+        string $code,
+        string $title,
+        string $slug,
+        string $excerpt,
+        string $content,
+        ?string $coverImage = null,
+    ): void {
+        $blogPost = $this->entityManager->getRepository(BlogPost::class)->findOneBy(['code' => $code]);
+        if (!$blogPost) {
+            $blogPost = new BlogPost();
+            $blogPost->setCode($code);
+            $blogPost->setTitle($title);
+            $blogPost->setSlug($slug);
+            $blogPost->setExcerpt($excerpt);
+            $blogPost->setContent($content);
+            $blogPost->setCoverImage($coverImage);
+            $blogPost->setAuthor('ZEN TOO Craft');
+            $blogPost->setPublished(true);
+            $blogPost->setPublishedAt(new \DateTimeImmutable());
+            $this->entityManager->persist($blogPost);
+        }
     }
 
     /**
