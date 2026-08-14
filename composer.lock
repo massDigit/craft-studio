@@ -4938,16 +4938,16 @@
         },
         {
             "name": "league/flysystem-bundle",
-            "version": "3.7.0",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-bundle.git",
-                "reference": "5eb41be38fc3759f74c9e458a6a5f0ef5f49284a"
+                "reference": "9cccb6862c9fcd16e6d8a0fbd62254abb8017c99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-bundle/zipball/5eb41be38fc3759f74c9e458a6a5f0ef5f49284a",
-                "reference": "5eb41be38fc3759f74c9e458a6a5f0ef5f49284a",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-bundle/zipball/9cccb6862c9fcd16e6d8a0fbd62254abb8017c99",
+                "reference": "9cccb6862c9fcd16e6d8a0fbd62254abb8017c99",
                 "shasum": ""
             },
             "require": {
@@ -5002,9 +5002,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem-bundle/issues",
-                "source": "https://github.com/thephpleague/flysystem-bundle/tree/3.7.0"
+                "source": "https://github.com/thephpleague/flysystem-bundle/tree/3.7.1"
             },
-            "time": "2026-03-28T22:14:56+00:00"
+            "time": "2026-08-10T15:55:07+00:00"
         },
         {
             "name": "league/flysystem-local",
@@ -6669,16 +6669,16 @@
         },
         {
             "name": "payum/payum-bundle",
-            "version": "2.7.1",
+            "version": "2.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Payum/PayumBundle.git",
-                "reference": "f71fdfc3501a23a057232c9c5e75fc7e1c2ec440"
+                "reference": "854ed36ab02c00c350b70ae3f7656d6a980f8a66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Payum/PayumBundle/zipball/f71fdfc3501a23a057232c9c5e75fc7e1c2ec440",
-                "reference": "f71fdfc3501a23a057232c9c5e75fc7e1c2ec440",
+                "url": "https://api.github.com/repos/Payum/PayumBundle/zipball/854ed36ab02c00c350b70ae3f7656d6a980f8a66",
+                "reference": "854ed36ab02c00c350b70ae3f7656d6a980f8a66",
                 "shasum": ""
             },
             "require": {
@@ -6770,9 +6770,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Payum/PayumBundle/issues",
-                "source": "https://github.com/Payum/PayumBundle/tree/2.7.1"
+                "source": "https://github.com/Payum/PayumBundle/tree/2.7.2"
             },
-            "time": "2026-02-10T19:25:28+00:00"
+            "time": "2026-07-07T12:12:48+00:00"
         },
         {
             "name": "php-http/discovery",
@@ -8745,16 +8745,16 @@
         },
         {
             "name": "sylius/mollie-plugin",
-            "version": "v3.3.2",
+            "version": "v3.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sylius/MolliePlugin.git",
-                "reference": "b14d12363b2b379f066568b8dd69803b83f82331"
+                "reference": "5ffb17c6fa4a254a62ef7285b4fd57a1a9619deb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sylius/MolliePlugin/zipball/b14d12363b2b379f066568b8dd69803b83f82331",
-                "reference": "b14d12363b2b379f066568b8dd69803b83f82331",
+                "url": "https://api.github.com/repos/Sylius/MolliePlugin/zipball/5ffb17c6fa4a254a62ef7285b4fd57a1a9619deb",
+                "reference": "5ffb17c6fa4a254a62ef7285b4fd57a1a9619deb",
                 "shasum": ""
             },
             "require": {
@@ -8827,7 +8827,7 @@
             "description": "Mollie payment plugin for Sylius applications.",
             "support": {
                 "issues": "https://github.com/Sylius/MolliePlugin/issues",
-                "source": "https://github.com/Sylius/MolliePlugin/tree/v3.3.2"
+                "source": "https://github.com/Sylius/MolliePlugin/tree/v3.3.3"
             },
             "funding": [
                 {
@@ -8835,7 +8835,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-07-09T12:25:58+00:00"
+            "time": "2026-08-11T04:44:03+00:00"
         },
         {
             "name": "sylius/paypal-plugin",
