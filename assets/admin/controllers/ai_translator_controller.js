@@ -18,7 +18,9 @@ export default class extends Controller {
 
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = 'btn btn-sm btn-outline-info my-2 ztc-ai-trans-btn fw-bold ms-2';
+        button.className = 'btn btn-sm btn-outline-info my-2 ztc-ai-trans-btn fw-bold d-inline-block ms-2';
+        button.style.letterSpacing = '0.03em';
+        button.style.zIndex = '10';
         button.innerHTML = `Traduire vers ${targetLocale.toUpperCase()} par IA`;
 
         button.addEventListener('click', (e) => {
@@ -26,7 +28,9 @@ export default class extends Controller {
             this.translateField(button, targetLocale);
         });
 
-        this.element.parentNode.insertBefore(button, this.element);
+        if (this.element.parentNode) {
+            this.element.parentNode.insertBefore(button, this.element.parentNode.firstChild);
+        }
     }
 
     async translateField(button, targetLocale) {

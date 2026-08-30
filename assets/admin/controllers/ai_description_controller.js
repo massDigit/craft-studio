@@ -14,8 +14,9 @@ export default class extends Controller {
 
         const button = document.createElement('button');
         button.type = 'button';
-        button.className = 'btn btn-sm btn-outline-warning my-2 ztc-ai-gen-btn fw-bold';
+        button.className = 'btn btn-sm btn-outline-warning my-2 ztc-ai-gen-btn fw-bold d-inline-block';
         button.style.letterSpacing = '0.03em';
+        button.style.zIndex = '10';
         button.innerHTML = 'Générer la Description par IA (Qwen 2.5 Local)';
 
         button.addEventListener('click', (e) => {
@@ -23,7 +24,9 @@ export default class extends Controller {
             this.generateDescription(button);
         });
 
-        this.element.parentNode.insertBefore(button, this.element);
+        if (this.element.parentNode) {
+            this.element.parentNode.insertBefore(button, this.element.parentNode.firstChild);
+        }
     }
 
     async generateDescription(button) {
