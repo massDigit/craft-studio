@@ -1,2 +1,3 @@
-sylius_mollie_plugin:
-    resource: "@SyliusMolliePlugin/config/routes.yaml"
+# Sylius Mollie Plugin disabled for ZEN TOO Craft Showcase Mode
+# sylius_mollie_plugin:
+#     resource: "@SyliusMolliePlugin/config/routes.yaml"
