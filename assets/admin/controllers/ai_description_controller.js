@@ -8,7 +8,7 @@ export default class extends Controller {
     }
 
     addAiButton() {
-        if (this.element.querySelector('.ztc-ai-gen-btn')) {
+        if (this.element.parentNode.querySelector('.ztc-ai-gen-btn')) {
             return;
         }
 
@@ -29,7 +29,7 @@ export default class extends Controller {
     async generateDescription(button) {
         let nameValue = '';
 
-        // 1. Chercher d'abord dans les champs de saisie du nom (FR)
+        // 1. Recherche dans les champs du nom de la création
         const nameInputs = document.querySelectorAll('input[id*="translations_fr_FR_name"], input[id*="translations_fr_name"], input[id*="_name"], input[name*="[name]"]');
         for (const input of nameInputs) {
             if (input && input.value && input.value.trim() !== '') {
@@ -38,7 +38,7 @@ export default class extends Controller {
             }
         }
 
-        // 2. En mode édition, si le champ est masqué ou non capturé, récupérer le titre de la création dans le header/fil d'Ariane
+        // 2. En mode Édition, extrait le nom depuis le titre de la page ou du fil d'Ariane
         if (!nameValue) {
             const pageHeader = document.querySelector('.page-title, h1, .breadcrumb-item.active, .card-title');
             if (pageHeader && pageHeader.textContent) {
@@ -67,15 +67,13 @@ export default class extends Controller {
 
             const data = await response.json();
             if (data.success && data.content) {
+                // Mise à jour de la valeur sous-jacente
                 this.element.value = data.content;
 
-                // Si l'éditeur visuel Quill WYSIWYG est actif sur le champ
-                const wrapper = this.element.previousElementSibling;
-                if (wrapper && wrapper.classList.contains('ql-container')) {
-                    const editor = wrapper.querySelector('.ql-editor');
-                    if (editor) {
-                        editor.innerHTML = data.content;
-                    }
+                // Rendu visuel riche WYSIWYG sans balises brutes pour l'administrateur
+                const quillEditor = this.element.parentNode.querySelector('.ql-editor');
+                if (quillEditor) {
+                    quillEditor.innerHTML = data.content;
                 }
             }
         } catch (error) {
