@@ -27,11 +27,30 @@ export default class extends Controller {
     }
 
     async generateDescription(button) {
-        const nameInput = document.querySelector('input[id$="_translations_fr_FR_name"], input[id$="_translations_fr_name"], input[name*="[title]"], input[name*="[name]"]');
-        const nameValue = nameInput ? nameInput.value : '';
+        let nameValue = '';
+
+        // 1. Chercher d'abord dans les champs de saisie du nom (FR)
+        const nameInputs = document.querySelectorAll('input[id*="translations_fr_FR_name"], input[id*="translations_fr_name"], input[id*="_name"], input[name*="[name]"]');
+        for (const input of nameInputs) {
+            if (input && input.value && input.value.trim() !== '') {
+                nameValue = input.value.trim();
+                break;
+            }
+        }
+
+        // 2. En mode édition, si le champ est masqué ou non capturé, récupérer le titre de la création dans le header/fil d'Ariane
+        if (!nameValue) {
+            const pageHeader = document.querySelector('.page-title, h1, .breadcrumb-item.active, .card-title');
+            if (pageHeader && pageHeader.textContent) {
+                const headerText = pageHeader.textContent.replace('Éditer', '').replace('Edit', '').trim();
+                if (headerText !== '' && !headerText.includes('Créations') && !headerText.includes('Produits')) {
+                    nameValue = headerText;
+                }
+            }
+        }
 
         if (!nameValue) {
-            alert('Veuillez d\'abord saisir le Nom de la Création.');
+            alert('Veuillez d\'abord remplir le champ Nom de la Création.');
             return;
         }
 
@@ -50,7 +69,7 @@ export default class extends Controller {
             if (data.success && data.content) {
                 this.element.value = data.content;
 
-                // Si Quill WYSIWYG est actif sur le champ
+                // Si l'éditeur visuel Quill WYSIWYG est actif sur le champ
                 const wrapper = this.element.previousElementSibling;
                 if (wrapper && wrapper.classList.contains('ql-container')) {
                     const editor = wrapper.querySelector('.ql-editor');
