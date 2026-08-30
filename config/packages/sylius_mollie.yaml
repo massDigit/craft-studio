@@ -1,3 +1,6 @@
+imports:
+    - { resource: "@SyliusMolliePlugin/config/config.yaml" }
+
 sylius_twig_hooks:
     hooks:
         'sylius_admin.order.show.content.sections.payments.item.actions':

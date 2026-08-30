@@ -39,9 +39,16 @@ class AdminMenuListener
             $cmsMenu->removeChild('media');
         }
 
-        // 2. Masquage des sections e-commerce inutiles en Mode Vitrine Sur-Mesure
+        // 2. Masquage des sections e-commerce et Mollie inutiles en Mode Vitrine Sur-Mesure
         $menu->removeChild('sales');
         $menu->removeChild('marketing');
+        $menu->removeChild('mollie');
+
+        $configurationMenu = $menu->getChild('configuration');
+        if (null !== $configurationMenu) {
+            $configurationMenu->removeChild('mollie');
+            $configurationMenu->removeChild('payment_methods');
+        }
 
         // 3. Personnalisation du menu Catalogue
         $catalogMenu = $menu->getChild('catalog');
