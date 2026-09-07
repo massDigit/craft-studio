@@ -18253,11 +18253,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.2.8",
+            "version": "2.2.13",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e285254e60f33c21902efef4a926ca0987c06804",
-                "reference": "e285254e60f33c21902efef4a926ca0987c06804",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
+                "reference": "9ba9ac76ee9c5cf5b56d58eb5deec6315b7a0260",
                 "shasum": ""
             },
             "require": {
@@ -18313,7 +18313,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-04T22:21:45+00:00"
+            "time": "2026-09-03T20:38:19+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
@@ -19137,30 +19137,27 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.6.1",
+            "version": "2.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "b8e68f058bca43e01a2e1caa51ef022d6551ed95"
+                "reference": "ca069d6c79feaa6651b423c15d101a27a436093e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/b8e68f058bca43e01a2e1caa51ef022d6551ed95",
-                "reference": "b8e68f058bca43e01a2e1caa51ef022d6551ed95",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/ca069d6c79feaa6651b423c15d101a27a436093e",
+                "reference": "ca069d6c79feaa6651b423c15d101a27a436093e",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.2.6"
+                "phpstan/phpstan": "^2.2.10"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
                 "rector/rector-downgrade-php": "*",
                 "rector/rector-phpunit": "*",
                 "rector/rector-symfony": "*"
-            },
-            "suggest": {
-                "ext-dom": "To manipulate phpunit.xml via the custom-rule command"
             },
             "bin": [
                 "bin/rector"
@@ -19185,7 +19182,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.6.1"
+                "source": "https://github.com/rectorphp/rector/tree/2.6.6"
             },
             "funding": [
                 {
@@ -19193,7 +19190,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-03T17:30:34+00:00"
+            "time": "2026-09-02T09:38:46+00:00"
         },
         {
             "name": "robertfausk/behat-panther-extension",
@@ -20552,25 +20549,24 @@
         },
         {
             "name": "sylius/sylius-rector",
-            "version": "v3.8.0",
+            "version": "v3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Sylius/SyliusRector.git",
-                "reference": "d25f503c6457d87e41e2a12817c28328b83aaed5"
+                "reference": "8d037883d602452f1b325b5d4877725e97be87c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Sylius/SyliusRector/zipball/d25f503c6457d87e41e2a12817c28328b83aaed5",
-                "reference": "d25f503c6457d87e41e2a12817c28328b83aaed5",
+                "url": "https://api.github.com/repos/Sylius/SyliusRector/zipball/8d037883d602452f1b325b5d4877725e97be87c8",
+                "reference": "8d037883d602452f1b325b5d4877725e97be87c8",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.0",
                 "rector/extension-installer": "~0.11",
-                "rector/rector": "^2.0"
+                "rector/rector": "^2.6"
             },
             "conflict": {
-                "rector/rector": "<0.11",
                 "symplify/phpstan-rules": "^11.1"
             },
             "require-dev": {
@@ -20580,7 +20576,6 @@
                 "phpstan/phpstan-webmozart-assert": "^2.0.0",
                 "phpunit/phpunit": "^10.5.44",
                 "symplify/easy-coding-standard": "^12.5.1",
-                "symplify/package-builder": "^11.3.2",
                 "symplify/phpstan-extensions": "^12.0.1",
                 "symplify/phpstan-rules": "^14.2.7",
                 "symplify/rule-doc-generator": "^12.2.5",
@@ -20610,7 +20605,7 @@
             "description": "Rector upgrades rules for Sylius",
             "support": {
                 "issues": "https://github.com/Sylius/SyliusRector/issues",
-                "source": "https://github.com/Sylius/SyliusRector/tree/v3.8.0"
+                "source": "https://github.com/Sylius/SyliusRector/tree/v3.9.0"
             },
             "funding": [
                 {
@@ -20618,7 +20613,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-06-17T07:27:20+00:00"
+            "time": "2026-09-04T08:32:01+00:00"
         },
         {
             "name": "symfony/browser-kit",
