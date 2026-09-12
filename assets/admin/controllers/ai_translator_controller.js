@@ -21,7 +21,7 @@ export default class extends Controller {
         button.className = 'btn btn-sm btn-outline-info my-2 ztc-ai-trans-btn fw-bold d-inline-block ms-2';
         button.style.letterSpacing = '0.03em';
         button.style.zIndex = '10';
-        button.innerHTML = `Traduire vers ${targetLocale.toUpperCase()} par IA`;
+        button.innerHTML = 'Générer la traduction';
 
         button.addEventListener('click', (e) => {
             e.preventDefault();
@@ -39,12 +39,17 @@ export default class extends Controller {
         const sourceFieldName = fieldName.replace(`[${targetLocale}]`, '[fr]').replace(`_${targetLocale}_`, '_fr_FR_');
 
         let sourceText = '';
-        const sourceInput = document.querySelector(`[name="${sourceFieldName}"]`) || document.querySelector('input[id*="fr"], textarea[id*="fr"]');
+        const sourceInput = document.querySelector(`[name="${sourceFieldName}"]`) 
+            || document.querySelector('textarea[name*="[fr]"][name*="metaDescription"]')
+            || document.querySelector('textarea[id*="_fr_metaDescription"]')
+            || document.querySelector('input[id*="fr"], textarea[id*="fr"]');
+
         if (sourceInput && sourceInput.value) {
             sourceText = sourceInput.value;
         } else {
-            // Chercher dans l'éditeur visuel WYSIWYG du champ source
-            const sourceQuill = document.querySelector('.tab-pane.active .ql-editor, .ql-editor');
+            // Chercher dans l'éditeur visuel WYSIWYG du bloc Français
+            const frBlock = document.querySelector('[data-toggle-target="content"]') || document.querySelector('.tab-pane.active');
+            const sourceQuill = frBlock ? frBlock.querySelector('.ql-editor') : document.querySelector('.ql-editor');
             if (sourceQuill) {
                 sourceText = sourceQuill.innerHTML;
             }
@@ -71,13 +76,17 @@ export default class extends Controller {
 
             const data = await response.json();
             if (data.success && data.translatedText) {
-                // Mise à jour de la valeur sous-jacente
-                this.element.value = data.translatedText;
+                // Nettoyage de sécurité JS contre les blocs markdown ```html ... ```
+                let cleanedHtml = data.translatedText.trim();
+                cleanedHtml = cleanedHtml.replace(/^```(?:html)?\s*/i, '').replace(/\s*```$/, '').trim();
 
-                // Rendu visuel riche WYSIWYG sans balises brutes pour l'administrateur
+                // Mise à jour de la valeur sous-jacente du textarea
+                this.element.value = cleanedHtml;
+
+                // Rendu visuel riche dans l'éditeur Quill WYSIWYG
                 const quillEditor = this.element.parentNode.querySelector('.ql-editor');
                 if (quillEditor) {
-                    quillEditor.innerHTML = data.translatedText;
+                    quillEditor.innerHTML = cleanedHtml;
                 }
             }
         } catch (error) {

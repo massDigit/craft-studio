@@ -62,7 +62,7 @@ class AdminMenuListener
 
             $taxons = $catalogMenu->getChild('taxons');
             if (null !== $taxons) {
-                $taxons->setLabel('Catégories & Univers');
+                $taxons->setLabel('Catégories');
             }
 
             // Masquage des sous-sections d'options et attributs complexes

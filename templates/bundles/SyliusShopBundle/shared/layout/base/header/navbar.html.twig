@@ -1,34 +1,48 @@
-<nav class="navbar navbar-expand-lg py-3" style="background: rgba(10, 12, 11, 0.95); border-bottom: 1px solid rgba(212, 175, 55, 0.15);">
-    <div class="container">
+<nav class="ztc-navbar navbar navbar-expand-lg" id="ztcMainNav">
+    <div class="ztc-nav-container">
         <!-- Logo de la Marque -->
         {{ include('@SyliusShop/shared/layout/base/header/content/logo.html.twig') }}
 
         <!-- Bouton Burger Mobile -->
-        <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#ztcStorefrontNavbar" aria-controls="ztcStorefrontNavbar" aria-expanded="false" aria-label="Menu principal">
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#ztcStorefrontNavbar" aria-controls="ztcStorefrontNavbar" aria-expanded="false" aria-label="Menu principal">
             <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
         </button>
 
         <!-- Navigation Principale -->
         <div class="collapse navbar-collapse" id="ztcStorefrontNavbar">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-lg-4 align-items-lg-center">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-lg-1 align-items-lg-center">
+                {% set currentRoute = app.request.get('_route') %}
+                {% set currentSlug = app.request.get('slug') %}
+
                 <li class="nav-item">
-                    <a class="nav-link px-3 py-2 fw-semibold text-uppercase" href="{{ path('sylius_shop_homepage') }}" style="color: var(--text-primary, #F4EFE6); letter-spacing: 0.08em; font-size: 0.9rem;">
+                    <a class="ztc-nav-link {% if currentRoute == 'sylius_shop_homepage' %}active{% endif %}"
+                       href="{{ path('sylius_shop_homepage') }}">
                         Accueil
                     </a>
                 </li>
+
+                <!-- Taxons principaux dynamiques -->
+                {% set menuTaxon = sylius.channel.menuTaxon %}
+                {% set taxonsToDisplay = (menuTaxon is not null and menuTaxon.children is not empty) ? menuTaxon.children : [] %}
+                {% for taxonItem in taxonsToDisplay %}
+                    <li class="nav-item">
+                        <a class="ztc-nav-link {% if currentSlug == taxonItem.slug %}active{% endif %}"
+                           href="{{ path('sylius_shop_product_index', {'slug': taxonItem.slug}) }}">
+                            {{ taxonItem.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+
                 <li class="nav-item">
-                    <a class="nav-link px-3 py-2 fw-semibold text-uppercase" href="{{ path('app_blog_index') }}" style="color: var(--text-primary, #F4EFE6); letter-spacing: 0.08em; font-size: 0.9rem;">
-                        Le Journal
+                    <a class="ztc-nav-link {% if currentRoute starts with 'app_blog' %}active{% endif %}"
+                       href="{{ path('app_blog_index') }}">
+                        Journal
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link px-3 py-2 fw-semibold text-uppercase" href="{{ path('sylius_shop_contact_request') }}" style="color: var(--text-primary, #F4EFE6); letter-spacing: 0.08em; font-size: 0.9rem;">
-                        Demande Sur-Mesure
-                    </a>
-                </li>
-                <li class="nav-item ms-lg-2">
-                    <a class="btn px-4 py-2 fw-bold text-dark text-uppercase" href="{{ path('sylius_shop_contact_request') }}" style="background: linear-gradient(135deg, #D4AF37, #E5C158); border: none; border-radius: 30px; font-size: 0.85rem; letter-spacing: 0.05em;">
-                        Échanger avec l'Artisan
+
+                <li class="nav-item ms-lg-3">
+                    <a class="ztc-btn-gold" href="{{ path('sylius_shop_contact_request') }}">
+                        Sur-Mesure
                     </a>
                 </li>
             </ul>

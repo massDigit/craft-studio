@@ -1,0 +1,8 @@
+sylius_resource:
+    resources:
+        app.faq_item:
+            classes:
+                model: App\Entity\Taxonomy\FaqItem
+            translation:
+                classes:
+                    model: App\Entity\Taxonomy\FaqItemTranslation

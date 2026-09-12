@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maquette Taxon - ZEN TOO Craft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        dark: '#080A09', darker: '#050605', gold: '#D4AF37', goldlight: '#E5C158',
+                        surface: 'rgba(255, 255, 255, 0.03)', border: 'rgba(255, 255, 255, 0.08)',
+                        textmain: '#F4EFE6', textmuted: '#8E9690'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #080A09; color: #F4EFE6; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .font-display { font-family: 'Outfit', sans-serif; }
+        .glass-panel { background: rgba(255, 255, 255, 0.02); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.06); }
+        .hero-img { filter: brightness(0.5) contrast(1.1); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Navbar (Mock) -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-border/50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-2 h-2 rounded-full bg-gold shadow-[0_0_8px_rgba(212,175,55,0.8)]"></div>
+                <span class="font-display font-semibold tracking-widest text-sm">ZEN TOO CRAFT</span>
+            </div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-textmuted">
+                <a href="#" class="hover:text-textmain transition">Accueil</a>
+                <a href="#" class="text-gold border-b border-gold pb-1">Instruments</a>
+                <a href="#" class="hover:text-textmain transition">Luminaires</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow pt-24 pb-20 px-6 max-w-[1400px] mx-auto w-full">
+        <!-- Taxon Hero Cinematic -->
+        <section class="relative w-full h-[50vh] rounded-[32px] overflow-hidden mb-12 glass-panel flex flex-col justify-end p-12">
+            <img src="https://images.unsplash.com/photo-1520529986992-d4ce365fbc99?q=80&w=2000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover hero-img" alt="Background">
+            <div class="absolute inset-0 bg-gradient-to-t from-darker via-dark/60 to-transparent"></div>
+            
+            <div class="relative z-10 max-w-3xl">
+                <span class="text-gold font-medium tracking-[0.2em] uppercase text-xs mb-4 block">Collection Artisanale</span>
+                <h1 class="text-5xl md:text-7xl font-display font-light mb-6">Instruments à Vent.</h1>
+                <p class="text-lg text-textmuted font-light max-w-2xl leading-relaxed">
+                    Des pièces uniques façonnées à la main à partir de bambous séchés naturellement. Chaque instrument possède sa propre voix.
+                </p>
+            </div>
+        </section>
+
+        <!-- Filters (Apple Style Minimalist) -->
+        <div class="flex justify-between items-center mb-10 border-b border-border pb-6">
+            <div class="flex gap-4">
+                <button class="bg-surface border border-border text-textmain px-6 py-2 rounded-full text-sm font-medium">Toutes les créations</button>
+                <button class="text-textmuted hover:text-textmain px-4 py-2 rounded-full text-sm transition">Flûtes Shakuhachi</button>
+                <button class="text-textmuted hover:text-textmain px-4 py-2 rounded-full text-sm transition">Bols Sonores</button>
+            </div>
+            <div class="text-sm text-textmuted">3 créations</div>
+        </div>
+
+        <!-- Minimalist Product Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-16">
+            <!-- Card 1 -->
+            <div class="group cursor-pointer">
+                <div class="aspect-[4/5] rounded-[24px] bg-surface mb-6 overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?q=80&w=800&auto=format&fit=crop" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition duration-700" alt="Product">
+                    <!-- Glassmorphism Audio Player Overlay -->
+                    <div class="absolute bottom-4 left-4 right-4 glass-panel rounded-2xl p-3 flex items-center gap-3 opacity-0 group-hover:opacity-100 transition duration-300 translate-y-4 group-hover:translate-y-0">
+                        <button class="w-10 h-10 rounded-full bg-gold text-darker flex items-center justify-center shrink-0">
+                            <svg width="12" height="14" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>
+                        </button>
+                        <div class="flex-grow">
+                            <div class="text-[10px] text-gold uppercase tracking-wider font-bold mb-1">Extrait Sonore</div>
+                            <div class="h-1 w-full bg-white/10 rounded-full overflow-hidden"><div class="w-1/3 h-full bg-gold"></div></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-display text-2xl font-medium">Flûte Shakuhachi</h3>
+                        <span class="font-medium text-lg text-gold">180 €</span>
+                    </div>
+                    <p class="text-textmuted text-sm line-clamp-2">Accordée en La 440 Hz, finition cire d'abeille naturelle.</p>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="group cursor-pointer">
+                <div class="aspect-[4/5] rounded-[24px] bg-surface mb-6 overflow-hidden relative">
+                    <div class="absolute inset-0 flex items-center justify-center text-textmuted text-sm">Image Produit 2</div>
+                </div>
+                <div>
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="font-display text-2xl font-medium">Bansuri Basse</h3>
+                        <span class="font-medium text-lg text-gold">210 €</span>
+                    </div>
+                    <p class="text-textmuted text-sm line-clamp-2">Sonorité grave et profonde pour la méditation.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

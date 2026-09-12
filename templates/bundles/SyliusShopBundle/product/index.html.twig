@@ -1,0 +1,116 @@
+{% extends '@SyliusShop/shared/layout/base.html.twig' %}
+{% import "@SyliusShop/shared/macro/money.html.twig" as money %}
+
+{% block content %}
+<div class="ztc-nav-container">
+    <div style="max-width: 1400px; margin: 0 auto; width: 100%;">
+
+        {% set current_taxon = ztc_current_taxon() %}
+        
+        <!-- Taxon Hero Cinematic (Option B) -->
+        <section class="ztc-taxon-hero">
+            <img src="https://images.unsplash.com/photo-1520529986992-d4ce365fbc99?q=80&w=2000&auto=format&fit=crop" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4) contrast(1.1); z-index: 0;" alt="Taxon Background">
+            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,6,5,1), rgba(8,10,9,0.4), transparent); z-index: 1;"></div>
+            
+            <div style="position: relative; z-index: 2; max-width: 48rem;">
+                <span class="ztc-tag-gold" style="margin-bottom: 1rem; display: inline-block;">Collection Artisanale</span>
+                <h1 style="font-family: 'Outfit', sans-serif; font-size: 3rem; font-weight: 300; margin-bottom: 1rem; color: #fff;">
+                    {% if current_taxon %}
+                        {{ current_taxon.name }}
+                    {% else %}
+                        Notre Collection
+                    {% endif %}.
+                </h1>
+                <p style="font-size: 1.125rem; color: var(--text-secondary); line-height: 1.6; font-weight: 300;">
+                    {% if current_taxon and current_taxon.description %}
+                        {{ current_taxon.description }}
+                    {% else %}
+                        Des pièces uniques façonnées à la main à partir de bambous séchés naturellement. Chaque création possède sa propre voix et son propre caractère.
+                    {% endif %}
+                </p>
+            </div>
+        </section>
+
+        <!-- Filters Minimalist Bar -->
+        <div class="ztc-filter-bar">
+            <div style="display: flex; gap: 1rem;">
+                <button style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--text-primary); padding: 0.5rem 1.5rem; border-radius: 9999px; font-size: 0.875rem;">Toutes les créations</button>
+                <button style="background: transparent; border: none; color: var(--text-secondary); padding: 0.5rem 1rem; font-size: 0.875rem; cursor: pointer;">Flûtes Shakuhachi</button>
+            </div>
+            <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                {{ resources.data|length }} création(s)
+            </div>
+        </div>
+
+        <!-- Product Grid (Minimalist Option B) -->
+        <div class="ztc-products-grid">
+            {% for product in resources.data %}
+                <a href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': sylius.localeCode}) }}" class="ztc-product-card-minimal" style="text-decoration: none;">
+                    <div class="visual">
+                        {% if product.images|length > 0 %}
+                            <img src="{{ product.images.first.path|imagine_filter('sylius_shop_product_thumbnail') }}" alt="{{ product.name }}">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?q=80&w=800&auto=format&fit=crop" alt="Default">
+                        {% endif %}
+                        
+                        <!-- Audio Player Overlay (Design only, would need real data) -->
+                        <div class="ztc-audio-overlay">
+                            <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold-accent); color: var(--bg-darker); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="12" height="14" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>
+                            </div>
+                            <div style="flex-grow: 1;">
+                                <div style="font-size: 10px; color: var(--gold-accent); text-transform: uppercase; letter-spacing: 0.1em; font-weight: bold; margin-bottom: 4px;">Extrait Sonore</div>
+                                <div style="height: 4px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 9999px; overflow: hidden;">
+                                    <div style="width: 33%; height: 100%; background: var(--gold-accent);"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+                        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 500; color: #fff; margin: 0;">{{ product.name }}</h3>
+                        <span style="font-weight: 500; font-size: 1.125rem; color: var(--gold-accent);">
+                            {% if not product.variants.empty %}
+                                {{ money.calculatePrice(product.variants.first) }}
+                            {% endif %}
+                        </span>
+                    </div>
+                    <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0; line-height: 1.5;">
+                        {{ product.shortDescription|default('Finition naturelle.')|striptags }}
+                    </p>
+                </a>
+            {% else %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: rgba(255,255,255,0.02); border-radius: 24px; color: var(--text-secondary);">
+                    Aucune création disponible pour le moment.
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if current_taxon and current_taxon.faqItems|length > 0 %}
+            <section style="margin-top: 6rem; padding-top: 4rem; border-top: 1px solid rgba(255,255,255,0.05); max-width: 800px; margin-left: auto; margin-right: auto;">
+                <h2 style="font-size: 2rem; font-weight: 400; color: var(--gold-accent); text-align: center; margin-bottom: 3rem;">Foire Aux Questions</h2>
+                
+                {% for faq in current_taxon.faqItems %}
+                    <div class="faq-item" style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+                        <button class="faq-question" onclick="this.parentElement.classList.toggle('active')" style="width: 100%; background: none; border: none; color: var(--text-primary); font-size: 1.25rem; font-weight: 400; padding: 1.5rem 0; text-align: left; display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
+                            {{ faq.question }}
+                            <span style="font-size: 1.5rem; color: var(--gold-accent);">+</span>
+                        </button>
+                        <div class="faq-answer" style="max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out;">
+                            <div style="padding-bottom: 1.5rem; color: var(--text-secondary); line-height: 1.7;">
+                                {{ faq.answer }}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </section>
+        {% endif %}
+        
+    </div>
+</div>
+
+<style>
+    .faq-item.active .faq-answer { max-height: 500px; }
+    .faq-item.active .faq-question span { transform: rotate(45deg); display: inline-block; transition: transform 0.3s; }
+</style>
+{% endblock %}

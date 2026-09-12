@@ -17,7 +17,7 @@ export default class extends Controller {
         button.className = 'btn btn-sm btn-outline-warning my-2 ztc-ai-gen-btn fw-bold d-inline-block';
         button.style.letterSpacing = '0.03em';
         button.style.zIndex = '10';
-        button.innerHTML = 'Générer la Description par IA (Qwen 2.5 Local)';
+        button.innerHTML = 'Générer la description';
 
         button.addEventListener('click', (e) => {
             e.preventDefault();
@@ -70,13 +70,17 @@ export default class extends Controller {
 
             const data = await response.json();
             if (data.success && data.content) {
-                // Mise à jour de la valeur sous-jacente
-                this.element.value = data.content;
+                // Nettoyage de sécurité JS contre les blocs markdown ```html ... ```
+                let cleanedHtml = data.content.trim();
+                cleanedHtml = cleanedHtml.replace(/^```(?:html)?\s*/i, '').replace(/\s*```$/, '').trim();
 
-                // Rendu visuel riche WYSIWYG sans balises brutes pour l'administrateur
+                // Mise à jour de la valeur sous-jacente du textarea
+                this.element.value = cleanedHtml;
+
+                // Rendu visuel riche dans l'éditeur Quill WYSIWYG
                 const quillEditor = this.element.parentNode.querySelector('.ql-editor');
                 if (quillEditor) {
-                    quillEditor.innerHTML = data.content;
+                    quillEditor.innerHTML = cleanedHtml;
                 }
             }
         } catch (error) {

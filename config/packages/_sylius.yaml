@@ -284,3 +284,19 @@ sylius_twig_hooks:
         'sylius_shop.base#javascripts':
             app_javascripts:
                 template: 'shop/javascripts.html.twig'
+
+        'sylius_shop.base.header#content':
+            logo:
+                enabled: false
+            security:
+                enabled: false
+            cart:
+                enabled: false
+            taxon_hamburger:
+                enabled: false
+
+        'sylius_shop.base.header':
+            content:
+                enabled: false
+
+

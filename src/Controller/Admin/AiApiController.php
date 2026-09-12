@@ -44,6 +44,30 @@ class AiApiController extends AbstractController
         ]);
     }
 
+    #[Route('/generate-faq', name: 'generate_faq', methods: ['POST'])]
+    public function generateFaq(Request $request): JsonResponse
+    {
+        $payload = json_decode($request->getContent(), true);
+        $taxonName = '';
+
+        if (is_array($payload)) {
+            $nameVal = $payload['taxonName'] ?? '';
+            $taxonName = is_string($nameVal) ? $nameVal : '';
+        }
+
+        if ('' === $taxonName) {
+            return new JsonResponse(['error' => 'Le nom du taxon est obligatoire.'], 400);
+        }
+
+        $generatedFaq = $this->aiService->generateFaqItem($taxonName);
+
+        return new JsonResponse([
+            'success' => true,
+            'question' => $generatedFaq['question'],
+            'answer' => $generatedFaq['answer'],
+        ]);
+    }
+
     #[Route('/translate-field', name: 'translate_field', methods: ['POST'])]
     public function translateField(Request $request): JsonResponse
     {

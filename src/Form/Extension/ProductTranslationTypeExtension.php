@@ -31,9 +31,9 @@ class ProductTranslationTypeExtension extends AbstractTypeExtension
                     : '';
 
                 if ('fr_FR' === $localeCode || 'fr' === $localeCode || str_contains($localeCode, 'fr')) {
-                    $existingAttr['data-controller'] = trim($currentController . ' ai-description');
+                    $existingAttr['data-controller'] = trim($currentController . ' wysiwyg ai-description');
                 } else {
-                    $existingAttr['data-controller'] = trim($currentController . ' ai-translator');
+                    $existingAttr['data-controller'] = trim($currentController . ' wysiwyg ai-translator');
                     $existingAttr['data-ai-translator-locale-value'] = str_starts_with($localeCode, 'en') ? 'en' : $localeCode;
                 }
 

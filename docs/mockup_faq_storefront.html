@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maquette - Page FAQ (Boutique)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-darker: #050605;
+            --bg-dark: #0A0C0B;
+            --text-primary: #F4EFE6;
+            --text-secondary: #A0A8A2;
+            --gold-accent: #D4AF37;
+        }
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg-darker);
+            color: var(--text-primary);
+            font-family: 'Outfit', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            display: flex;
+            gap: 4rem;
+        }
+        header {
+            text-align: center;
+            padding: 6rem 2rem 2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 300;
+            margin: 0 0 1rem 0;
+        }
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+        }
+        /* Sidebar */
+        .faq-sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 2rem;
+            height: max-content;
+        }
+        .faq-theme-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .faq-theme-link:hover {
+            background: rgba(255,255,255,0.03);
+            color: var(--text-primary);
+        }
+        .faq-theme-link.active {
+            background: rgba(212,175,55,0.1);
+            color: var(--gold-accent);
+            font-weight: 500;
+        }
+        /* Content */
+        .faq-content {
+            flex-grow: 1;
+            max-width: 800px;
+        }
+        .faq-section-title {
+            font-size: 2rem;
+            font-weight: 400;
+            margin: 0 0 2rem 0;
+            color: var(--gold-accent);
+        }
+        /* Accordion */
+        .faq-item {
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .faq-question {
+            width: 100%;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 1.25rem;
+            font-weight: 400;
+            padding: 2rem 0;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .faq-question:hover {
+            color: var(--gold-accent);
+        }
+        .faq-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+        .faq-icon::before, .faq-icon::after {
+            content: '';
+            position: absolute;
+            background: currentColor;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.3s;
+        }
+        .faq-icon::before { width: 16px; height: 2px; }
+        .faq-icon::after { width: 2px; height: 16px; }
+        
+        .faq-item.active .faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+        .faq-item.active .faq-question { color: var(--gold-accent); }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            transition: max-height 0.4s ease-in-out;
+        }
+        .faq-answer-inner {
+            padding-bottom: 2rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 300;
+            font-size: 1.05rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <span style="color: var(--gold-accent); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; margin-bottom: 1rem; display: block;">Besoin d'aide ?</span>
+        <h1>Foire Aux Questions.</h1>
+        <p class="subtitle">Trouvez les réponses à vos questions sur nos créations, l'entretien du bambou et nos processus de fabrication.</p>
+    </header>
+
+    <div class="container">
+        
+        <aside class="faq-sidebar">
+            <nav>
+                <a class="faq-theme-link active">Instruments à Vent</a>
+                <a class="faq-theme-link">Luminaires Artistiques</a>
+                <a class="faq-theme-link">Objets Décoratifs</a>
+                <a class="faq-theme-link">Commandes & Livraisons</a>
+            </nav>
+        </aside>
+
+        <main class="faq-content">
+            <h2 class="faq-section-title">Instruments à Vent</h2>
+            
+            <div class="faq-item active">
+                <button class="faq-question">
+                    Comment entretenir ma flûte Shakuhachi ?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Le bambou est une matière vivante. Il est recommandé de passer un chiffon doux après chaque utilisation pour enlever l'humidité. Évitez les chocs thermiques et l'exposition prolongée au soleil direct. Une fois par mois, vous pouvez appliquer quelques gouttes d'huile de camélia à l'intérieur pour nourrir la fibre.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    Les instruments sont-ils accordés sur une fréquence précise ?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Oui, la plupart de nos flûtes méditatives sont accordées sur le La 432 Hz, considéré comme la fréquence naturelle de l'univers, favorisant la relaxation profonde et la sonothérapie. Nous pouvons également accorder en 440 Hz sur demande lors d'un projet sur-mesure.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="this.parentElement.classList.toggle('active')">
+                    Le bambou peut-il se fendre avec le temps ?
+                    <span class="faq-icon"></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Nous sélectionnons des chaumes de bambou matures qui ont été séchés naturellement pendant plusieurs années. De plus, nos instruments subissent un traitement spécifique pour consolider leurs fibres. Si vous respectez les consignes d'entretien et d'hygrométrie, le risque de fente est minime.
+                    </div>
+                </div>
+            </div>
+            
+        </main>
+    </div>
+
+    <script>
+        // Simple script for mockup interactivity
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                // Close others
+                document.querySelectorAll('.faq-item').forEach(other => {
+                    if(other !== item) other.classList.remove('active');
+                });
+                // Toggle current
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
