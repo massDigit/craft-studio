@@ -27,6 +27,7 @@ Application du style minimaliste Apple (bannière d'univers avec visuel du taxon
 - [x] Adoption de la direction artistique style Apple : ajout des classes `.ztc-apple-card` et `.ztc-apple-pill` dans `assets/shop/styles/zen_too_craft.css` et build Encore.
 - [x] Refonte du template de listing de catégorie `templates/bundles/SyliusShopBundle/product/index.html.twig` (bannière dépolie avec image du taxon, puces de sous-catégories et grille d'exposition).
 - [x] Génération de l'image d'art HD `taxon_instruments.jpeg` et association en base de données à la ressource `TaxonImage` de la catégorie Instruments à Vent (ID: 10).
+- [x] **Système FAQ intégré par IA** : Entités dédiées (`FaqItem`), back-office pour taxons, traduction/génération IA (Ollama Qwen), et création des pages de FAQ Storefront (`/faq` + page Catégorie) conformes aux maquettes design. Pull Request #16 ouverte.
 
 ## 🔄 En Cours / À Reprendre au Prochain Démarrage
 - [ ] Associer des visuels dédiés aux autres taxons principaux (Luminaires Artistiques, Objets Décoratifs) dans la base de données.
