@@ -14,11 +14,12 @@ class AdminMenuListener
     {
         $menu = $event->getMenu();
 
+        // 1. Personnalisation du menu Gestion des Contenus & Blog
         $cmsMenu = $menu->getChild('sylius_cms');
         if (null !== $cmsMenu) {
             $cmsMenu->setLabel('Gestion des Contenus & Blog');
 
-            // Ajout de l'accès direct aux Articles du Journal de l'Artisan
+            // Accès direct aux Articles du Journal de l'Artisan
             $cmsMenu
                 ->addChild('blog_posts', [
                     'route' => 'app_admin_blog_post_index',
@@ -31,11 +32,43 @@ class AdminMenuListener
                 $pages->setLabel('Pages Legales & Footer');
             }
 
-            // Masquage des sections complexes et obsoletes (Blocs, Modeles, Collections et Medias)
+            // Masquage des sous-sections complexes et obsolètes
             $cmsMenu->removeChild('blocks');
             $cmsMenu->removeChild('templates');
             $cmsMenu->removeChild('collections');
             $cmsMenu->removeChild('media');
+        }
+
+        // 2. Masquage des sections e-commerce et Mollie inutiles en Mode Vitrine Sur-Mesure
+        $menu->removeChild('sales');
+        $menu->removeChild('marketing');
+        $menu->removeChild('mollie');
+
+        $configurationMenu = $menu->getChild('configuration');
+        if (null !== $configurationMenu) {
+            $configurationMenu->removeChild('mollie');
+            $configurationMenu->removeChild('payment_methods');
+        }
+
+        // 3. Personnalisation du menu Catalogue
+        $catalogMenu = $menu->getChild('catalog');
+        if (null !== $catalogMenu) {
+            $catalogMenu->setLabel('Catalogue & Créations');
+
+            $products = $catalogMenu->getChild('products');
+            if (null !== $products) {
+                $products->setLabel('Créations & Instruments');
+            }
+
+            $taxons = $catalogMenu->getChild('taxons');
+            if (null !== $taxons) {
+                $taxons->setLabel('Catégories');
+            }
+
+            // Masquage des sous-sections d'options et attributs complexes
+            $catalogMenu->removeChild('attributes');
+            $catalogMenu->removeChild('options');
+            $catalogMenu->removeChild('associations');
         }
     }
 }

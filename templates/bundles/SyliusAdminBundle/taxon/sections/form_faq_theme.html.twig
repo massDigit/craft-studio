@@ -1,0 +1,20 @@
+{% block app_faq_item_widget %}
+    <div data-form-collection-item="item" style="position: relative; padding: 1rem; border: 1px solid #e9ecef; margin-bottom: 1rem; background: #fff; border-radius: 6px;">
+        
+        <button type="button" class="btn btn-sm btn-outline-danger" style="position: absolute; top: 1rem; right: 1rem;" onclick="this.closest('[data-form-collection-item]').remove()">
+            Supprimer
+        </button>
+
+        <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+            <button type="button" class="btn-ai-generate">
+                ✨ Générer une FAQ par IA
+            </button>
+            <button type="button" class="btn-ai-translate">
+                🌐 Traduire les autres langues
+            </button>
+            <div class="ai-loading">✨ L'IA réfléchit...</div>
+        </div>
+
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}

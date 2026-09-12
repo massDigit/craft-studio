@@ -18,3 +18,14 @@ services:
     mailhog:
         # do not use in production!
         image: mailhog/mailhog:latest
+    ollama:
+        image: ollama/ollama:latest
+        container_name: craft-studio-ollama
+        ports:
+            - "11434:11434"
+        volumes:
+            - ollama_data:/root/.ollama
+        restart: unless-stopped
+
+volumes:
+    ollama_data:

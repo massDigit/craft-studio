@@ -1,66 +1,228 @@
 {% extends '@SyliusShop/shared/layout/base.html.twig' %}
 
-{% block title %}Foire Aux Questions (FAQ) — ZEN TOO Craft{% endblock %}
+{% block title %}Foire aux questions | ZEN TOO CRAFT{% endblock %}
 
 {% block content %}
-    <div class="container py-5 my-3" style="max-width: 900px;">
-        <header class="text-center mb-5 p-4 p-md-5" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);">
-            <span class="ztc-badge-nature mb-3 d-inline-block">Réponses & Conseils d'Entretien</span>
-            <h1 class="display-4 fw-bold mt-2" style="color: var(--text-primary, #F4EFE6); letter-spacing: 0.03em;">Foire Aux Questions</h1>
-            <p class="lead mt-3 mx-auto" style="color: var(--text-secondary, #A0A8A2); max-width: 700px;">
-                Retrouvez toutes les réponses concernant l'entretien des flûtes en bambou, la livraison et les créations sur-mesure.
-            </p>
-        </header>
+<style>
+    .ztc-faq-page {
+        --bg-darker: #050605;
+        --bg-dark: #0A0C0B;
+        --text-primary: #F4EFE6;
+        --text-secondary: #A0A8A2;
+        --gold-accent: #D4AF37;
+        background-color: var(--bg-darker);
+        color: var(--text-primary);
+    }
+    .ztc-faq-page .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 4rem 2rem;
+        display: flex;
+        gap: 4rem;
+    }
+    @media (max-width: 768px) {
+        .ztc-faq-page .container {
+            flex-direction: column;
+            gap: 2rem;
+        }
+    }
+    .ztc-faq-page header {
+        text-align: center;
+        padding: 6rem 2rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .ztc-faq-page h1 {
+        font-family: 'Outfit', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 300;
+        margin: 0 0 1rem 0;
+        color: #fff;
+    }
+    .ztc-faq-page .subtitle {
+        color: var(--text-secondary);
+        font-size: 1.125rem;
+        max-width: 600px;
+        margin: 0 auto;
+        font-weight: 300;
+    }
+    .faq-sidebar {
+        width: 250px;
+        flex-shrink: 0;
+        position: sticky;
+        top: 2rem;
+        height: max-content;
+    }
+    .faq-theme-link {
+        display: flex;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        color: var(--text-secondary);
+        text-decoration: none;
+        border-radius: 12px;
+        margin-bottom: 0.5rem;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+    .faq-theme-link:hover {
+        background: rgba(255,255,255,0.03);
+        color: var(--text-primary);
+    }
+    .faq-theme-link.active {
+        background: rgba(212,175,55,0.1);
+        color: var(--gold-accent);
+        font-weight: 500;
+    }
+    .faq-content {
+        flex-grow: 1;
+        max-width: 800px;
+    }
+    .faq-section-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 2rem;
+        font-weight: 400;
+        margin: 0 0 2rem 0;
+        color: var(--gold-accent);
+    }
+    .faq-item {
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .faq-question {
+        width: 100%;
+        background: none;
+        border: none;
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 1.25rem;
+        font-weight: 400;
+        padding: 2rem 0;
+        text-align: left;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: color 0.3s;
+    }
+    .faq-question:hover {
+        color: var(--gold-accent);
+    }
+    .faq-icon {
+        width: 24px;
+        height: 24px;
+        position: relative;
+    }
+    .faq-icon::before, .faq-icon::after {
+        content: '';
+        position: absolute;
+        background: currentColor;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        transition: transform 0.3s;
+    }
+    .faq-icon::before { width: 16px; height: 2px; }
+    .faq-icon::after { width: 2px; height: 16px; }
+    
+    .faq-item.active .faq-icon::after { transform: translate(-50%, -50%) rotate(90deg); opacity: 0; }
+    .faq-item.active .faq-question { color: var(--gold-accent); }
+    
+    .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0, 1, 0, 1);
+    }
+    .faq-item.active .faq-answer {
+        max-height: 500px;
+        transition: max-height 0.4s ease-in-out;
+    }
+    .faq-answer-inner {
+        padding-bottom: 2rem;
+        color: var(--text-secondary);
+        line-height: 1.7;
+        font-weight: 300;
+        font-size: 1.05rem;
+    }
+</style>
 
-        <div class="accordion accordion-flush" id="faqAccordion">
-            <!-- Question 1 -->
-            <div class="accordion-item mb-3" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px; overflow: hidden;">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed py-4 px-4 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1" style="background: transparent; color: var(--text-primary, #F4EFE6); font-size: 1.15rem;">
-                        Comment entretenir ma flûte Shakuhachi en bambou ?
-                    </button>
-                </h2>
-                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body px-4 pb-4" style="color: var(--text-secondary, #A0A8A2); line-height: 1.8;">
-                        Le bambou est un matériau vivant. Après chaque session de jeu, essuyez l'intérieur avec un chiffon doux sec. Conservez la flûte à l'abri des variations brutales de température et d'humidité. Un nourrissage à la cire d'abeille bio 1 à 2 fois par an est recommandé.
+<div class="ztc-faq-page">
+    <header>
+        <span style="color: var(--gold-accent); font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; margin-bottom: 1rem; display: block;">Besoin d'aide ?</span>
+        <h1>Foire Aux Questions.</h1>
+        <p class="subtitle">Trouvez les réponses à vos questions sur nos créations, l'entretien du bambou et nos processus de fabrication.</p>
+    </header>
+
+    <div class="container">
+        
+        {% if taxons|length > 0 %}
+            <aside class="faq-sidebar">
+                <nav>
+                    {% for taxon in taxons %}
+                        <a class="faq-theme-link {% if loop.first %}active{% endif %}" data-target="faq-section-{{ taxon.id }}">
+                            {{ taxon.name }}
+                        </a>
+                    {% endfor %}
+                </nav>
+            </aside>
+
+            <main class="faq-content">
+                {% for taxon in taxons %}
+                    <div id="faq-section-{{ taxon.id }}" class="faq-section" style="display: {% if loop.first %}block{% else %}none{% endif %};">
+                        <h2 class="faq-section-title">{{ taxon.name }}</h2>
+                        
+                        {% for faq in taxon.faqItems %}
+                            <div class="faq-item">
+                                <button class="faq-question">
+                                    {{ faq.question }}
+                                    <span class="faq-icon"></span>
+                                </button>
+                                <div class="faq-answer">
+                                    <div class="faq-answer-inner">
+                                        {{ faq.answer|nl2br }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
-                </div>
+                {% endfor %}
+            </main>
+        {% else %}
+            <div style="width: 100%; text-align: center; padding: 4rem; color: var(--text-secondary);">
+                Aucune question fréquente n'est disponible pour le moment.
             </div>
-
-            <!-- Question 2 -->
-            <div class="accordion-item mb-3" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px; overflow: hidden;">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed py-4 px-4 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2" style="background: transparent; color: var(--text-primary, #F4EFE6); font-size: 1.15rem;">
-                        Proposez-vous des créations sur-mesure ?
-                    </button>
-                </h2>
-                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body px-4 pb-4" style="color: var(--text-secondary, #A0A8A2); line-height: 1.8;">
-                        Oui ! Chaque projet sur-mesure (accordage particulier en 432 Hz, motif d'ajourage spécifique pour luminaire) peut être étudié directement via notre formulaire de devis en ligne.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Question 3 -->
-            <div class="accordion-item mb-3" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 16px; overflow: hidden;">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed py-4 px-4 fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3" style="background: transparent; color: var(--text-primary, #F4EFE6); font-size: 1.15rem;">
-                        Quels sont les délais et modes de livraison ?
-                    </button>
-                </h2>
-                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-                    <div class="accordion-body px-4 pb-4" style="color: var(--text-secondary, #A0A8A2); line-height: 1.8;">
-                        Chaque création est expédiée dans un emballage renforcé et sécurisé sous 3 à 5 jours ouvrés. Vous recevrez un numéro de suivi dès la prise en charge par le transporteur.
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="mt-5 text-center p-4" style="background: rgba(10, 12, 11, 0.95); border: 1px solid rgba(212, 175, 55, 0.2); border-radius: 20px;">
-            <p class="mb-3" style="color: var(--text-secondary, #A0A8A2);">Vous avez une autre question ?</p>
-            <a href="{{ path('sylius_shop_contact_request') }}" class="btn px-4 py-3 fw-bold text-dark" style="background: linear-gradient(135deg, #D4AF37, #E5C158); border: none; border-radius: 30px;">
-                Contacter l'Artisan
-            </a>
-        </div>
+        {% endif %}
     </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tab switching logic
+        const tabBtns = document.querySelectorAll('.faq-theme-link');
+        const sections = document.querySelectorAll('.faq-section');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                sections.forEach(s => s.style.display = 'none');
+                
+                this.classList.add('active');
+                const targetId = this.getAttribute('data-target');
+                if (targetId) document.getElementById(targetId).style.display = 'block';
+            });
+        });
+
+        // Accordion logic
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.parentElement;
+                // Close others in the same section
+                const section = item.closest('.faq-section');
+                if (section) {
+                    section.querySelectorAll('.faq-item').forEach(other => {
+                        if(other !== item) other.classList.remove('active');
+                    });
+                }
+                // Toggle current
+                item.classList.toggle('active');
+            });
+        });
+    });
+</script>
 {% endblock %}

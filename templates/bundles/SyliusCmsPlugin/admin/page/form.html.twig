@@ -72,12 +72,14 @@
                             <div class="form-text text-muted mt-2">Adresse web d'accès à la page (ex: cgv, mentions-legales).</div>
                         </div>
 
+                        {% set is_fr = (locale == 'fr' or locale == 'fr_FR') %}
                         <div class="mb-3">
                             {{ form_row(translation.metaDescription, {
                                 'label': 'Contenu Juridique / Texte de la Page Légale (' ~ display_language ~ ')',
                                 'label_attr': {'class': 'form-label fw-bold mb-2'},
                                 'attr': {
-                                    'data-controller': 'wysiwyg',
+                                    'data-controller': is_fr ? 'wysiwyg' : 'wysiwyg ai-translator',
+                                    'data-ai-translator-locale-value': is_fr ? '' : (locale starts with 'en' ? 'en' : locale),
                                     'rows': 12
                                 }
                             }) }}

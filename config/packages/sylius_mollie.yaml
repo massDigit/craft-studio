@@ -7,5 +7,4 @@ sylius_twig_hooks:
             send_payment_link:
                 enabled: false
             mollie_send_payment_link:
-                template: '@SyliusMolliePlugin/admin/order/show/content/sections/payments/item/actions/send_payment_link.html.twig'
-                priority: -200
+                enabled: false

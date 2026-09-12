@@ -1,0 +1,66 @@
+<footer class="ztc-footer">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 0 2rem; width: 100%; box-sizing: border-box;">
+        
+        <!-- Middle Footer: Links Grid -->
+        <div class="ztc-footer-grid" style="padding-top: 2rem;">
+            <!-- Brand Column -->
+            <div>
+                <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.5rem;">
+                    <span class="ztc-brand-dot"></span>
+                    <span style="font-family: 'Outfit', sans-serif; font-weight: 600; letter-spacing: 0.1em; font-size: 0.875rem; color: var(--text-primary);">ZEN TOO CRAFT</span>
+                </div>
+                <p class="ztc-footer-text" style="margin-bottom: 1.5rem;">
+                    Studio de création artisanale. Instruments à vent et sculptures lumineuses en bambou naturel, façonnés à la main dans le respect du vivant.
+                </p>
+                <div style="display: flex; gap: 1rem;">
+                    <a href="#" class="ztc-footer-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                    </a>
+                    <a href="#" class="ztc-footer-link">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Links Columns -->
+            <div>
+                <h4 class="ztc-footer-heading">Collections</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem;">
+                    {% set root_taxon = ztc_get_taxon_by_code('category') %}
+                    {% if root_taxon %}
+                        {% for taxon in root_taxon.children %}
+                            <li><a href="{{ path('sylius_shop_product_index', {'slug': taxon.slug, '_locale': sylius.localeCode}) }}" class="ztc-footer-link">{{ taxon.name }}</a></li>
+                        {% endfor %}
+                    {% endif %}
+                    <li><a href="{{ path('sylius_shop_contact_request') }}" class="ztc-footer-link">Sur-Mesure <span class="ztc-footer-tag">PROJET</span></a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="ztc-footer-heading">L'Atelier</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem;">
+                    <li><a href="#" class="ztc-footer-link">Le Journal (Blog)</a></li>
+                    <li><a href="{{ path('app_shop_faq') }}" class="ztc-footer-link">Foire Aux Questions</a></li>
+                    <li><a href="{{ path('sylius_shop_contact_request') }}" class="ztc-footer-link">Contact & Support</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="ztc-footer-heading">Informations</h4>
+                <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 1rem;">
+                    {% for page in ztc_get_enabled_pages() %}
+                        <li><a href="{{ path('sylius_cms_shop_page_show', {'slug': page.slug, '_locale': sylius.localeCode}) }}" class="ztc-footer-link">{{ page.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bottom Footer: Copyright -->
+        <div class="ztc-footer-bottom">
+            <p style="margin: 0;">&copy; {{ 'now'|date('Y') }} Studio ZEN TOO Craft. Tous droits réservés.</p>
+            <div style="display: flex; gap: 1.5rem; margin-top: 1rem;">
+                <span>Artisanat Français</span>
+                <span>Éco-Design</span>
+            </div>
+        </div>
+        
+    </div>
+</footer>

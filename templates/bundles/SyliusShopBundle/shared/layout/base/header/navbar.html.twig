@@ -1,0 +1,51 @@
+<nav class="ztc-navbar navbar navbar-expand-lg" id="ztcMainNav">
+    <div class="ztc-nav-container">
+        <!-- Logo de la Marque -->
+        {{ include('@SyliusShop/shared/layout/base/header/content/logo.html.twig') }}
+
+        <!-- Bouton Burger Mobile -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#ztcStorefrontNavbar" aria-controls="ztcStorefrontNavbar" aria-expanded="false" aria-label="Menu principal">
+            <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+        </button>
+
+        <!-- Navigation Principale -->
+        <div class="collapse navbar-collapse" id="ztcStorefrontNavbar">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-lg-1 align-items-lg-center">
+                {% set currentRoute = app.request.get('_route') %}
+                {% set currentSlug = app.request.get('slug') %}
+
+                <li class="nav-item">
+                    <a class="ztc-nav-link {% if currentRoute == 'sylius_shop_homepage' %}active{% endif %}"
+                       href="{{ path('sylius_shop_homepage') }}">
+                        Accueil
+                    </a>
+                </li>
+
+                <!-- Taxons principaux dynamiques -->
+                {% set menuTaxon = sylius.channel.menuTaxon %}
+                {% set taxonsToDisplay = (menuTaxon is not null and menuTaxon.children is not empty) ? menuTaxon.children : [] %}
+                {% for taxonItem in taxonsToDisplay %}
+                    <li class="nav-item">
+                        <a class="ztc-nav-link {% if currentSlug == taxonItem.slug %}active{% endif %}"
+                           href="{{ path('sylius_shop_product_index', {'slug': taxonItem.slug}) }}">
+                            {{ taxonItem.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+
+                <li class="nav-item">
+                    <a class="ztc-nav-link {% if currentRoute starts with 'app_blog' %}active{% endif %}"
+                       href="{{ path('app_blog_index') }}">
+                        Journal
+                    </a>
+                </li>
+
+                <li class="nav-item ms-lg-3">
+                    <a class="ztc-btn-gold" href="{{ path('sylius_shop_contact_request') }}">
+                        Sur-Mesure
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maquette Footer - ZEN TOO Craft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Outfit', 'sans-serif'] },
+                    colors: {
+                        dark: '#080A09', darker: '#050605', gold: '#D4AF37', goldlight: '#E5C158',
+                        surface: 'rgba(255, 255, 255, 0.02)', border: 'rgba(255, 255, 255, 0.08)',
+                        textmain: '#F4EFE6', textmuted: '#8E9690'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #080A09; color: #F4EFE6; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .font-display { font-family: 'Outfit', sans-serif; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-end">
+    
+    <!-- Contenu fictif de la page pour repère visuel -->
+    <div class="flex-grow flex items-center justify-center text-textmuted pb-20">
+        (Fin du contenu de la page)
+    </div>
+
+    <!-- Le Footer Premium -->
+    <footer class="bg-darker border-t border-border pt-20 pb-10">
+        <div class="max-w-[1400px] mx-auto px-6">
+            
+            <!-- Top Footer: Newsletter / Contact -->
+            <div class="flex flex-col md:flex-row justify-between items-center pb-16 border-b border-border/50 gap-8">
+                <div class="max-w-xl">
+                    <h2 class="font-display text-3xl font-light mb-3">L'Écho de l'Atelier.</h2>
+                    <p class="text-textmuted text-sm leading-relaxed">
+                        Rejoignez le carnet de bord de l'artisan. Recevez nos réflexions sur la sonothérapie, l'éco-design et découvrez nos pièces uniques en avant-première (1 email par mois).
+                    </p>
+                </div>
+                <div class="w-full md:w-auto flex gap-3">
+                    <input type="email" placeholder="Votre adresse email" class="bg-surface border border-border rounded-full px-6 py-3 text-sm text-textmain focus:outline-none focus:border-gold w-full md:w-80 transition">
+                    <button class="bg-textmain text-darker font-medium px-6 py-3 rounded-full hover:bg-gold transition text-sm">S'inscrire</button>
+                </div>
+            </div>
+
+            <!-- Middle Footer: Links Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 py-16">
+                <!-- Brand Column -->
+                <div class="col-span-1">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-2 h-2 rounded-full bg-gold shadow-[0_0_8px_rgba(212,175,55,0.8)]"></div>
+                        <span class="font-display font-semibold tracking-widest text-sm text-textmain">ZEN TOO CRAFT</span>
+                    </div>
+                    <p class="text-textmuted text-sm leading-relaxed mb-6">
+                        Studio de création artisanale. Instruments à vent méditatifs et sculptures lumineuses en bambou naturel, façonnés à la main dans le respect du vivant.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href="#" class="text-textmuted hover:text-gold transition">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+                        </a>
+                        <a href="#" class="text-textmuted hover:text-gold transition">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Links Columns -->
+                <div>
+                    <h4 class="text-textmain font-medium tracking-wide text-sm mb-6">Collections</h4>
+                    <ul class="space-y-4 text-sm text-textmuted">
+                        <li><a href="#" class="hover:text-gold transition">Instruments à Vent</a></li>
+                        <li><a href="#" class="hover:text-gold transition">Luminaires Artistiques</a></li>
+                        <li><a href="#" class="hover:text-gold transition">Objets Décoratifs</a></li>
+                        <li><a href="#" class="hover:text-gold transition flex items-center gap-2">Sur-Mesure <span class="bg-surface border border-border text-[9px] px-2 py-0.5 rounded-full text-textmain">PROJET</span></a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-textmain font-medium tracking-wide text-sm mb-6">L'Atelier</h4>
+                    <ul class="space-y-4 text-sm text-textmuted">
+                        <li><a href="#" class="hover:text-gold transition">Notre Philosophie</a></li>
+                        <li><a href="#" class="hover:text-gold transition">Le Journal (Blog)</a></li>
+                        <li><a href="#" class="hover:text-gold transition">Foire Aux Questions</a></li>
+                        <li><a href="#" class="hover:text-gold transition">Contact & Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-textmain font-medium tracking-wide text-sm mb-6">Informations</h4>
+                    <ul class="space-y-4 text-sm text-textmuted">
+                        <li><a href="#" class="hover:text-gold transition">Conditions Générales (CGV)</a></li>
+                        <li><a href="#" class="hover:text-gold transition">Mentions Légales</a></li>
+                        <li><a href="#" class="hover:text-gold transition">Politique de Confidentialité</a></li>
+                        <li><a href="#" class="hover:text-gold transition">Livraison & Retours</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Bottom Footer: Copyright -->
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-border/30 text-xs text-textmuted/60">
+                <p>&copy; 2026 Studio ZEN TOO Craft. Tous droits réservés.</p>
+                <div class="flex gap-6 mt-4 md:mt-0">
+                    <span>Artisanat Français</span>
+                    <span>Éco-Design</span>
+                </div>
+            </div>
+            
+        </div>
+    </footer>
+</body>
+</html>
