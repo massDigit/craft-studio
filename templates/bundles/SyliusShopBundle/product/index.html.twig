@@ -3,13 +3,17 @@
 
 {% block content %}
 <div class="ztc-nav-container">
-    <div style="max-width: 1400px; margin: 0 auto; width: 100%;">
+    <div style="max-width: 1400px; margin: 0 auto; width: 100%; padding-bottom: 8rem;">
 
         {% set current_taxon = ztc_current_taxon() %}
         
         <!-- Taxon Hero Cinematic (Option B) -->
         <section class="ztc-taxon-hero">
-            <img src="https://images.unsplash.com/photo-1520529986992-d4ce365fbc99?q=80&w=2000&auto=format&fit=crop" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.4) contrast(1.1); z-index: 0;" alt="Taxon Background">
+            {% if current_taxon and current_taxon.images|length > 0 %}
+                <img src="{{ asset('media/image/' ~ current_taxon.images.first.path) }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.75) contrast(1.05); z-index: 0;" alt="{{ current_taxon.name }}">
+            {% else %}
+                <img src="https://images.unsplash.com/photo-1520529986992-d4ce365fbc99?q=80&w=2000&auto=format&fit=crop" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.75) contrast(1.05); z-index: 0;" alt="Taxon Background">
+            {% endif %}
             <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,6,5,1), rgba(8,10,9,0.4), transparent); z-index: 1;"></div>
             
             <div style="position: relative; z-index: 2; max-width: 48rem;">
@@ -45,26 +49,27 @@
         <!-- Product Grid (Minimalist Option B) -->
         <div class="ztc-products-grid">
             {% for product in resources.data %}
-                <a href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': sylius.localeCode}) }}" class="ztc-product-card-minimal" style="text-decoration: none;">
-                    <div class="visual">
+                <a href="{{ path('sylius_shop_product_show', {'slug': product.slug, '_locale': sylius.localeCode}) }}" class="ztc-product-card-minimal" style="text-decoration: none; display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.04); border-radius: 24px; padding: 1rem; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); position: relative;">
+                    <div class="visual" style="border-radius: 16px;">
                         {% if product.images|length > 0 %}
                             <img src="{{ product.images.first.path|imagine_filter('sylius_shop_product_thumbnail') }}" alt="{{ product.name }}">
                         {% else %}
                             <img src="https://images.unsplash.com/photo-1599839575945-a9e5af0c3fa5?q=80&w=800&auto=format&fit=crop" alt="Default">
                         {% endif %}
                         
-                        <!-- Audio Player Overlay (Design only, would need real data) -->
-                        <div class="ztc-audio-overlay">
-                            <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold-accent); color: var(--bg-darker); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg width="12" height="14" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>
-                            </div>
-                            <div style="flex-grow: 1;">
-                                <div style="font-size: 10px; color: var(--gold-accent); text-transform: uppercase; letter-spacing: 0.1em; font-weight: bold; margin-bottom: 4px;">Extrait Sonore</div>
-                                <div style="height: 4px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 9999px; overflow: hidden;">
-                                    <div style="width: 33%; height: 100%; background: var(--gold-accent);"></div>
+                        {% if product.audios|length > 0 %}
+                            <div class="ztc-audio-overlay">
+                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold-accent); color: #050605; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                    <svg width="12" height="14" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>
+                                </div>
+                                <div style="flex-grow: 1;">
+                                    <div style="font-size: 10px; color: var(--gold-accent); text-transform: uppercase; letter-spacing: 0.1em; font-weight: bold; margin-bottom: 4px;">Extrait Sonore</div>
+                                    <div style="height: 4px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 9999px; overflow: hidden;">
+                                        <div style="width: 33%; height: 100%; background: var(--gold-accent);"></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
@@ -75,9 +80,15 @@
                             {% endif %}
                         </span>
                     </div>
-                    <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0; line-height: 1.5;">
+                    <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0 0 1.5rem 0; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
                         {{ product.shortDescription|default('Finition naturelle.')|striptags }}
                     </p>
+                    <div style="display: flex; width: 100%; margin-top: auto;">
+                        <span class="ztc-cta-btn" style="display: flex; width: 100%; justify-content: center; align-items: center; gap: 0.5rem; padding: 0.75rem 1.25rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; color: var(--gold-accent); background: rgba(212, 175, 55, 0.05); border: 1px solid rgba(212, 175, 55, 0.15); backdrop-filter: blur(10px); transition: all 0.4s ease;">
+                            Découvrir
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="transition: transform 0.4s ease;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                        </span>
+                    </div>
                 </a>
             {% else %}
                 <div style="grid-column: 1 / -1; text-align: center; padding: 4rem; background: rgba(255,255,255,0.02); border-radius: 24px; color: var(--text-secondary);">
@@ -112,5 +123,22 @@
 <style>
     .faq-item.active .faq-answer { max-height: 500px; }
     .faq-item.active .faq-question span { transform: rotate(45deg); display: inline-block; transition: transform 0.3s; }
+    
+    .ztc-product-card-minimal:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+    
+    .ztc-product-card-minimal:hover .ztc-cta-btn {
+        background: var(--gold-accent) !important;
+        color: #050605 !important;
+        border-color: var(--gold-accent) !important;
+    }
+
+    .ztc-product-card-minimal:hover .ztc-cta-btn svg {
+        transform: translateX(4px);
+    }
 </style>
 {% endblock %}
