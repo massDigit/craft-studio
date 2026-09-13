@@ -1,0 +1,10 @@
+app:
+    form:
+        product:
+            technical_sheet_items: 'Technical Sheet'
+            add_technical_sheet_item: 'Add section'
+        technical_sheet:
+            title: 'Section title (e.g., Care Instructions)'
+            description: 'Detailed description'
+            position: 'Position (Display order)'
+            translations: 'Translations'

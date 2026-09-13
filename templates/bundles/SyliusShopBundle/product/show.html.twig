@@ -94,20 +94,25 @@
                     </form>
 
                     <!-- Accordions -->
+                    <!-- Fiche Technique Dynamique -->
                     <div style="border-top: 1px solid rgba(255,255,255,0.08);">
-                        <div style="padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-                            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 500; margin: 0; color: #fff;">Caractéristiques Techniques</h3>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M6 9l6 6 6-6"/></svg>
-                        </div>
-                        <div style="padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-                            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 500; margin: 0; color: #fff;">Entretien du Bambou</h3>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M6 9l6 6 6-6"/></svg>
-                        </div>
-                        <div style="padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; cursor: pointer;">
-                            <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 500; margin: 0; color: #fff;">Livraison & Sur-Mesure</h3>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M6 9l6 6 6-6"/></svg>
-                        </div>
+                        {% for item in product.technicalSheetItems %}
+                            <details class="ztc-accordion" id="{{ item.translation.title|slug }}">
+                                <summary style="padding: 1.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center; cursor: pointer; list-style: none;" onmousedown="this.style.outline='none'">
+                                    <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.25rem; font-weight: 500; margin: 0; color: #fff;">{{ item.translation.title }}</h3>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-secondary);"><path d="M6 9l6 6 6-6"/></svg>
+                                </summary>
+                                <div style="padding: 1rem 0 2rem; color: var(--text-secondary); font-size: 1rem; line-height: 1.7;">
+                                    {{ item.translation.description|nl2br }}
+                                </div>
+                            </details>
+                        {% endfor %}
                     </div>
+                    <style>
+                        .ztc-accordion summary::-webkit-details-marker { display: none; }
+                        .ztc-accordion[open] summary svg { transform: rotate(180deg); }
+                        .ztc-accordion summary svg { transition: transform 0.3s ease; }
+                    </style>
                     
                 </div>
             </div>

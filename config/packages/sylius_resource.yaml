@@ -22,3 +22,13 @@ sylius_resource:
                 repository: App\Repository\BlogPostRepository
                 form: App\Form\Type\BlogPostType
 
+        app.product_technical_sheet_item:
+            driver: doctrine/orm
+            classes:
+                model: App\Entity\Product\ProductTechnicalSheetItem
+                form: App\Form\Type\ProductTechnicalSheetItemType
+            translation:
+                classes:
+                    model: App\Entity\Product\ProductTechnicalSheetItemTranslation
+                    form: App\Form\Type\ProductTechnicalSheetItemTranslationType
+

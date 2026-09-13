@@ -44,6 +44,61 @@ class AiApiController extends AbstractController
         ]);
     }
 
+    #[Route('/generate-technical-sheet', name: 'generate_technical_sheet', methods: ['POST'])]
+    public function generateTechnicalSheet(Request $request): JsonResponse
+    {
+        $payload = json_decode($request->getContent(), true);
+        $name = '';
+        $category = '';
+        $expectedTitle = null;
+
+        if (is_array($payload)) {
+            $nameVal = $payload['name'] ?? '';
+            $name = is_string($nameVal) ? $nameVal : '';
+            $catVal = $payload['category'] ?? '';
+            $category = is_string($catVal) ? $catVal : '';
+            $expectedVal = $payload['expectedTitle'] ?? '';
+            $expectedTitle = is_string($expectedVal) && $expectedVal !== '' ? $expectedVal : null;
+        }
+
+        if ('' === $name) {
+            return new JsonResponse(['error' => 'Le nom de la création est obligatoire.'], 400);
+        }
+
+        $items = $this->aiService->generateTechnicalSheet($name, $category, $expectedTitle);
+
+        return new JsonResponse([
+            'success' => true,
+            'items' => $items,
+        ]);
+    }
+
+    #[Route('/improve-text', name: 'improve_text', methods: ['POST'])]
+    public function improveText(Request $request): JsonResponse
+    {
+        $payload = json_decode($request->getContent(), true);
+        $text = '';
+        $instructions = '';
+
+        if (is_array($payload)) {
+            $textVal = $payload['text'] ?? '';
+            $text = is_string($textVal) ? $textVal : '';
+            $instVal = $payload['instructions'] ?? '';
+            $instructions = is_string($instVal) ? $instVal : '';
+        }
+
+        if ('' === $text || '' === $instructions) {
+            return new JsonResponse(['error' => 'Texte ou instructions manquants.'], 400);
+        }
+
+        $improved = $this->aiService->improveText($text, $instructions);
+
+        return new JsonResponse([
+            'success' => true,
+            'improvedText' => $improved,
+        ]);
+    }
+
     #[Route('/generate-faq', name: 'generate_faq', methods: ['POST'])]
     public function generateFaq(Request $request): JsonResponse
     {
