@@ -1,0 +1,10 @@
+app:
+    form:
+        product:
+            technical_sheet_items: 'Fiche technique'
+            add_technical_sheet_item: 'Ajouter une section'
+        technical_sheet:
+            title: "Titre de la section (ex: Entretien)"
+            description: "Description détaillée"
+            position: "Position (Ordre d'affichage)"
+            translations: "Traductions"
