@@ -1,0 +1,385 @@
+{% set form = hookable_metadata.context.form %}
+{% set product = hookable_metadata.context.resource %}
+
+<div class="tab-pane {% if hookable_metadata.configuration.active|default(false) %}show active{% endif %}" id="product-technical-sheet" role="tabpanel" tabindex="0">
+    <div class="card mb-3">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2 id="productTechnicalSheet" class="card-title">
+                Fiche Technique (IA)
+            </h2>
+            
+            <div class="ai-actions d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" id="btn-ai-translate-en">
+                    🌐 Traduire tout en Anglais
+                </button>
+                <button type="button" class="btn btn-sm btn-primary" id="btn-ai-generate-sheet" style="background: linear-gradient(135deg, #6f42c1, #8A2BE2); border: none;">
+                    ✨ Générer via l'IA
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info" style="font-size: 0.9rem;">
+                Gérez les sections techniques (Caractéristiques, Entretien...) qui apparaîtront sur la fiche produit. Chaque section est traduisible.
+            </div>
+
+            <div id="technical-sheet-wrapper" data-prototype="{{ form_widget(form.technicalSheetItems.vars.prototype)|e('html_attr') }}" data-index="{{ form.technicalSheetItems|length }}">
+                {{ form_widget(form.technicalSheetItems) }}
+                
+                <button type="button" class="btn btn-outline-primary mt-3 w-100 border-dashed" id="add-technical-sheet" style="border-style: dashed;">
+                    + Ajouter une section technique
+                </button>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+<script>
+    window.AppModal = {
+        prompt: function(title, message, defaultValue = '') {
+            return new Promise((resolve) => {
+                const modalHtml = `
+                <div class="modal fade" id="appDynamicModal" tabindex="-1" aria-hidden="true" style="z-index: 9999;">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg">
+                      <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold" style="color: #6f42c1;">${title}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body py-4">
+                        <p class="mb-3 text-muted">${message}</p>
+                        <input type="text" class="form-control form-control-lg" id="appModalInput" value="${defaultValue}">
+                      </div>
+                      <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-primary px-4" id="appModalConfirm" style="background: linear-gradient(135deg, #6f42c1, #8A2BE2); border: none;">Confirmer</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>`;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                const modalEl = document.getElementById('appDynamicModal');
+                const bsModal = new bootstrap.Modal(modalEl);
+                const inputEl = document.getElementById('appModalInput');
+                const confirmBtn = document.getElementById('appModalConfirm');
+                
+                let resolved = false;
+                
+                confirmBtn.addEventListener('click', () => {
+                    resolved = true;
+                    resolve(inputEl.value);
+                    bsModal.hide();
+                });
+                
+                inputEl.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        confirmBtn.click();
+                    }
+                });
+                
+                modalEl.addEventListener('hidden.bs.modal', () => {
+                    if (!resolved) resolve(null);
+                    modalEl.remove();
+                });
+                
+                bsModal.show();
+                modalEl.addEventListener('shown.bs.modal', () => inputEl.focus());
+            });
+        },
+        alert: function(title, message, isError = false) {
+            return new Promise((resolve) => {
+                const headerColor = isError ? 'text-danger' : 'text-primary';
+                const modalHtml = `
+                <div class="modal fade" id="appDynamicModal" tabindex="-1" aria-hidden="true" style="z-index: 9999;">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow">
+                      <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-bold ${headerColor}">${title}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body py-4">
+                        <p class="mb-0">${message}</p>
+                      </div>
+                      <div class="modal-footer border-0 pt-0">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">OK</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>`;
+                
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                const modalEl = document.getElementById('appDynamicModal');
+                const bsModal = new bootstrap.Modal(modalEl);
+                
+                modalEl.addEventListener('hidden.bs.modal', () => {
+                    resolve(true);
+                    modalEl.remove();
+                });
+                
+                bsModal.show();
+            });
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const wrapper = document.getElementById('technical-sheet-wrapper');
+        const container = wrapper.querySelector('div[id$="_technicalSheetItems"]');
+        const addButton = document.getElementById('add-technical-sheet');
+        
+        if (!container || !addButton) return;
+
+        // Les boutons de suppression et d'amélioration sont ajoutés plus bas dans le script.
+
+        const btnAi = document.getElementById('btn-ai-generate-sheet');
+        const btnTranslateEn = document.getElementById('btn-ai-translate-en');
+
+        // Helper pour trouver l'input correspondant à une langue
+        function findInputByLang(inputs, lang1, lang2) {
+            return Array.from(inputs).find(i => i.name.includes('['+lang1+']') || (lang2 && i.name.includes('['+lang2+']')));
+        }
+
+        if (btnAi && container && addButton) {
+            btnAi.addEventListener('click', async function() {
+                let productName = "{{ product.id ? (product.translations is not empty ? product.name|e('js') : '') : '' }}";
+                
+                if (!productName) {
+                    const nameInput = document.querySelector('input[name*="[name]"]');
+                    productName = nameInput ? nameInput.value : '';
+                }
+                
+                if (!productName) {
+                    await AppModal.alert("Attention", "Le nom du produit est introuvable. Veuillez d'abord saisir un nom en haut de la page.");
+                    return;
+                }
+
+                // Détermination du bloc cible et du titre attendu
+                const items = container.querySelectorAll('.technical-sheet-item');
+                let targetItem = items.length > 0 ? items[items.length - 1] : null;
+                
+                let expectedTitle = '';
+                let targetIsUsable = false;
+                
+                if (targetItem) {
+                    const allTitles = targetItem.querySelectorAll('input[name*="[title]"]');
+                    const allDescs = targetItem.querySelectorAll('textarea[name*="[description]"]');
+                    const firstTitle = findInputByLang(allTitles, 'fr', 'fr_FR') || allTitles[0];
+                    const firstDesc = findInputByLang(allDescs, 'fr', 'fr_FR') || allDescs[0];
+                    
+                    if (firstDesc && firstDesc.value.trim() === '') {
+                        targetIsUsable = true;
+                        if (firstTitle && firstTitle.value.trim() !== '') {
+                            expectedTitle = firstTitle.value.trim();
+                        }
+                    }
+                }
+                
+                if (!targetItem || !targetIsUsable) {
+                    addButton.click();
+                    const newItems = container.querySelectorAll('.technical-sheet-item');
+                    targetItem = newItems[newItems.length - 1];
+                    expectedTitle = ''; // Nouveau bloc, aucun titre présaisi
+                }
+
+                btnAi.innerHTML = '⏳ Génération en cours...';
+                btnAi.disabled = true;
+
+                fetch('/admin/ajax/ai/generate-technical-sheet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: productName, expectedTitle: expectedTitle })
+                })
+                .then(res => res.json())
+                .then(async data => {
+                    if (data.success && data.items && data.items.title) {
+                        if (targetItem) {
+                            const allTitles = targetItem.querySelectorAll('input[name*="[title]"]');
+                            const allDescs = targetItem.querySelectorAll('textarea[name*="[description]"]');
+                            
+                            const titleFr = findInputByLang(allTitles, 'fr', 'fr_FR') || allTitles[0];
+                            const descFr = findInputByLang(allDescs, 'fr', 'fr_FR') || allDescs[0];
+                            
+                            if (titleFr) { 
+                                titleFr.value = data.items.title; 
+                                titleFr.dispatchEvent(new Event('input', { bubbles: true })); 
+                                titleFr.dispatchEvent(new Event('change', { bubbles: true })); 
+                            }
+                            if (descFr) { 
+                                descFr.value = data.items.description; 
+                                descFr.dispatchEvent(new Event('input', { bubbles: true })); 
+                                descFr.dispatchEvent(new Event('change', { bubbles: true })); 
+                            }
+                        }
+                    } else {
+                        await AppModal.alert("Erreur", "Erreur lors de la génération IA.", true);
+                    }
+                })
+                .catch(async err => {
+                    console.error(err);
+                    await AppModal.alert("Erreur", "Erreur de connexion avec l'IA Ollama locale.", true);
+                })
+                .finally(() => {
+                    btnAi.innerHTML = '✨ Générer via l\'IA';
+                    btnAi.disabled = false;
+                });
+            });
+        }
+        
+        if (btnTranslateEn && container) {
+            btnTranslateEn.addEventListener('click', async function() {
+                const items = container.querySelectorAll('.technical-sheet-item');
+                if (items.length === 0) {
+                    await AppModal.alert("Information", "Aucune section à traduire.");
+                    return;
+                }
+                
+                btnTranslateEn.innerHTML = '⏳ Traduction en cours...';
+                btnTranslateEn.disabled = true;
+                
+                try {
+                    for (const item of items) {
+                        const allTitles = item.querySelectorAll('input[name*="[title]"]');
+                        const allDescs = item.querySelectorAll('textarea[name*="[description]"]');
+                        
+                        const titleFr = findInputByLang(allTitles, 'fr', 'fr_FR') || allTitles[0];
+                        const descFr = findInputByLang(allDescs, 'fr', 'fr_FR') || allDescs[0];
+                        
+                        const titleEn = findInputByLang(allTitles, 'en', 'en_US');
+                        const descEn = findInputByLang(allDescs, 'en', 'en_US');
+                        
+                        if (titleFr && titleFr.value && titleEn) {
+                            const resTitle = await fetch('/admin/ajax/ai/translate-field', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ text: titleFr.value, targetLocale: 'en' })
+                            }).then(r => r.json());
+                            if (resTitle.success) { 
+                                titleEn.value = resTitle.translatedText; 
+                                titleEn.dispatchEvent(new Event('input', { bubbles: true })); 
+                                titleEn.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
+                        }
+                        
+                        if (descFr && descFr.value && descEn) {
+                            const resDesc = await fetch('/admin/ajax/ai/translate-field', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ text: descFr.value, targetLocale: 'en' })
+                            }).then(r => r.json());
+                            if (resDesc.success) { 
+                                descEn.value = resDesc.translatedText; 
+                                descEn.dispatchEvent(new Event('input', { bubbles: true })); 
+                                descEn.dispatchEvent(new Event('change', { bubbles: true }));
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.error(e);
+                    await AppModal.alert("Erreur", "Erreur de traduction avec l'IA.", true);
+                } finally {
+                    btnTranslateEn.innerHTML = '🌐 Traduire tout en Anglais';
+                    btnTranslateEn.disabled = false;
+                }
+            });
+        }
+        
+        function addDeleteButton(item) {
+            if (item.querySelector('.btn-remove-item')) return;
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'btn btn-sm btn-outline-danger mt-2 btn-remove-item';
+            btn.innerHTML = 'Retirer cette section';
+            btn.onclick = function() { item.remove(); };
+            item.appendChild(btn);
+        }
+
+        function addImproveButtons(item) {
+            const textareas = item.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                if (textarea.parentNode.querySelector('.btn-improve-ai')) return;
+                
+                const btnWrapper = document.createElement('div');
+                btnWrapper.className = 'justify-content-end mt-2';
+                btnWrapper.style.display = textarea.value.trim().length > 0 ? 'flex' : 'none';
+                
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'btn btn-sm btn-improve-ai';
+                btn.style.cssText = 'font-size: 0.8rem; padding: 0.25rem 0.5rem; background: linear-gradient(135deg, #6f42c1, #8A2BE2); color: white; border: none; border-radius: 4px;';
+                btn.innerHTML = '✨ Améliorer ce texte';
+                
+                btn.onclick = async function() {
+                    const currentText = textarea.value;
+                    if (!currentText.trim()) return;
+                    
+                    const instructions = await AppModal.prompt("Instructions pour l'IA", "Que doit faire l'IA ? (ex: Rends le texte plus vendeur, plus court...)", "Améliore ce texte avec un ton premium et artisanal");
+                    if (!instructions) return;
+                    
+                    btn.innerHTML = '⏳ Amélioration...';
+                    btn.disabled = true;
+                    
+                    try {
+                        const res = await fetch('/admin/ajax/ai/improve-text', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ text: currentText, instructions: instructions })
+                        }).then(r => r.json());
+                        
+                        if (res.success && res.improvedText) {
+                            textarea.value = res.improvedText;
+                            textarea.dispatchEvent(new Event('input', { bubbles: true }));
+                            textarea.dispatchEvent(new Event('change', { bubbles: true }));
+                        } else {
+                            await AppModal.alert("Erreur", "Erreur lors de l'amélioration.", true);
+                        }
+                    } catch (e) {
+                        console.error(e);
+                        await AppModal.alert("Erreur", "Erreur de connexion IA.", true);
+                    } finally {
+                        btn.innerHTML = '✨ Améliorer ce texte';
+                        btn.disabled = false;
+                    }
+                };
+                
+                // Afficher/masquer le bouton selon si le champ est vide
+                textarea.addEventListener('input', function() {
+                    btnWrapper.style.display = this.value.trim().length > 0 ? 'flex' : 'none';
+                });
+                
+                btnWrapper.appendChild(btn);
+                textarea.parentNode.appendChild(btnWrapper);
+            });
+        }
+
+        // Ajouter les boutons aux items déjà existants
+        Array.from(container.children).forEach(item => {
+            addDeleteButton(item);
+            addImproveButtons(item);
+        });
+
+        addButton.addEventListener('click', function() {
+            let index = parseInt(wrapper.dataset.index);
+            let prototype = wrapper.dataset.prototype;
+            let newForm = prototype.replace(/__name__/g, index);
+            wrapper.dataset.index = index + 1;
+            
+            const div = document.createElement('div');
+            div.innerHTML = newForm;
+            div.className = 'technical-sheet-item p-3 mb-3 border rounded bg-light';
+            
+            // Auto-remplissage de la position
+            const positionInput = div.querySelector('input[name$="[position]"]');
+            if (positionInput) {
+                const existingPositions = Array.from(container.querySelectorAll('input[name$="[position]"]'))
+                    .map(inp => parseInt(inp.value) || 0);
+                const nextPos = existingPositions.length > 0 ? Math.max(...existingPositions) + 1 : 1;
+                positionInput.value = nextPos;
+            }
+            
+            addDeleteButton(div);
+            // Il faut attendre un instant que le DOM du prototype soit bien inséré et parsé (onglets inclus)
+            setTimeout(() => addImproveButtons(div), 50);
+            container.appendChild(div);
+        });
+    });
+</script>

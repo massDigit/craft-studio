@@ -22,11 +22,17 @@ class Product extends BaseProduct implements ProductInterface
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductAudio::class, cascade: ['all'], orphanRemoval: true)]
     private Collection $audios;
 
+    /** @var Collection<int, ProductTechnicalSheetItem> */
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductTechnicalSheetItem::class, cascade: ['all'], orphanRemoval: true)]
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    private Collection $technicalSheetItems;
+
     public function __construct()
     {
         parent::__construct();
 
         $this->audios = new ArrayCollection();
+        $this->technicalSheetItems = new ArrayCollection();
     }
 
     protected function createTranslation(): ProductTranslationInterface
@@ -77,5 +83,39 @@ class Product extends BaseProduct implements ProductInterface
         }
 
         return $this->audios->first() ?: null;
+    }
+
+    /**
+     * @return Collection<int, ProductTechnicalSheetItem>
+     */
+    public function getTechnicalSheetItems(): Collection
+    {
+        return $this->technicalSheetItems;
+    }
+
+    public function hasTechnicalSheetItems(): bool
+    {
+        return !$this->technicalSheetItems->isEmpty();
+    }
+
+    public function addTechnicalSheetItem(ProductTechnicalSheetItem $item): self
+    {
+        if (!$this->technicalSheetItems->contains($item)) {
+            $this->technicalSheetItems->add($item);
+            $item->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTechnicalSheetItem(ProductTechnicalSheetItem $item): self
+    {
+        if ($this->technicalSheetItems->removeElement($item)) {
+            if ($item->getProduct() === $this) {
+                $item->setProduct(null);
+            }
+        }
+
+        return $this;
     }
 }

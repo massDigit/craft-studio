@@ -1,0 +1,19 @@
+sylius_twig_hooks:
+    hooks:
+        'sylius_admin.product.create.content.form.side_navigation':
+            technical_sheet:
+                template: 'admin/product/form/side_navigation/technical_sheet.html.twig'
+                priority: 150
+        'sylius_admin.product.create.content.form.sections':
+            technical_sheet:
+                template: 'admin/product/form/sections/technical_sheet.html.twig'
+                priority: 150
+
+        'sylius_admin.product.update.content.form.side_navigation':
+            technical_sheet:
+                template: 'admin/product/form/side_navigation/technical_sheet.html.twig'
+                priority: 150
+        'sylius_admin.product.update.content.form.sections':
+            technical_sheet:
+                template: 'admin/product/form/sections/technical_sheet.html.twig'
+                priority: 150
