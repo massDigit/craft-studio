@@ -53,6 +53,11 @@ final class AdminMenuListener
             }
         }
 
+        // Désactiver (masquer) la section "Marketing" (promotions, réductions, coupons, avis)
+        if (null !== $menu->getChild('marketing')) {
+            $menu->removeChild('marketing');
+        }
+
         // Désactiver (masquer) la section "Ventes" (Sales) car on n'utilise plus le pipeline e-commerce classique
         if (null !== $menu->getChild('sales')) {
             $menu->removeChild('sales');

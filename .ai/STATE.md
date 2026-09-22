@@ -21,7 +21,7 @@ Enrichissement des visuels de taxons restants et structuration des sous-taxons a
 - [x] Intégration du formulaire WYSIWYG (Quill.js) sur les champs de description de produit et les pages CMS.
 - [x] Implémentation du service IA Ollama (Qwen 2.5 local) avec les boutons `Générer la description` (FR) et `Générer la traduction` (EN) dans Sylius Admin.
 - [x] Nettoyage strict des langues système en base et en cache pour restreindre l'application uniquement au Français (`fr`) et à l'Anglais (`en`).
-- [x] Simplification du menu Admin : masquage des sous-sections superflues du catalogue (Stock, Options, Attributs, Associations) et renommage explicite de "Taxons" en "Catégories".
+- [x] Simplification du menu Admin : masquage des sous-sections superflues du catalogue (Stock, Options, Attributs, Associations), masquage de la section Marketing (promotions/avis) et renommage explicite de "Taxons" en "Catégories".
 - [x] Raccordement dynamique du menu principal du haut (Navbar) pour afficher les catégories de premier niveau rattachées au canal (`sylius.channel.menuTaxon.children`).
 - [x] Désactivation du hook natif d'en-tête Sylius (`sylius_shop.base.header#content`) pour éviter le doublon d'en-tête.
 - [x] Adoption de la direction artistique style Apple : ajout des classes `.ztc-apple-card` et `.ztc-apple-pill` dans `assets/shop/styles/zen_too_craft.css` et build Encore.
