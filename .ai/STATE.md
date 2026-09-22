@@ -6,10 +6,10 @@
 **Branche Courante** : `feat/shop-dynamic-taxon-filters`
 
 ## 🚀 Phase Actuelle
-Phase 6 : Refonte des Pages Catégories / Taxons & Direction Artistique Apple (EN COURS).
+Phase 7 : Enrichissement du Catalogue & Pages Éditoriales (EN COURS).
 
 ## 🎯 Focus Courant
-Optimisation ergonomique et responsive de la barre de navigation et filtres de sous-taxons.
+Enrichissement des visuels de taxons restants et structuration des sous-taxons avec produits rattachés.
 
 ## ✅ Réalisé
 - [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
