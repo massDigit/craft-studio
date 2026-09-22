@@ -1,4 +1,11 @@
 app:
+    shop:
+        home:
+            explore_universes: "Explore our Worlds"
+            collection: "Collection"
+            bespoke_title: "The Art of Bespoke Craft."
+            bespoke_description: "Every piece of bamboo holds its own resonance and curvature. Together, we design the instrument or artifact that resonates perfectly with your space or artistic practice."
+            start_project: "Start a bespoke project"
     form:
         product:
             technical_sheet_items: 'Technical Sheet'
@@ -8,3 +15,55 @@ app:
             description: 'Detailed description'
             position: 'Position (Display order)'
             translations: 'Translations'
+
+sylius:
+    menu:
+        admin:
+            main:
+                catalog:
+                    taxons: 'Catalogs'
+    admin:
+        ui:
+            taxon: 'Catalog'
+            no_main_taxon: 'no main catalog'
+    ui:
+        taxon: 'Catalog'
+        taxons: 'Catalogs'
+        new_taxon: 'New catalog'
+        create_taxon: 'Create catalog'
+        edit_taxon: 'Edit catalog'
+        editing_taxon: 'Editing catalog'
+        main_taxon: 'Main catalog'
+        manage_taxons: 'Manage catalogs'
+        manage_product_positions_in_taxon: 'Manage product positions in %taxon_name%'
+        product_taxon: 'Product catalog'
+        product_taxons: 'Product catalogs'
+        products_categorized_under_taxon_taxon: 'Products <small>categorized under catalog "%taxon%"</small>'
+        select_taxon: 'Select a catalog'
+        taxonomy: 'Catalogs'
+        taxons_for_which_the_lowest_price_is_not_displayed: 'Catalogs for which the lowest price is not displayed'
+        there_are_no_taxons_for_this_product: 'No catalog defined'
+        there_are_no_taxons_to_display: 'There are no catalogs to display'
+        there_is_no_main_taxon_for_this_product: 'There is no main catalog for this product'
+        for_taxons: 'For catalogs'
+    form:
+        product:
+            main_taxon: 'Main catalog'
+            taxons: 'Catalogs'
+        channel:
+            for_taxons: 'For catalogs'
+            menu_taxon: 'Menu catalog'
+            taxonomies: 'Catalogs'
+            main_taxon: 'Main catalog'
+        taxon:
+            code: 'Code'
+            file: 'Select image'
+            images: 'Images'
+        taxonomy:
+            file: 'Select image'
+        product_filter:
+            taxons: 'Catalogs filter'
+            has_taxon:
+                taxons: 'Catalogs'
+            total_of_items_from_taxon:
+                taxon: 'Catalog'

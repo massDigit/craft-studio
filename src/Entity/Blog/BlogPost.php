@@ -34,6 +34,9 @@ class BlogPost implements ResourceInterface
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $author = 'ZEN TOO Craft';
 
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $topic = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $coverImage = null;
 
@@ -127,6 +130,16 @@ class BlogPost implements ResourceInterface
     public function setAuthor(?string $author): void
     {
         $this->author = $author;
+    }
+
+    public function getTopic(): ?string
+    {
+        return $this->topic;
+    }
+
+    public function setTopic(?string $topic): void
+    {
+        $this->topic = $topic;
     }
 
     public function getCoverImage(): ?string

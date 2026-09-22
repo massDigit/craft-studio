@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Twig\Extension;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sylius\Component\Core\Model\TaxonInterface;
 use Sylius\Component\Locale\Context\LocaleContextInterface;
 use Sylius\Component\Taxonomy\Repository\TaxonRepositoryInterface;
@@ -23,6 +24,7 @@ class TaxonExtension extends AbstractExtension
         private readonly RequestStack $requestStack,
         private readonly TaxonRepositoryInterface $taxonRepository,
         private readonly LocaleContextInterface $localeContext,
+        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -31,6 +33,8 @@ class TaxonExtension extends AbstractExtension
         return [
             new TwigFunction('ztc_current_taxon', $this->getCurrentTaxon(...)),
             new TwigFunction('ztc_get_taxon_by_code', $this->getTaxonByCode(...)),
+            new TwigFunction('ztc_get_subtaxons_with_products', $this->getSubtaxonsWithProducts(...)),
+            new TwigFunction('ztc_short_taxon_name', $this->getShortTaxonName(...)),
         ];
     }
 
@@ -58,5 +62,66 @@ class TaxonExtension extends AbstractExtension
         }
 
         return $this->taxonRepository->findOneBySlug((string) $slug, $locale);
+    }
+
+    /**
+     * @return array<TaxonInterface>
+     */
+    public function getSubtaxonsWithProducts(TaxonInterface $taxon): array
+    {
+        $children = $taxon->getChildren();
+        if ($children->isEmpty()) {
+            return [];
+        }
+
+        $subtaxonsWithProducts = [];
+        $connection = $this->entityManager->getConnection();
+
+        foreach ($children as $child) {
+            $count = (int) $connection->fetchOne(
+                'SELECT COUNT(pt.id) 
+                 FROM sylius_product_taxon pt 
+                 JOIN sylius_product p ON p.id = pt.product_id 
+                 WHERE pt.taxon_id = :taxonId AND p.enabled = 1',
+                ['taxonId' => $child->getId()]
+            );
+
+            if ($count > 0) {
+                $subtaxonsWithProducts[] = $child;
+            }
+        }
+
+        return $subtaxonsWithProducts;
+    }
+
+    public function getShortTaxonName(TaxonInterface $taxon): string
+    {
+        $code = (string) $taxon->getCode();
+        $name = (string) $taxon->getName();
+
+        $mapping = [
+            'instruments' => 'Instruments à Vent',
+            'luminaires' => 'Luminaires',
+            'decorations' => 'Décoration',
+            'luce' => 'Lumière',
+        ];
+
+        if (isset($mapping[$code])) {
+            return $mapping[$code];
+        }
+
+        // Split on '&' if present (take first part)
+        if (str_contains($name, '&')) {
+            $parts = explode('&', $name);
+            return trim($parts[0]);
+        }
+
+        // Split on '/' if present
+        if (str_contains($name, '/')) {
+            $parts = explode('/', $name);
+            return trim($parts[0]);
+        }
+
+        return $name;
     }
 }

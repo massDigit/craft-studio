@@ -179,21 +179,24 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     position: sticky;
     top: 0;
     z-index: 1000;
-    background: rgba(8, 10, 9, 0.78) !important;
+    width: 100%;
+    background: rgba(8, 10, 9, 0.85) !important;
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
-    padding: 1.1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    padding: 1rem 0;
     transition: background 0.3s ease;
 }
 
 .ztc-nav-container {
-    max-width: 1280px;
+    width: 100%;
+    max-width: 1320px;
     margin: 0 auto;
     padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: relative;
 }
 
 /* Logo avec point doré */
@@ -207,6 +210,7 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    white-space: nowrap;
 }
 
 .ztc-brand-dot {
@@ -219,7 +223,16 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     box-shadow: 0 0 10px var(--gold-accent);
 }
 
-/* Liens de navigation */
+/* Liens de navigation Desktop */
+.ztc-nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
 .ztc-nav-link {
     color: var(--text-secondary) !important;
     text-decoration: none;
@@ -229,6 +242,7 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     position: relative;
     padding: 0.4rem 0.6rem;
     display: inline-block;
+    white-space: nowrap;
 }
 
 .ztc-nav-link:hover {
@@ -250,7 +264,7 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     border-radius: 2px;
 }
 
-/* Bouton CTA doré */
+/* Bouton CTA doré de la Direction Artistique */
 .ztc-btn-gold {
     display: inline-block;
     padding: 0.55rem 1.4rem;
@@ -263,6 +277,7 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     text-decoration: none;
     border-radius: 30px;
     border: none;
+    white-space: nowrap;
     transition: box-shadow 0.25s ease, transform 0.2s ease;
 }
 
@@ -270,6 +285,127 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     box-shadow: 0 4px 20px rgba(212, 175, 55, 0.35);
     transform: translateY(-1px);
     color: #0a0c0b !important;
+}
+
+/* Bouton Burger Sobre et Épuré avec SVG */
+.ztc-burger-btn {
+    background: transparent !important;
+    border: none !important;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #F4EFE6 !important;
+    transition: color 0.2s ease, background 0.2s ease;
+    padding: 0;
+    box-shadow: none !important;
+}
+
+.ztc-burger-btn:hover {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: var(--gold-accent, #D4AF37) !important;
+}
+
+.ztc-burger-btn .ztc-burger-icon-bars {
+    display: block;
+}
+
+.ztc-burger-btn .ztc-burger-icon-close {
+    display: none;
+}
+
+.ztc-burger-btn[aria-expanded="true"] {
+    color: var(--gold-accent, #D4AF37) !important;
+}
+
+.ztc-burger-btn[aria-expanded="true"] .ztc-burger-icon-bars {
+    display: none;
+}
+
+.ztc-burger-btn[aria-expanded="true"] .ztc-burger-icon-close {
+    display: block;
+}
+
+/* Tiroir Mobile Épuré Dépoli */
+.ztc-mobile-drawer {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: rgba(8, 10, 9, 0.96) !important;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
+    max-height: calc(100vh - 75px);
+    overflow-y: auto;
+}
+
+.ztc-mobile-drawer-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0.75rem 2rem 1.25rem;
+}
+
+.ztc-mobile-nav-list {
+    list-style: none !important;
+    list-style-type: none !important;
+    margin: 0;
+    padding: 0;
+}
+
+.ztc-mobile-nav-item {
+    list-style: none !important;
+    list-style-type: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.ztc-mobile-nav-item:last-child {
+    border-bottom: none;
+}
+
+.ztc-mobile-nav-link {
+    display: block;
+    padding: 0.85rem 0.5rem;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: var(--text-secondary, #B8B5AD) !important;
+    text-decoration: none;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.ztc-mobile-nav-link:hover {
+    color: var(--text-primary, #F4EFE6) !important;
+    padding-left: 0.85rem;
+}
+
+.ztc-mobile-nav-link.active {
+    color: var(--gold-accent, #D4AF37) !important;
+    font-weight: 500;
+}
+
+@media (max-width: 576px) {
+    .ztc-nav-container {
+        padding: 0 1rem;
+    }
+    .ztc-mobile-drawer-inner {
+        padding: 0.5rem 1rem 1rem;
+    }
+    .ztc-brand-logo {
+        font-size: 0.92rem;
+        letter-spacing: 0.14em;
+        gap: 0.4rem;
+    }
+    .ztc-header-cta {
+        padding: 0.42rem 0.85rem !important;
+        font-size: 0.72rem !important;
+    }
 }
 
 /* ─────────────────────────────────────────

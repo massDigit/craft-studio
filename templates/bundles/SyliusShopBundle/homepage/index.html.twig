@@ -19,7 +19,7 @@
         <!-- Bento Grid: Univers -->
         <section style="margin-top: 5rem; margin-bottom: 8rem;">
             <div style="text-align: center; margin-bottom: 3rem;">
-                <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.25rem; font-weight: 300;">Explorez nos Univers</h2>
+                <h2 style="font-family: 'Outfit', sans-serif; font-size: 2.25rem; font-weight: 300;">{{ 'app.shop.home.explore_universes'|trans }}</h2>
             </div>
             
             <div class="ztc-bento-grid">
@@ -38,7 +38,7 @@
                             <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(5,6,5,0.9) 0%, rgba(8,10,9,0.4) 50%, transparent 100%);"></div>
                             
                             <div style="position: absolute; bottom: 0; left: 0; padding: {{ isLarge ? '2.5rem' : '2rem' }}; width: 100%;">
-                                <span class="ztc-tag-gold" style="margin-bottom: 0.5rem; display: block; font-size: 0.65rem;">Collection</span>
+                                <span class="ztc-tag-gold" style="margin-bottom: 0.5rem; display: block; font-size: 0.65rem;">{{ 'app.shop.home.collection'|trans }}</span>
                                 <h3 style="font-family: 'Outfit', sans-serif; font-size: {{ isLarge ? '2.25rem' : '1.5rem' }}; font-weight: 500; margin-bottom: 0.75rem; color: #fff;">{{ taxon.name }}</h3>
                                 {% if taxon.description %}
                                     <p style="color: var(--text-secondary); max-width: 28rem; font-size: 0.875rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ taxon.description|striptags }}</p>
@@ -48,13 +48,13 @@
                     {% endfor %}
                 {% endif %}
 
-                <!-- Bento Wide (Sur mesure - Point de contact statique) -->
+                <!-- Bento Wide (Sur mesure - Point de contact) -->
                 <div class="ztc-bento-card ztc-bento-wide" style="display: flex; align-items: center; padding: 2.5rem; background: linear-gradient(to bottom right, rgba(255,255,255,0.03), transparent);">
                     <div style="max-width: 32rem;">
-                        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.875rem; font-weight: 500; margin-bottom: 1rem; color: #fff;">L'Art du Sur-Mesure.</h3>
-                        <p style="color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6;">Chaque pièce de bambou possède sa propre résonance et courbure. Nous concevons avec vous l'instrument ou l'objet qui correspond parfaitement à votre intérieur ou votre pratique.</p>
+                        <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.875rem; font-weight: 500; margin-bottom: 1rem; color: #fff;">{{ 'app.shop.home.bespoke_title'|trans }}</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 2rem; line-height: 1.6;">{{ 'app.shop.home.bespoke_description'|trans }}</p>
                         <a href="{{ path('sylius_shop_contact_request') }}" style="color: var(--gold-accent); font-weight: 500; display: inline-flex; align-items: center; gap: 0.5rem; text-decoration: none;">
-                            Commencer un projet
+                            {{ 'app.shop.home.start_project'|trans }}
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                         </a>
                     </div>

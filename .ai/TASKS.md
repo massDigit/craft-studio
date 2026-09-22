@@ -32,12 +32,24 @@
 - [x] Fiche Création Détaillée & Lecteur Audio HTML5 Sur-Mesure (`templates/bundles/SyliusShopBundle/product/show.html.twig`)
 - [x] Formulaire de Contact & Demandes Sur-Mesure (`templates/bundles/SyliusShopBundle/contact/request.html.twig`)
 
-### Phase 6 : Pages Éditoriales CMS (`sylius/cms-plugin`) & Administration
-- [ ] Page "Savoir-Faire & Matière Brute" (administrable via le module CMS)
-- [ ] Page "L'Artisan" (administrable via le module CMS)
-- [ ] Interface d'édition des pages CMS dans Sylius Admin
+### Phase 6 : Back-Office CMS, Blog & Direction Artistique (TERMINÉ ✅)
+- [x] Intégration du Journal de l'Artisan (`BlogPost` / `BlogPostTranslation`) directement dans le menu Admin **« Gestion de contenu »** aux côtés des pages.
+- [x] Gestion dynamique des thématiques (*Topics*) sur les articles de blog dans Sylius Admin.
+- [x] Nettoyage et assainissement du CMS : suppression de la collection obsolète et retrait des sous-sections inutilisées (*Médias*, *Blocs*, *Modèles de page*).
+- [x] Intégration de l'éditeur WYSIWYG (Quill.js) et du service local d'IA Ollama (Qwen 2.5) pour la rédaction et traduction FR/EN.
+- [x] Nettoyage strict des langues système en base et en cache pour restreindre l'application uniquement au Français (`fr`) et à l'Anglais (`en`).
+- [x] Refonte des pages catégories / taxons : bannière d'univers en verre dépoli, cartes glassmorphism (`.ztc-apple-card`) et pastilles Apple (`.ztc-apple-pill`).
+- [x] Filtres de sous-taxons dynamiques et contextuels (`ztc_get_subtaxons_with_products`, conditionnés à la présence de produits rattachés).
+- [x] Optimisation de la barre de navigation haute : libellés concis via `ztc_short_taxon_name`, bouton permanent doré « Sur-Mesure » (`.ztc-btn-gold`) et rupture responsive à 1200px (`xl`).
+- [x] Menu mobile épuré : icône burger SVG vectorielle, tiroir flottant en verre dépoli sans impact sur la géométrie de la barre, liste sobre sans doublon.
+- [x] Internationalisation complète FR/EN de la grille Bento de la page d'accueil (univers et encart sur-mesure).
 
-### Phase 7 : Recette, Mobile Polish & SEO
+### Phase 7 : Enrichissement du Catalogue & Pages Éditoriales
+- [ ] Associer des visuels d'art dédiés aux taxons restants (*Luminaires*, *Décoration*).
+- [ ] Structuration de sous-taxons de démonstration avec produits associés (ex: *Flûtes Shakuhachi*, *Flûtes Traversières*).
+- [ ] Rédaction et traduction des pages éditoriales CMS (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
+
+### Phase 8 : Recette Finale, Performance & SEO
 - [ ] Optimisation des filtres LiipImagineBundle pour le rendu WebP mobile
-- [ ] Recette mobile & tablette (ergonomie tactile et streaming audio HTML5)
+- [ ] Recette mobile & tablette complète (streaming audio HTML5 et ergonomie tactile)
 - [ ] Audit SEO sémantique (Schema.org/Product, OpenGraph, meta-tags)

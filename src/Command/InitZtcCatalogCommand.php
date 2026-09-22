@@ -189,6 +189,16 @@ class InitZtcCatalogCommand extends Command
             $rootTaxon,
         );
 
+        // 1.1 Sous-taxon Shakuhachi sous Instruments
+        $shakuhachiTaxon = $this->getOrCreateTaxon(
+            'shakuhachi',
+            [
+                'fr' => ['name' => 'Flûtes Shakuhachi', 'slug' => 'flutes-shakuhachi'],
+                'en' => ['name' => 'Shakuhachi Flutes', 'slug' => 'shakuhachi-flutes'],
+            ],
+            $instrumentsTaxon,
+        );
+
         $this->entityManager->flush();
 
         $output->writeln('<comment>Taxons bilingues (fr/en) créés avec succès !</comment>');
@@ -212,6 +222,15 @@ class InitZtcCatalogCommand extends Command
             'flute_shakuhachi.jpeg',
             'demo_shakuhachi.mp3',
         );
+
+        /** @var Product|null $fluteProduct */
+        $fluteProduct = $this->productRepository->findOneBy(['code' => 'flute-shakuhachi-meditative']);
+        if ($fluteProduct && !$fluteProduct->hasTaxon($shakuhachiTaxon)) {
+            $pt = new ProductTaxon();
+            $pt->setProduct($fluteProduct);
+            $pt->setTaxon($shakuhachiTaxon);
+            $fluteProduct->addProductTaxon($pt);
+        }
 
         // Sample Product 2: Luminaire Bambou
         $this->createSampleProduct(
@@ -294,6 +313,7 @@ class InitZtcCatalogCommand extends Command
             'L\'atelier ZEN TOO Craft façonne des pièces uniques sculptées à la main dans le respect de la matière brute et de la nature.',
             '<h2>L\'Art du Bambou & du Son</h2><p>L\'atelier ZEN TOO Craft façonne des pièces uniques sculptées à la main dans le respect de la matière brute et de la nature.</p>',
             'flute_shakuhachi.jpeg',
+            'L\'Atelier',
         );
 
         $this->createBlogPost(
@@ -303,10 +323,17 @@ class InitZtcCatalogCommand extends Command
             'Sélection naturelle des tiges de bambou, séchage au soleil, polissage à la cire bio d\'abeille et accordage acoustique de précision (La 440 Hz / 432 Hz).',
             '<h2>Artisanat Éco-Responsable</h2><p>Sélection naturelle des tiges de bambou, séchage au soleil, polissage à la cire bio d\'abeille et accordage acoustique de précision (La 440 Hz / 432 Hz).</p>',
             'luminaire_ombre.jpeg',
+            'Savoir-Faire & Éco-Design',
         );
 
-        // 7. Collections CMS (Footer)
+        // 7. Collections CMS (Footer Légal)
         $this->getOrCreateCmsCollection('footer_menu', 'Footer — Informations Légales', [$pageMentions, $pageCgv]);
+
+        // Nettoyage de l'ancienne collection orpheline 'blog' si existante
+        $staleBlogCollection = $this->collectionRepository->findOneBy(['code' => 'blog']);
+        if ($staleBlogCollection) {
+            $this->entityManager->remove($staleBlogCollection);
+        }
 
         $this->entityManager->flush();
 
@@ -322,6 +349,7 @@ class InitZtcCatalogCommand extends Command
         string $excerpt,
         string $content,
         ?string $coverImage = null,
+        string $topic = 'Artisanat',
     ): void {
         $blogPost = $this->entityManager->getRepository(BlogPost::class)->findOneBy(['code' => $code]);
         if (!$blogPost) {
@@ -333,9 +361,12 @@ class InitZtcCatalogCommand extends Command
             $blogPost->setContent($content);
             $blogPost->setCoverImage($coverImage);
             $blogPost->setAuthor('ZEN TOO Craft');
+            $blogPost->setTopic($topic);
             $blogPost->setPublished(true);
             $blogPost->setPublishedAt(new \DateTimeImmutable());
             $this->entityManager->persist($blogPost);
+        } else {
+            $blogPost->setTopic($topic);
         }
     }
 

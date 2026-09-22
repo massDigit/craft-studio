@@ -11,6 +11,9 @@ sylius_grid:
                 title:
                     type: string
                     label: Titre de l'article
+                topic:
+                    type: string
+                    label: Thématique
                 slug:
                     type: string
                     label: Slug (URL)
