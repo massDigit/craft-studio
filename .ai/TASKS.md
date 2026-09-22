@@ -1,43 +1,65 @@
 # TASKS.md - Roadmap & Carnet de Tâches ZEN TOO Craft
 
+> Dernière mise à jour : 2026-09-22
+
 ## 🎯 Roadmap par Phases
 
 ### Phase 1 : Bootstrap Documentaire & Cadrage (TERMINÉ ✅)
 - [x] Structuration de `.ai/` et `docs/` selon AGENTS.md
-- [x] Enregistrement des décisions validées (Twig/Symfony UX, Lecteur Audio HTML5, V1 Vitrine) dans `.ai/DECISIONS.md`
-- [x] Analyse spécifique de l'architecture des Médias Audio & Contenus Éditoriaux dans `.ai/ASSUMPTIONS.md`
-- [x] Rédaction des spécifications d'ingénierie dans `docs/` (`PROJECT.md`, `FEATURES.md`, `BUSINESS_RULES.md`, `STACK.md`, `ARCHITECTURE.md`, `DATABASE.md`, `API.md`, `SECURITY.md`, `TESTING.md`, `DEPLOYMENT.md`)
+- [x] Enregistrement des décisions validées dans `.ai/DECISIONS.md`
+- [x] Analyse de l'architecture Audio & CMS dans `.ai/ASSUMPTIONS.md`
+- [x] Rédaction des specs dans `docs/` (`PROJECT.md`, `FEATURES.md`, `BUSINESS_RULES.md`, `STACK.md`, `ARCHITECTURE.md`, `DATABASE.md`, `API.md`, `SECURITY.md`, `TESTING.md`, `DEPLOYMENT.md`)
 
-### Phase 2 : Validation des Recommandations Architecture Audio & CMS (TERMINÉ ✅)
-- [x] Validation de l'architecture `ProductAudio` (Sylius Resource dédiée)
-- [x] Validation de l'architecture CMS (`sylius/cms-plugin` ^1.1)
+### Phase 2 : Validation Architecture Audio & CMS (TERMINÉ ✅)
+- [x] Validation architecture `ProductAudio` (Sylius Resource dédiée)
+- [x] Validation architecture CMS (`sylius/cms-plugin` ^1.1)
 
-### Phase 3 : Initialisation du Socle Sylius / Symfony & Ressource `ProductAudio` (TERMINÉ ✅)
-- [x] Bootstrap de l'application Sylius 2.2 / Symfony 7.4
-- [x] Installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1)
-- [x] Implémentation du modèle `ProductAudio` (`App\Entity\Product\ProductAudio`) avec cardinalité ouverte (`ManyToOne` vers `Product`)
-- [x] Enregistrement de la ressource Sylius `app.product_audio` dans `sylius_resource.yaml`
-- [x] Validation empirique des mappings Doctrine (`doctrine:schema:validate`)
-- [x] Validation empirique de l'injection de dépendances (`lint:container`)
-- [x] Formulaire d'upload `ProductAudioType` et listener d'événements `ProductAudioUploadListener` (stockage & nettoyage `public/media/audio`)
-- [x] Configuration des Taxons natifs de référence via `ztc:catalog:init` (Instruments à vent, Décoration, Luminaires ajourés)
+### Phase 3 : Socle Sylius / Symfony & Ressource `ProductAudio` (TERMINÉ ✅)
+- [x] Bootstrap Sylius 2.2 / Symfony 7.4 + plugin CMS
+- [x] Entité `ProductAudio` (`ManyToOne` vers `Product`), ressource Sylius, formulaire, listener d'upload
+- [x] Migration Docker PHP 8.4
+- [x] Taxons natifs via `ztc:catalog:init`
+- [x] Validation Doctrine & injection de dépendances
 
-### Phase 4 : Design System & Theme "Sombre Obsidienne & Or" (TERMINÉ ✅)
-- [x] Création du Thème Sylius Storefront (Twig) & Design System CSS (`assets/shop/styles/zen_too_craft.css`)
-- [x] Intégration du CSS Design System (obsidienne `#0D0F0E`, or végétal `#D4AF37`, typographies Google Fonts *Outfit* + *Inter*)
-- [x] Création du composant Twig du lecteur audio HTML5 sur-mesure (`templates/shop/product/_audio_player.html.twig`)
+### Phase 4 : Design System & Thème "Sombre Obsidienne & Or" (TERMINÉ ✅)
+- [x] Design System CSS (`assets/shop/styles/zen_too_craft.css`)
+- [x] Composant lecteur audio HTML5 sur-mesure (`templates/shop/product/_audio_player.html.twig`)
 
-### Phase 5 : Vitrine Publique V1 (Pages & Composants) (TERMINÉ ✅)
-- [x] Page d'Accueil : Banner Hero immersif, univers du créateur, sélection de créations, teaser savoir-faire (`templates/bundles/SyliusShopBundle/homepage/index.html.twig`)
-- [x] Fiche Création Détaillée & Lecteur Audio HTML5 Sur-Mesure (`templates/bundles/SyliusShopBundle/product/show.html.twig`)
-- [x] Formulaire de Contact & Demandes Sur-Mesure (`templates/bundles/SyliusShopBundle/contact/request.html.twig`)
+### Phase 5 : Vitrine Publique V1 (TERMINÉ ✅)
+- [x] Page d'accueil immersive (hero, univers, créations, savoir-faire)
+- [x] Page catalogue produits — direction artistique Apple, cartes glassmorphism, puces de filtres
+- [x] Fiche produit détaillée + lecteur audio HTML5
+- [x] Page Contact / Demandes sur-mesure
+- [x] Navbar dynamique (catégories du canal), footer custom
+- [x] Page CMS (`shop/page/show.html.twig`)
+- [x] Page FAQ globale + FAQ par taxon (admin)
+- [x] Page Blog
 
-### Phase 6 : Pages Éditoriales CMS (`sylius/cms-plugin`) & Administration
-- [ ] Page "Savoir-Faire & Matière Brute" (administrable via le module CMS)
-- [ ] Page "L'Artisan" (administrable via le module CMS)
-- [ ] Interface d'édition des pages CMS dans Sylius Admin
+### Phase 5-bis : Back-office Admin Artisanal (TERMINÉ ✅)
+- [x] Studio d'enregistrement audio dans le formulaire produit (API MediaRecorder + upload)
+- [x] Champ `label` obligatoire sur piste audio + migration `Version20260918143705`
+- [x] Formulaire produit épuré (onglets inutiles désactivés via hooks + `ProductVariantCleanExtension`)
+- [x] Fiches techniques générées par IA (Ollama / Qwen 2.5 local)
+- [x] WYSIWYG Quill.js sur descriptions produit et pages CMS
+- [x] Tableau de bord demandes de projet (widget admin)
+- [x] CRUD admin `ProjectRequest` + lien menu latéral
+- [x] Formulaire demande de projet sur fiche produit vitrine + message de confirmation artisanal
+
+### Phase 5-ter : Lecteur Audio Interactif Vitrine (TERMINÉ ✅)
+- [x] Overlay de carte produit cliquable → play/pause piste principale
+- [x] Barre de progression animée en temps réel
+- [x] Exclusion mutuelle (une seule piste à la fois)
+- [x] Affichage du `label` de la piste sur l'overlay
+
+### Phase 6 : Pages Éditoriales CMS & Finition Catalogue (EN COURS 🔄)
+- [ ] Page "Savoir-Faire & Matière Brute" (administrable via CMS)
+- [ ] Page "L'Artisan" (administrable via CMS)
+- [ ] Rendre dynamique l'encart "Savoir-Faire & Philosophie" de la homepage
+- [ ] Sous-taxons de démonstration (Flûtes Shakuhachi, Flûtes Traversières…)
+- [ ] Visuels associés aux taxons *Luminaires Artistiques* et *Objets Décoratifs*
 
 ### Phase 7 : Recette, Mobile Polish & SEO
-- [ ] Optimisation des filtres LiipImagineBundle pour le rendu WebP mobile
-- [ ] Recette mobile & tablette (ergonomie tactile et streaming audio HTML5)
+- [ ] Optimisation images WebP/mobile (LiipImagineBundle)
+- [ ] Recette mobile & tablette (ergonomie tactile, streaming audio iOS)
 - [ ] Audit SEO sémantique (Schema.org/Product, OpenGraph, meta-tags)
+- [ ] Volume persistant pour `public/media/audio/` en production

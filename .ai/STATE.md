@@ -2,41 +2,74 @@
 
 > **Ce fichier donne une image précise de l'état du projet ZEN TOO Craft.**
 
-**Dernière mise à jour** : 2026-09-05
+**Dernière mise à jour** : 2026-09-22
 **Branche Courante** : `main`
+**Dernier commit** : `6e13c1c` — Merge PR #21 `feat/project-requests`
 
 ## 🚀 Phase Actuelle
-Phase 6 : Refonte des Pages Catégories / Taxons & Direction Artistique Apple (EN COURS).
+Phase 6 : Pages Éditoriales CMS & Finition Vitrine (PROCHAINE ÉTAPE).
 
 ## 🎯 Focus Courant
-Application du style minimaliste Apple (bannière d'univers avec visuel du taxon, puces de sous-catégories Apple-style, cartes glassmorphism) et structuration des univers.
+Le socle technique est complet. L'artisan dispose d'un back-office adapté à son activité artisanale. La prochaine priorité est le contenu éditorial (pages CMS) et la structure catalogue (sous-taxons, visuels).
 
 ## ✅ Réalisé
-- [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
-- [x] Création de la ressource Sylius `App\Entity\Product\ProductAudio` rattachée au `Product` natif avec une cardinalité ouverte (`ManyToOne`).
-- [x] Déclaration de la ressource `app.product_audio` dans `config/packages/sylius_resource.yaml`.
-- [x] Création du formulaire `ProductAudioType` et extension du `ProductType` dans Sylius Admin.
-- [x] Implémentation du listener d'événement `ProductAudioUploadListener` pour la gestion des téléversements et de la suppression physique des fichiers audio (`public/media/audio`).
-- [x] Migration de l'environnement Docker vers PHP 8.4 (`ghcr.io/sylius/sylius-php:8.4-fixuid-xdebug-alpine`) et démarrage des conteneurs (`make up`).
-- [x] Intégration du formulaire WYSIWYG (Quill.js) sur les champs de description de produit et les pages CMS.
-- [x] Implémentation du service IA Ollama (Qwen 2.5 local) avec les boutons `Générer la description` (FR) et `Générer la traduction` (EN) dans Sylius Admin.
-- [x] Nettoyage strict des langues système en base et en cache pour restreindre l'application uniquement au Français (`fr`) et à l'Anglais (`en`).
-- [x] Simplification du menu Admin : sous-section du catalogue renommée en "Catégories".
-- [x] Raccordement dynamique du menu principal du haut (Navbar) pour afficher les catégories de premier niveau rattachées au canal (`sylius.channel.menuTaxon.children`).
-- [x] Désactivation du hook natif d'en-tête Sylius (`sylius_shop.base.header#content`) pour éviter le doublon d'en-tête.
-- [x] Adoption de la direction artistique style Apple : ajout des classes `.ztc-apple-card` et `.ztc-apple-pill` dans `assets/shop/styles/zen_too_craft.css` et build Encore.
-- [x] Refonte du template de listing de catégorie `templates/bundles/SyliusShopBundle/product/index.html.twig` (bannière dépolie avec image du taxon, puces de sous-catégories et grille d'exposition).
-- [x] Génération de l'image d'art HD `taxon_instruments.jpeg` et association en base de données à la ressource `TaxonImage` de la catégorie Instruments à Vent (ID: 10).
 
-## 🔄 En Cours / À Reprendre au Prochain Démarrage
-- [ ] Associer des visuels dédiés aux autres taxons principaux (Luminaires Artistiques, Objets Décoratifs) dans la base de données.
-- [ ] Créer des sous-taxons de démonstration (ex: Flûtes Shakuhachi, Flûtes Traversières sous Instruments à Vent) pour alimenter dynamiquement les puces de filtres Apple.
-- [ ] Rendre dynamique ou convertir en bloc CMS l'encart "Savoir-Faire & Philosophie" du bas de la page d'accueil.
-- [ ] Poursuivre la rédaction et la traduction des pages éditoriales CMS (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
+### Socle & Architecture
+- [x] Bootstrap Sylius 2.2 / Symfony 7.4 + plugin CMS (`sylius/cms-plugin` ^1.1)
+- [x] Migration Docker PHP 8.4 (`ghcr.io/sylius/sylius-php:8.4-fixuid-xdebug-alpine`)
+- [x] Design System CSS "Sombre Obsidienne & Or" (`assets/shop/styles/zen_too_craft.css`)
+- [x] Taxons natifs initialisés via `ztc:catalog:init` (Instruments à Vent, Décoration, Luminaires)
+
+### Vitrine Publique (Shop)
+- [x] Page d'accueil immersive (hero, univers créateur, sélection créations, teaser savoir-faire)
+- [x] Page catalogue produit (`product/index.html.twig`) — direction artistique Apple, cartes glassmorphism
+- [x] **Lecteur audio interactif sur cartes** : clic sur overlay = play/pause piste primaire, barre de progression, exclusion mutuelle
+- [x] Fiche produit détaillée + lecteur audio HTML5 sur-mesure (`_audio_player.html.twig`)
+- [x] **Formulaire de demande de projet** sur fiche produit avec message de confirmation artisanal
+- [x] Pied de page custom, navbar dynamique (catégories du canal)
+- [x] Page CMS Sylius (template `shop/page/show.html.twig` surclassé avec le thème)
+- [x] Page FAQ globale (`/faq`) avec système de questions/réponses par taxon
+- [x] Page Blog (`/blog` + `/blog/{slug}`)
+- [x] Page Contact (`contact/request.html.twig`)
+
+### Back-office Admin
+- [x] **Studio d'enregistrement audio** dans le formulaire produit (API MediaRecorder + upload fichier)
+- [x] Entité `ProductAudio` avec champ `label` obligatoire, upload listener, suppression physique
+- [x] Migration `Version20260918143705` — colonne `label VARCHAR(255)` sur `ztc_product_audio`
+- [x] **Formulaire produit épuré** — onglets Taxes, Expédition, Inventaire, Attributs, Associations, Mollie, ESD masqués via `sylius_twig_hooks.yaml` + `ProductVariantCleanExtension`
+- [x] Fiche technique produit générée par IA (Ollama / Qwen 2.5 local) — `ProductTechnicalSheetItem`
+- [x] **Tableau de bord demandes de projet** remplaçant les statistiques de vente
+- [x] CRUD admin `ProjectRequest` (liste, visualisation, statut)
+- [x] Menu admin simplifié (lien "Demandes de Projets", "Catégories")
+- [x] Formulaire CMS pages surclassé (WYSIWYG Quill.js, meta SEO)
+- [x] FAQ admin par taxon (`FaqItem` + `FaqItemTranslation`)
+
+### Infrastructure
+- [x] Limite upload Nginx + PHP portée à 50Mo (`nginx-custom.conf`, `uploads.ini`, `compose.override.yml`)
+- [x] Intégration Ollama (LLM local) pour la génération de contenus
+
+## 🔄 À Faire
+
+### Contenu & Catalogue
+- [ ] Sous-taxons de démonstration (ex: Flûtes Shakuhachi, Flûtes Traversières) pour les puces de filtres
+- [ ] Visuels associés aux taxons *Luminaires Artistiques* et *Objets Décoratifs*
+- [ ] Rendre dynamique l'encart "Savoir-Faire & Philosophie" de la homepage (actuellement en dur)
+
+### Pages CMS Éditoriales
+- [ ] Page "Savoir-Faire & Matière Brute"
+- [ ] Page "L'Artisan"
+
+### Phase 7 – Recette & Production
+- [ ] Optimisation images WebP/mobile (LiipImagineBundle)
+- [ ] Recette mobile & tablette (ergonomie tactile, streaming audio iOS)
+- [ ] Audit SEO (Schema.org/Product, OpenGraph, meta-tags)
 
 ## ⚠️ Points de Vigilance
-- Toujours purger le cache Symfony (`docker compose exec php bin/console cache:clear`) après toute modification de configuration Twig ou de hooks.
-- Recompiler les assets avec `npm run build` si de nouvelles classes CSS sont ajoutées à `assets/shop/styles/zen_too_craft.css`.
+- Purger le cache après toute modif config : `docker compose exec php bin/console cache:clear`
+- Recompiler les assets si modif CSS : `docker compose run --rm nodejs yarn build`
+- Les fichiers audio (`public/media/audio/`) ne sont pas versionnés — prévoir un volume persistant en production.
 
 ## 🏁 Prochaine Étape / Milestone
-Finaliser la structure hiérarchique des sous-catégories et associer les visuels de taxons restants.
+Créer les pages CMS éditoriales et les sous-taxons pour dynamiser la navigation catalogue.
+
+
