@@ -2,14 +2,14 @@
 
 > **Ce fichier donne une image précise de l'état du projet ZEN TOO Craft.**
 
-**Dernière mise à jour** : 2026-09-05
-**Branche Courante** : `main`
+**Dernière mise à jour** : 2026-09-22
+**Branche Courante** : `feat/shop-dynamic-taxon-filters`
 
 ## 🚀 Phase Actuelle
 Phase 6 : Refonte des Pages Catégories / Taxons & Direction Artistique Apple (EN COURS).
 
 ## 🎯 Focus Courant
-Application du style minimaliste Apple (bannière d'univers avec visuel du taxon, puces de sous-catégories Apple-style, cartes glassmorphism) et structuration des univers.
+Optimisation ergonomique et responsive de la barre de navigation et filtres de sous-taxons.
 
 ## ✅ Réalisé
 - [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
@@ -27,6 +27,9 @@ Application du style minimaliste Apple (bannière d'univers avec visuel du taxon
 - [x] Adoption de la direction artistique style Apple : ajout des classes `.ztc-apple-card` et `.ztc-apple-pill` dans `assets/shop/styles/zen_too_craft.css` et build Encore.
 - [x] Refonte du template de listing de catégorie `templates/bundles/SyliusShopBundle/product/index.html.twig` (bannière dépolie avec image du taxon, puces de sous-catégories et grille d'exposition).
 - [x] Génération de l'image d'art HD `taxon_instruments.jpeg` et association en base de données à la ressource `TaxonImage` de la catégorie Instruments à Vent (ID: 10).
+- [x] Rendu dynamique et contextuel des filtres de sous-taxons (affiche uniquement les pastilles d'enfants ayant des produits rattachés via `ztc_get_subtaxons_with_products`).
+- [x] Refonte ergonomique et responsive de la barre de navigation haute : libellés de taxons épurés via `ztc_short_taxon_name`, bouton « Sur-Mesure » permanent de la DA, icône burger SVG nette, et tiroir mobile dépoli épuré sans bouton redondant.
+- [x] Branche `feat/shop-dynamic-taxon-filters` poussée sur le dépôt distant.
 
 ## 🔄 En Cours / À Reprendre au Prochain Démarrage
 - [ ] Associer des visuels dédiés aux autres taxons principaux (Luminaires Artistiques, Objets Décoratifs) dans la base de données.
