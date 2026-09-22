@@ -5,70 +5,24 @@ declare(strict_types=1);
 namespace App\Menu;
 
 use Sylius\Bundle\UiBundle\Menu\Event\MenuBuilderEvent;
-use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-#[AsEventListener(event: 'sylius.menu.admin.main', priority: -10)]
-class AdminMenuListener
+final class AdminMenuListener
 {
-    public function __invoke(MenuBuilderEvent $event): void
+    public function addAdminMenuItems(MenuBuilderEvent $event): void
     {
         $menu = $event->getMenu();
 
-        // 1. Personnalisation du menu Gestion des Contenus & Blog
-        $cmsMenu = $menu->getChild('sylius_cms');
-        if (null !== $cmsMenu) {
-            $cmsMenu->setLabel('Gestion des Contenus & Blog');
-
-            // Accès direct aux Articles du Journal de l'Artisan
-            $cmsMenu
-                ->addChild('blog_posts', [
-                    'route' => 'app_admin_blog_post_index',
-                ])
-                ->setLabel('Articles du Journal (Blog)')
-                ->setLabelAttribute('icon', 'tabler:article');
-
-            $pages = $cmsMenu->getChild('pages');
-            if (null !== $pages) {
-                $pages->setLabel('Pages Legales & Footer');
-            }
-
-            // Masquage des sous-sections complexes et obsolètes
-            $cmsMenu->removeChild('blocks');
-            $cmsMenu->removeChild('templates');
-            $cmsMenu->removeChild('collections');
-            $cmsMenu->removeChild('media');
+        $customerSubmenu = $menu->getChild('customers');
+        if (null !== $customerSubmenu) {
+            $customerSubmenu
+                ->addChild('project_requests', ['route' => 'app_admin_project_request_index'])
+                ->setLabel('Demandes sur-mesure')
+                ->setLabelAttribute('icon', 'envelope outline');
         }
 
-        // 2. Masquage des sections e-commerce et Mollie inutiles en Mode Vitrine Sur-Mesure
-        $menu->removeChild('sales');
-        $menu->removeChild('marketing');
-        $menu->removeChild('mollie');
-
-        $configurationMenu = $menu->getChild('configuration');
-        if (null !== $configurationMenu) {
-            $configurationMenu->removeChild('mollie');
-            $configurationMenu->removeChild('payment_methods');
-        }
-
-        // 3. Personnalisation du menu Catalogue
-        $catalogMenu = $menu->getChild('catalog');
-        if (null !== $catalogMenu) {
-            $catalogMenu->setLabel('Catalogue & Créations');
-
-            $products = $catalogMenu->getChild('products');
-            if (null !== $products) {
-                $products->setLabel('Créations & Instruments');
-            }
-
-            $taxons = $catalogMenu->getChild('taxons');
-            if (null !== $taxons) {
-                $taxons->setLabel('Catégories');
-            }
-
-            // Masquage des sous-sections d'options et attributs complexes
-            $catalogMenu->removeChild('attributes');
-            $catalogMenu->removeChild('options');
-            $catalogMenu->removeChild('associations');
+        // Désactiver (masquer) la section "Ventes" (Sales) car on n'utilise plus le pipeline e-commerce classique
+        if (null !== $menu->getChild('sales')) {
+            $menu->removeChild('sales');
         }
     }
 }

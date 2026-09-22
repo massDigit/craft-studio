@@ -1,0 +1,9 @@
+app_admin_project_request:
+    resource: |
+        alias: app.project_request
+        section: admin
+        templates: "@SyliusAdmin/shared/crud"
+        grid: app_admin_project_request
+        redirect: index
+    type: sylius.resource
+    prefix: /admin

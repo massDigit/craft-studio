@@ -33,3 +33,45 @@ sylius_grid:
                         type: update
                     delete:
                         type: delete
+        app_admin_project_request:
+            driver:
+                name: doctrine/orm
+                options:
+                    class: App\Entity\ProjectRequest
+            sorting:
+                createdAt: desc
+            fields:
+                createdAt:
+                    type: datetime
+                    label: Date
+                    options:
+                        format: d/m/Y H:i
+                product:
+                    type: string
+                    label: Produit ciblé
+                    path: product.name
+                firstName:
+                    type: string
+                    label: Prénom
+                lastName:
+                    type: string
+                    label: Nom
+                status:
+                    type: twig
+                    label: Statut
+                    options:
+                        template: "admin/project_request/grid/field/status.html.twig"
+            filters:
+                status:
+                    type: string
+                firstName:
+                    type: string
+                lastName:
+                    type: string
+            actions:
+                main: ~
+                item:
+                    update:
+                        type: update
+                    delete:
+                        type: delete

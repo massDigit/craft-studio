@@ -37,6 +37,9 @@ class ProductAudio implements ResourceInterface
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $isPrimary = true;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $label = '';
+
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
@@ -123,6 +126,18 @@ class ProductAudio implements ResourceInterface
     public function setIsPrimary(bool $isPrimary): self
     {
         $this->isPrimary = $isPrimary;
+
+        return $this;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
 
         return $this;
     }

@@ -14,10 +14,7 @@ use Sylius\Component\Resource\Model\TimestampableTrait;
 #[ORM\Table(name: 'app_project_request')]
 class ProjectRequest implements ResourceInterface, TimestampableInterface
 {
-    use TimestampableTrait;
-
     public const STATUS_NEW = 'new';
-    public const STATUS_READ = 'read';
     public const STATUS_PROCESSING = 'processing';
     public const STATUS_ARCHIVED = 'archived';
 
@@ -44,6 +41,12 @@ class ProjectRequest implements ResourceInterface, TimestampableInterface
 
     #[ORM\Column(type: 'string', length: 50, options: ['default' => self::STATUS_NEW])]
     private string $status = self::STATUS_NEW;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $createdAt = null;
+
+    #[ORM\Column(type: 'datetime', nullable: true)]
+    protected ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -113,5 +116,25 @@ class ProjectRequest implements ResourceInterface, TimestampableInterface
     public function setStatus(string $status): void
     {
         $this->status = $status;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(?\DateTimeInterface $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
     }
 }

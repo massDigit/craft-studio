@@ -64,34 +64,84 @@
                         {{ product.description|default('Une création unique façonnée à la main. Chaque pièce possède sa propre résonance.')|raw }}
                     </div>
 
-                    {% if product.audios|length > 0 %}
-                        <!-- Audio Player Premium -->
-                        <div style="background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 1.5rem; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 1.5rem;">
-                            <button style="width: 4rem; height: 4rem; border-radius: 50%; background: var(--gold-accent); color: #050605; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 15px rgba(212,175,55,0.4); border: none; cursor: pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-                                <svg width="20" height="24" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>
+                    {% if product.audios|length > 0 and product.primaryAudio is not null and product.primaryAudio.path is not empty %}
+                        {% set primaryAudio = product.primaryAudio %}
+                        <!-- Audio Player Premium (Functional) -->
+                        <div class="ztc-audio-player" id="ztc-audio-{{ product.id }}" style="background: rgba(255,255,255,0.02); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; padding: 1.5rem; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 1.5rem;">
+                            
+                            <audio id="audio-element-{{ product.id }}" src="{{ asset('media/audio/' ~ primaryAudio.path) }}" preload="metadata"></audio>
+
+                            <button type="button" onclick="toggleZtcAudio('{{ product.id }}')" style="width: 4rem; height: 4rem; border-radius: 50%; background: var(--gold-accent, #D4AF37); color: #050605; display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 0 15px rgba(212,175,55,0.4); border: none; cursor: pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                <svg id="play-icon-{{ product.id }}" width="20" height="24" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>
                             </button>
+                            
                             <div style="flex-grow: 1;">
                                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.875rem;">
-                                    <span style="color: var(--text-primary); font-weight: 500;">Extrait sonore ({{ product.audios.first.type|default('Shakuhachi')|capitalize }})</span>
-                                    <span style="color: var(--text-secondary);">0:45</span>
+                                    <span style="color: var(--text-primary); font-weight: 500;">🎵 {{ primaryAudio.originalName|default('Extrait Sonore') }}</span>
+                                    <span style="color: var(--text-secondary);" id="time-display-{{ product.id }}">0:00</span>
                                 </div>
-                                <div style="height: 4px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 9999px; overflow: hidden; cursor: pointer;">
-                                    <div style="width: 0%; height: 100%; background: var(--gold-accent); transition: width 0.3s;"></div>
+                                <div style="height: 4px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 9999px; overflow: hidden; cursor: pointer; position: relative;" onclick="seekZtcAudio('{{ product.id }}', event)">
+                                    <div id="progress-fill-{{ product.id }}" style="width: 0%; height: 100%; background: var(--gold-accent, #D4AF37); transition: width 0.1s linear; pointer-events: none;"></div>
                                 </div>
                             </div>
                         </div>
+
+                        <script>
+                            if (typeof toggleZtcAudio === 'undefined') {
+                                function toggleZtcAudio(id) {
+                                    const audio = document.getElementById('audio-element-' + id);
+                                    const icon = document.getElementById('play-icon-' + id);
+                                    
+                                    if (audio.paused) {
+                                        audio.play();
+                                        icon.innerHTML = '<path d="M0 0H4V16H0V0ZM8 0H12V16H8V0Z"/>';
+                                    } else {
+                                        audio.pause();
+                                        icon.innerHTML = '<path d="M0 0L14 8L0 16V0Z"/>';
+                                    }
+                                }
+
+                                function seekZtcAudio(id, event) {
+                                    const audio = document.getElementById('audio-element-' + id);
+                                    const rect = event.currentTarget.getBoundingClientRect();
+                                    const pos = (event.clientX - rect.left) / rect.width;
+                                    if (audio.duration) {
+                                        audio.currentTime = pos * audio.duration;
+                                    }
+                                }
+
+                                document.addEventListener('DOMContentLoaded', function() {
+                                    document.querySelectorAll('audio[id^="audio-element-"]').forEach(function(audio) {
+                                        const id = audio.id.replace('audio-element-', '');
+                                        const fill = document.getElementById('progress-fill-' + id);
+                                        const display = document.getElementById('time-display-' + id);
+
+                                        audio.addEventListener('timeupdate', function() {
+                                            if (audio.duration) {
+                                                const percent = (audio.currentTime / audio.duration) * 100;
+                                                if (fill) fill.style.width = percent + '%';
+                                                
+                                                const mins = Math.floor(audio.currentTime / 60);
+                                                const secs = Math.floor(audio.currentTime % 60);
+                                                if (display) display.textContent = mins + ':' + (secs < 10 ? '0' : '') + secs;
+                                            }
+                                        });
+
+                                        audio.addEventListener('ended', function() {
+                                            const icon = document.getElementById('play-icon-' + id);
+                                            if (icon) icon.innerHTML = '<path d="M0 0L14 8L0 16V0Z"/>';
+                                            if (fill) fill.style.width = '0%';
+                                        });
+                                    });
+                                });
+                            }
+                        </script>
                     {% endif %}
 
-                    <!-- Add to cart -->
-                    <form action="#" method="post" style="margin-bottom: 3rem;">
-                        <!-- For the sake of UI we use a dummy submit style -->
-                        <button type="submit" style="width: 100%; background: var(--text-primary); color: #050605; font-size: 1.125rem; font-weight: 500; padding: 1.25rem; border-radius: 9999px; border: none; cursor: pointer; transition: background 0.3s; box-shadow: 0 4px 20px rgba(255,255,255,0.05);" onmouseover="this.style.background='#fff'" onmouseout="this.style.background='var(--text-primary)'">
-                            Ajouter au panier — 
-                            {% if not product.variants.empty %}
-                                {{ money.calculatePrice(product.variants.first) }}
-                            {% endif %}
-                        </button>
-                    </form>
+                    <!-- Project Request Button -->
+                    <button type="button" onclick="document.getElementById('ztc-request-modal').style.display='flex';" style="width: 100%; background: var(--gold-accent, #D4AF37); color: #050605; font-size: 1.125rem; font-weight: 500; padding: 1.25rem; border-radius: 9999px; border: none; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 20px rgba(212,175,55,0.2); margin-bottom: 3rem;" onmouseover="this.style.filter='brightness(1.1)'" onmouseout="this.style.filter='brightness(1)'">
+                        Effectuer une demande de réalisation
+                    </button>
 
                     <!-- Accordions -->
                     <!-- Fiche Technique Dynamique -->
@@ -120,4 +170,111 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Demande de Réalisation -->
+<div id="ztc-request-modal" style="display: none; position: fixed; inset: 0; z-index: 1000; align-items: center; justify-content: center; padding: 1rem;">
+    <!-- Overlay -->
+    <div style="position: absolute; inset: 0; background: rgba(5,6,5,0.8); backdrop-filter: blur(8px);" onclick="document.getElementById('ztc-request-modal').style.display='none';"></div>
+    
+    <!-- Modal Box -->
+    <div style="position: relative; width: 100%; max-width: 600px; background: rgba(255,255,255,0.04); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.08); border-radius: 32px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; max-height: 90vh;">
+        
+        <!-- Header -->
+        <div style="padding: 1.5rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;">
+            <h2 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 500; color: var(--gold-accent, #D4AF37); margin: 0;">Demande de Réalisation</h2>
+            <button onclick="document.getElementById('ztc-request-modal').style.display='none';" style="background: none; border: none; color: var(--text-secondary); cursor: pointer; padding: 0.5rem; display: flex; align-items: center; justify-content: center;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div style="padding: 2rem; overflow-y: auto;">
+            <div id="ztc-request-success" style="display: none; text-align: center; padding: 2rem 0;">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="var(--gold-accent, #D4AF37)" stroke-width="1.5" style="margin: 0 auto 1.5rem;"><path d="M20 6L9 17l-5-5"/></svg>
+                <h3 style="font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 500; color: #fff; margin-bottom: 1rem;">Demande envoyée</h3>
+                <p style="color: var(--text-secondary); line-height: 1.6;">Votre demande est bien arrivée à l'atelier ! Je prendrai le temps d'étudier votre projet (basé sur <strong>{{ product.name }}</strong>) et vous recontacterai personnellement sous 48h à l'adresse indiquée pour en discuter.</p>
+                <button onclick="document.getElementById('ztc-request-modal').style.display='none';" style="margin-top: 2rem; background: rgba(255,255,255,0.1); color: #fff; padding: 0.75rem 2rem; border-radius: 9999px; border: none; cursor: pointer;">Fermer</button>
+            </div>
+
+            <form id="ztc-request-form" style="display: flex; flex-direction: column; gap: 1.5rem;" onsubmit="submitProjectRequest(event)">
+                <input type="hidden" id="pr-product-id" value="{{ product.id }}">
+                <p style="color: var(--text-secondary); margin: 0 0 1rem; line-height: 1.6;">
+                    Vous avez sélectionné la création <strong style="color: #fff; font-weight: 500;">{{ product.name }}</strong> comme base pour votre projet. Détaillez-nous vos attentes.
+                </p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="pr-firstname" style="font-size: 0.875rem; font-weight: 500; color: var(--text-primary);">Prénom</label>
+                        <input type="text" id="pr-firstname" required class="ztc-glass-input">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <label for="pr-lastname" style="font-size: 0.875rem; font-weight: 500; color: var(--text-primary);">Nom</label>
+                        <input type="text" id="pr-lastname" required class="ztc-glass-input">
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label for="pr-email" style="font-size: 0.875rem; font-weight: 500; color: var(--text-primary);">Adresse Email</label>
+                    <input type="email" id="pr-email" required class="ztc-glass-input">
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <label for="pr-details" style="font-size: 0.875rem; font-weight: 500; color: var(--text-primary);">Détails spécifiques souhaités</label>
+                    <textarea id="pr-details" rows="4" required class="ztc-glass-input" style="resize: vertical;"></textarea>
+                </div>
+
+                <button type="submit" id="pr-submit-btn" style="margin-top: 1rem; width: 100%; background: var(--text-primary); color: #050605; font-size: 1.125rem; font-weight: 500; padding: 1.25rem; border-radius: 16px; border: none; cursor: pointer; transition: background 0.3s; box-shadow: 0 4px 20px rgba(255,255,255,0.05);" onmouseover="this.style.background='#fff'" onmouseout="this.style.background='var(--text-primary)'">
+                    Envoyer ma demande à l'atelier
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .ztc-glass-input {
+        width: 100%; padding: 1rem 1.25rem; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; color: var(--text-primary); font-family: inherit; font-size: 1rem; box-sizing: border-box; outline: none; transition: all 0.3s ease;
+    }
+    .ztc-glass-input:focus {
+        border-color: rgba(212,175,55,0.5); background: rgba(0,0,0,0.4); box-shadow: 0 0 0 2px rgba(212,175,55,0.1);
+    }
+</style>
+
+<script>
+async function submitProjectRequest(e) {
+    e.preventDefault();
+    const btn = document.getElementById('pr-submit-btn');
+    const originalText = btn.innerText;
+    btn.innerText = 'Envoi en cours...';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('/project-request/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                productId: document.getElementById('pr-product-id').value,
+                firstName: document.getElementById('pr-firstname').value,
+                lastName: document.getElementById('pr-lastname').value,
+                email: document.getElementById('pr-email').value,
+                specificDetails: document.getElementById('pr-details').value
+            })
+        });
+
+        if (response.ok) {
+            document.getElementById('ztc-request-form').style.display = 'none';
+            document.getElementById('ztc-request-success').style.display = 'block';
+        } else {
+            alert('Une erreur est survenue. Veuillez réessayer.');
+            btn.innerText = originalText;
+            btn.disabled = false;
+        }
+    } catch (err) {
+        alert('Erreur réseau.');
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}
+</script>
+
 {% endblock %}
