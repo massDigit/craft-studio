@@ -287,28 +287,26 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     color: #0a0c0b !important;
 }
 
-/* Bouton Burger Minimaliste Style Apple avec SVG */
+/* Bouton Burger Sobre et Épuré avec SVG */
 .ztc-burger-btn {
-    background: rgba(255, 255, 255, 0.06) !important;
-    border: 1px solid rgba(255, 255, 255, 0.14) !important;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    background: transparent !important;
+    border: none !important;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     color: #F4EFE6 !important;
-    transition: all 0.25s ease;
+    transition: color 0.2s ease, background 0.2s ease;
     padding: 0;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    box-shadow: none !important;
 }
 
 .ztc-burger-btn:hover {
-    background: rgba(212, 175, 55, 0.15) !important;
-    border-color: rgba(212, 175, 55, 0.45) !important;
-    color: #D4AF37 !important;
-    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: var(--gold-accent, #D4AF37) !important;
 }
 
 .ztc-burger-btn .ztc-burger-icon-bars {
@@ -320,9 +318,7 @@ h1, h2, h3, h4, h5, h6, .ui.header {
 }
 
 .ztc-burger-btn[aria-expanded="true"] {
-    background: rgba(212, 175, 55, 0.18) !important;
-    border-color: #D4AF37 !important;
-    color: #D4AF37 !important;
+    color: var(--gold-accent, #D4AF37) !important;
 }
 
 .ztc-burger-btn[aria-expanded="true"] .ztc-burger-icon-bars {
@@ -333,41 +329,26 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     display: block;
 }
 
-/* Tiroir Mobile Épuré Dépoli Flottant (Style Apple) */
+/* Tiroir Mobile Épuré Dépoli */
 .ztc-mobile-drawer {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
     width: 100%;
-    background: rgba(8, 10, 9, 0.97) !important;
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
+    background: rgba(8, 10, 9, 0.96) !important;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     max-height: calc(100vh - 75px);
     overflow-y: auto;
 }
 
 .ztc-mobile-drawer-inner {
-    max-width: 600px;
+    max-width: 1320px;
     margin: 0 auto;
-    padding: 1.5rem 1.25rem 2.5rem;
-}
-
-.ztc-mobile-drawer-header {
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.ztc-mobile-section-title {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: rgba(244, 239, 230, 0.5);
-    font-family: 'Outfit', sans-serif;
-    font-weight: 600;
+    padding: 0.75rem 2rem 1.25rem;
 }
 
 .ztc-mobile-nav-list {
@@ -375,101 +356,46 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     list-style-type: none !important;
     margin: 0;
     padding: 0;
-    display: flex;
-    flex-direction: column;
 }
 
 .ztc-mobile-nav-item {
     list-style: none !important;
     list-style-type: none !important;
-    margin-bottom: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.ztc-mobile-nav-card {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    border-radius: 14px;
-    padding: 1rem 1.25rem;
-    margin-bottom: 0.65rem;
-    text-decoration: none;
-    transition: all 0.25s ease;
+.ztc-mobile-nav-item:last-child {
+    border-bottom: none;
 }
 
-.ztc-mobile-card-content {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-}
-
-.ztc-mobile-card-title {
+.ztc-mobile-nav-link {
+    display: block;
+    padding: 0.85rem 0.5rem;
     font-family: 'Outfit', sans-serif;
     font-size: 1.05rem;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    color: var(--text-secondary, #B8B5AD) !important;
+    text-decoration: none;
+    transition: color 0.2s ease, padding-left 0.2s ease;
+}
+
+.ztc-mobile-nav-link:hover {
+    color: var(--text-primary, #F4EFE6) !important;
+    padding-left: 0.85rem;
+}
+
+.ztc-mobile-nav-link.active {
+    color: var(--gold-accent, #D4AF37) !important;
     font-weight: 500;
-    color: #F4EFE6;
-    letter-spacing: 0.02em;
-    transition: color 0.2s ease;
-}
-
-.ztc-mobile-card-desc {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.78rem;
-    color: #8E9290;
-    letter-spacing: 0.01em;
-}
-
-.ztc-mobile-arrow {
-    color: rgba(244, 239, 230, 0.35);
-    flex-shrink: 0;
-    transition: all 0.2s ease;
-}
-
-.ztc-mobile-nav-card:hover {
-    background: rgba(212, 175, 55, 0.08);
-    border-color: rgba(212, 175, 55, 0.35);
-}
-
-.ztc-mobile-nav-card:hover .ztc-mobile-card-title {
-    color: #D4AF37;
-}
-
-.ztc-mobile-nav-card:hover .ztc-mobile-arrow {
-    color: #D4AF37;
-    transform: translateX(3px);
-}
-
-.ztc-mobile-nav-card.active {
-    background: rgba(212, 175, 55, 0.1);
-    border-color: rgba(212, 175, 55, 0.45);
-}
-
-.ztc-mobile-nav-card.active .ztc-mobile-card-title {
-    color: #D4AF37;
-    font-weight: 600;
-}
-
-.ztc-mobile-nav-card.active .ztc-mobile-arrow {
-    color: #D4AF37;
-}
-
-.ztc-mobile-drawer-footer {
-    margin-top: 1.75rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid rgba(212, 175, 55, 0.15);
-}
-
-.ztc-mobile-footer-text {
-    font-size: 0.75rem;
-    color: rgba(244, 239, 230, 0.45);
-    letter-spacing: 0.04em;
-    font-family: 'Outfit', sans-serif;
 }
 
 @media (max-width: 576px) {
     .ztc-nav-container {
         padding: 0 1rem;
+    }
+    .ztc-mobile-drawer-inner {
+        padding: 0.5rem 1rem 1rem;
     }
     .ztc-brand-logo {
         font-size: 0.92rem;
@@ -479,10 +405,6 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     .ztc-header-cta {
         padding: 0.42rem 0.85rem !important;
         font-size: 0.72rem !important;
-    }
-    .ztc-burger-btn {
-        width: 38px;
-        height: 38px;
     }
 }
 
