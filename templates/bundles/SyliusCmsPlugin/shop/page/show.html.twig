@@ -27,9 +27,41 @@
                         </div>
                     {% endfor %}
                 {% else %}
-                    <p>{{ page.metaDescription|default(page.title) }}</p>
+                    <div class="ztc-editorial-body">
+                        {{ (page.metaDescription|default(page.title))|raw }}
+                    </div>
                 {% endif %}
             </div>
+
+            <style>
+                .ztc-cms-content h2, .ztc-cms-content h3, .ztc-cms-content h4 {
+                    color: var(--gold-light, #E5C158);
+                    font-family: 'Cinzel', serif;
+                    margin-top: 2rem;
+                    margin-bottom: 1rem;
+                }
+                .ztc-cms-content p {
+                    margin-bottom: 1.5rem;
+                }
+                .ztc-cms-content blockquote {
+                    border-left: 3px solid var(--gold, #D4AF37);
+                    padding-left: 1.25rem;
+                    margin: 1.5rem 0;
+                    color: var(--text-primary, #F4EFE6);
+                    font-style: italic;
+                    background: rgba(212, 175, 55, 0.05);
+                    padding-top: 0.75rem;
+                    padding-bottom: 0.75rem;
+                    border-radius: 0 8px 8px 0;
+                }
+                .ztc-cms-content ul, .ztc-cms-content ol {
+                    margin-bottom: 1.5rem;
+                    padding-left: 1.5rem;
+                }
+                .ztc-cms-content li {
+                    margin-bottom: 0.5rem;
+                }
+            </style>
 
         </article>
     </div>

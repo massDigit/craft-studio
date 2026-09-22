@@ -47,9 +47,13 @@
 - [x] Harmonisation du vocabulaire d'administration : remplacement universel du terme technique « Taxon » par **« Catalogue »** (menu, fiches produits, arborescence, filtres et messages flash/validation) en FR et EN.
 
 ### Phase 7 : Enrichissement du Catalogue & Pages Éditoriales
-- [ ] Associer des visuels d'art dédiés aux taxons restants (*Luminaires*, *Décoration*).
-- [ ] Structuration de sous-taxons de démonstration avec produits associés (ex: *Flûtes Shakuhachi*, *Flûtes Traversières*).
-- [ ] Rédaction et traduction des pages éditoriales CMS (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
+- [x] Audit complet par insertion de données (pages éditoriales, sous-catalogues et produits) avec validation Playwright.
+- [x] Correction du rendu HTML brut sur les pages CMS (`|raw` et typographie sur-mesure dans `templates/bundles/SyliusCmsPlugin/shop/page/show.html.twig`).
+- [x] Généralisation du formulaire de page CMS dans Sylius Admin (libellés universels éditoriaux/juridiques, correction grammaticale "Nouvelle page éditoriale" via hooks Twig).
+- [x] Robustesse visuelle du Hero Taxon : héritage de l'image du catalogue parent pour les sous-catalogues et dégradé radial de secours Obsidian & Gold (suppression des dépendances Unsplash externes défaillantes).
+- [x] Maintien de l'état actif dans la Navbar (desktop & mobile) lors de la navigation dans les sous-catalogues (`ztc_is_taxon_active`).
+- [x] Nettoyage du catalogue doublon obsolète (`lumiere` / ID 13) et assainissement du jeu de données de test en base.
+- [ ] Rédaction finale des contenus éditoriaux officiels (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
 
 ### Phase 8 : Recette Finale, Performance & SEO
 - [ ] Optimisation des filtres LiipImagineBundle pour le rendu WebP mobile

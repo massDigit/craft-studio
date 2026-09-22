@@ -3,13 +3,13 @@
 > **Ce fichier donne une image précise de l'état du projet ZEN TOO Craft.**
 
 **Dernière mise à jour** : 2026-09-22
-**Branche Courante** : `main`
+**Branche Courante** : `feat/phase-7-catalog-enrichment-editorial`
 
 ## 🚀 Phase Actuelle
-Phase 7 : Enrichissement du Catalogue & Pages Éditoriales (EN COURS).
+Phase 7 : Enrichissement du Catalogue & Pages Éditoriales (EN COURS / AUDITÉ).
 
 ## 🎯 Focus Courant
-Enrichissement des visuels de taxons restants et structuration des sous-taxons avec produits rattachés.
+Audit de l'insertion des données de catalogue et de pages éditoriales, résolution des 5 anomalies détectées, et nettoyage du jeu de données de test.
 
 ## ✅ Réalisé
 - [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
