@@ -58,14 +58,21 @@
                         {% endif %}
                         
                         {% if product.audios|length > 0 %}
-                            <div class="ztc-audio-overlay">
-                                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold-accent); color: #050605; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                    <svg width="12" height="14" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>
+                            {% set primary_audio = product.primaryAudio %}
+                            <div class="ztc-audio-overlay" 
+                                 data-audio-url="{{ asset('media/audio/' ~ primary_audio.path) }}"
+                                 data-label="{{ primary_audio.label }}"
+                                 title="Écouter : {{ primary_audio.label }}">
+                                <div class="ztc-play-btn">
+                                    {# Play icon #}
+                                    <svg class="icon-play" width="12" height="14" viewBox="0 0 14 16" fill="currentColor"><path d="M0 0L14 8L0 16V0Z"/></svg>
+                                    {# Pause icon #}
+                                    <svg class="icon-pause" width="12" height="14" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><rect x="4" y="2" width="4" height="20"/><rect x="16" y="2" width="4" height="20"/></svg>
                                 </div>
                                 <div style="flex-grow: 1;">
-                                    <div style="font-size: 10px; color: var(--gold-accent); text-transform: uppercase; letter-spacing: 0.1em; font-weight: bold; margin-bottom: 4px;">Extrait Sonore</div>
+                                    <div style="font-size: 10px; color: var(--gold-accent); text-transform: uppercase; letter-spacing: 0.1em; font-weight: bold; margin-bottom: 4px;">{{ primary_audio.label }}</div>
                                     <div style="height: 4px; width: 100%; background: rgba(255,255,255,0.1); border-radius: 9999px; overflow: hidden;">
-                                        <div style="width: 33%; height: 100%; background: var(--gold-accent);"></div>
+                                        <div class="ztc-audio-progress" style="width: 0%; height: 100%; background: var(--gold-accent); transition: width 0.3s linear;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -140,5 +147,110 @@
     .ztc-product-card-minimal:hover .ztc-cta-btn svg {
         transform: translateX(4px);
     }
+
+    .ztc-play-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--gold-accent);
+        color: #050605;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .ztc-audio-overlay:hover .ztc-play-btn {
+        transform: scale(1.1);
+    }
+
+    .ztc-audio-overlay.is-playing .ztc-play-btn {
+        background: #fff;
+    }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let currentAudio = null;
+    let currentOverlay = null;
+
+    document.querySelectorAll('.ztc-audio-overlay').forEach(function (overlay) {
+        overlay.style.cursor = 'pointer';
+
+        overlay.addEventListener('click', function (e) {
+            // Stop navigation to the product page
+            e.preventDefault();
+            e.stopPropagation();
+
+            const url = overlay.dataset.audioUrl;
+            const progressBar = overlay.querySelector('.ztc-audio-progress');
+            const iconPlay = overlay.querySelector('.icon-play');
+            const iconPause = overlay.querySelector('.icon-pause');
+
+            // If this overlay is already playing → pause it
+            if (currentAudio && currentOverlay === overlay && !currentAudio.paused) {
+                currentAudio.pause();
+                iconPlay.style.display = '';
+                iconPause.style.display = 'none';
+                overlay.classList.remove('is-playing');
+                return;
+            }
+
+            // Stop any other playing audio
+            if (currentAudio && !currentAudio.paused) {
+                currentAudio.pause();
+                if (currentOverlay) {
+                    currentOverlay.querySelector('.icon-play').style.display = '';
+                    currentOverlay.querySelector('.icon-pause').style.display = 'none';
+                    currentOverlay.querySelector('.ztc-audio-progress').style.width = '0%';
+                    currentOverlay.classList.remove('is-playing');
+                }
+            }
+
+            // If same overlay but was paused → resume
+            if (currentAudio && currentOverlay === overlay) {
+                currentAudio.play();
+                iconPlay.style.display = 'none';
+                iconPause.style.display = '';
+                overlay.classList.add('is-playing');
+                return;
+            }
+
+            // New audio
+            const audio = new Audio(url);
+            currentAudio = audio;
+            currentOverlay = overlay;
+
+            iconPlay.style.display = 'none';
+            iconPause.style.display = '';
+            overlay.classList.add('is-playing');
+
+            audio.play().catch(function (err) {
+                console.warn('Audio play failed:', err);
+                iconPlay.style.display = '';
+                iconPause.style.display = 'none';
+                overlay.classList.remove('is-playing');
+            });
+
+            // Progress bar
+            audio.addEventListener('timeupdate', function () {
+                if (audio.duration) {
+                    progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
+                }
+            });
+
+            // Reset on end
+            audio.addEventListener('ended', function () {
+                iconPlay.style.display = '';
+                iconPause.style.display = 'none';
+                progressBar.style.width = '0%';
+                overlay.classList.remove('is-playing');
+                currentAudio = null;
+                currentOverlay = null;
+            });
+        });
+    });
+});
+</script>
 {% endblock %}

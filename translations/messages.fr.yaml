@@ -8,3 +8,14 @@ app:
             description: "Description détaillée"
             position: "Position (Ordre d'affichage)"
             translations: "Traductions"
+
+ztc:
+    form:
+        product_audio:
+            label: Intitulé de la piste
+            file: Fichier Audio
+            is_primary: Piste Principale (Mise en avant sur le lecteur public)
+            invalid_mime_type: "Le format audio n'est pas supporté (Formats acceptés : .mp3, .wav, .ogg, .mp4, .webm)"
+    product_audio:
+        label:
+            not_blank: "L'intitulé de la piste est obligatoire."

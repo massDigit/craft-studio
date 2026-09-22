@@ -1,0 +1,230 @@
+{% import '@SyliusAdmin/shared/helper/translations.html.twig' as translations %}
+
+{% set form = hookable_metadata.context.form %}
+{% set prefixes = hookable_metadata.prefixes %}
+{% set product = hookable_metadata.context.resource %}
+
+{% macro audio_item(audio_form) %}
+    <div class="audio-item card mb-3 bg-light shadow-sm border-0">
+        <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="card-title m-0 text-primary"><i class="ti ti-music"></i> Piste Audio</h4>
+                <button type="button" class="btn btn-sm btn-outline-danger btn-remove-audio"><i class="ti ti-trash"></i></button>
+            </div>
+            {{ form_errors(audio_form) }}
+            
+            <div class="px-3 mb-3">
+                {{ form_row(audio_form.label) }}
+            </div>
+            
+            <div class="row align-items-center">
+                <div class="col-md-6 border-end">
+                    <!-- Audio Recorder UI -->
+                    <div class="audio-recorder p-3 text-center">
+                        <button type="button" class="btn btn-danger btn-record rounded-pill w-100 mb-2">
+                            <i class="ti ti-microphone me-2"></i> Enregistrer avec le micro
+                        </button>
+                        <button type="button" class="btn btn-dark btn-stop rounded-pill w-100 mb-2" style="display: none;">
+                            <i class="ti ti-player-stop me-2"></i> Stopper l'enregistrement
+                        </button>
+                        <div class="recording-status text-danger blink fw-bold" style="display: none; font-size: 0.8rem;">🔴 Enregistrement en cours...</div>
+                        
+                        <div class="mt-3 text-muted small fw-bold">OU UPLOADER</div>
+                        
+                        <div class="mt-2 text-start">
+                            {{ form_widget(audio_form.file, {'attr': {'class': 'audio-file-input form-control form-control-sm'}}) }}
+                            {{ form_errors(audio_form.file) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="audio-preview-container text-center px-3">
+                        {% if audio_form.vars.value and audio_form.vars.value.path %}
+                            <!-- Existing audio -->
+                            <audio controls class="w-100 mb-3 audio-player" src="{{ asset('media/audio/' ~ audio_form.vars.value.path) }}"></audio>
+                        {% else %}
+                            <!-- New audio preview -->
+                            <audio controls class="w-100 mb-3 audio-player" style="display: none;"></audio>
+                            <div class="text-muted small empty-preview mb-3 p-3 border border-dashed rounded bg-white">Aucun aperçu sonore disponible</div>
+                        {% endif %}
+                    </div>
+                    <div class="px-3">
+                        {{ form_row(audio_form.isPrimary) }}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Hide remaining fields from rendering automatically -->
+            <div class="d-none">
+                {{ form_rest(audio_form) }}
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+<div class="tab-pane {% if hookable_metadata.configuration.active|default(false) %}show active{% endif %}" id="product-translations" role="tabpanel" tabindex="0">
+    
+    <!-- Section Média (Images + Audios) -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h2 id="productMedia" class="card-title">
+                {{ 'sylius.ui.media'|trans }} & Extraits Sonores
+            </h2>
+        </div>
+        <div class="card-body">
+            <!-- Native Sylius Media Hook (Images) -->
+            {% hook 'media' with { product: product, form: form } %}
+
+            <!-- Custom Audios Studio Collection -->
+            <div class="mt-5 pt-4 border-top" id="custom-audio-collection-wrapper">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h3 class="card-title m-0">Studio d'Enregistrement</h3>
+                        <p class="text-muted small m-0">Enregistrez le son de votre instrument directement au micro, ou importez un fichier HD.</p>
+                    </div>
+                    <button type="button" id="btn-add-audio" class="btn btn-primary">
+                        <i class="ti ti-plus me-2"></i> Ajouter une piste
+                    </button>
+                </div>
+                
+                {{ form_errors(form.audios) }}
+
+                <div id="audio-items-container" data-prototype="{{ _self.audio_item(form.audios.vars.prototype)|e('html_attr') }}" data-index="{{ form.audios|length }}">
+                    {% for audio_form in form.audios %}
+                        {{ _self.audio_item(audio_form) }}
+                    {% endfor %}
+                </div>
+                
+                <!-- Mark collection as rendered to prevent double rendering by form_rest -->
+                {% do form.audios.setRendered() %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Traduction (inchangée) -->
+    <div class="card mb-3">
+        <div class="card-header">
+            <h2 class="card-title">
+                {{ 'sylius.ui.translations'|trans }} (Informations Textuelles)
+            </h2>
+        </div>
+        <div>
+            {{ translations.with_hook(form.translations, prefixes, null, {accordion_id: 'product-translations-accordion', accordion_flush: true}) }}
+        </div>
+    </div>
+</div>
+
+<style>
+    .blink { animation: blinker 1.5s linear infinite; }
+    @keyframes blinker { 50% { opacity: 0; } }
+    .border-dashed { border-style: dashed !important; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const container = document.getElementById('audio-items-container');
+    const btnAdd = document.getElementById('btn-add-audio');
+
+    if (!container || !btnAdd) return;
+
+    // Add new audio form
+    btnAdd.addEventListener('click', function() {
+        const prototype = container.dataset.prototype;
+        const index = parseInt(container.dataset.index);
+        
+        const newItemHTML = prototype.replace(/__name__/g, index);
+        container.dataset.index = index + 1;
+        
+        container.insertAdjacentHTML('beforeend', newItemHTML);
+        initAudioItem(container.lastElementChild);
+    });
+
+    // Remove audio form
+    container.addEventListener('click', function(e) {
+        if (e.target.closest('.btn-remove-audio')) {
+            e.target.closest('.audio-item').remove();
+        }
+    });
+
+    // Initialize existing items
+    container.querySelectorAll('.audio-item').forEach(initAudioItem);
+
+    function initAudioItem(itemElement) {
+        const btnRecord = itemElement.querySelector('.btn-record');
+        const btnStop = itemElement.querySelector('.btn-stop');
+        const status = itemElement.querySelector('.recording-status');
+        const fileInput = itemElement.querySelector('.audio-file-input');
+        const audioPlayer = itemElement.querySelector('.audio-player');
+        const emptyPreview = itemElement.querySelector('.empty-preview');
+
+        let mediaRecorder;
+        let audioChunks = [];
+
+        // Preview local file when selected via input
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const url = URL.createObjectURL(file);
+                audioPlayer.src = url;
+                audioPlayer.style.display = 'block';
+                if(emptyPreview) emptyPreview.style.display = 'none';
+            }
+        });
+
+        // Record logic
+        btnRecord.addEventListener('click', async function() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream);
+                audioChunks = [];
+
+                mediaRecorder.addEventListener('dataavailable', event => {
+                    audioChunks.push(event.data);
+                });
+
+                mediaRecorder.addEventListener('stop', () => {
+                    // Construct a file when recording stops
+                    const mimeType = mediaRecorder.mimeType || 'audio/webm';
+                    let extension = 'webm';
+                    if (mimeType.includes('mp4')) extension = 'mp4';
+                    if (mimeType.includes('ogg')) extension = 'ogg';
+
+                    const audioBlob = new Blob(audioChunks, { type: mimeType });
+                    const audioUrl = URL.createObjectURL(audioBlob);
+                    
+                    audioPlayer.src = audioUrl;
+                    audioPlayer.style.display = 'block';
+                    if(emptyPreview) emptyPreview.style.display = 'none';
+
+                    // Inject the recorded Blob into the File Input
+                    const file = new File([audioBlob], 'enregistrement_live_' + Date.now() + '.' + extension, { type: mimeType, lastModified: new Date().getTime() });
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+
+                    // Stop mic access
+                    stream.getTracks().forEach(track => track.stop());
+                });
+
+                mediaRecorder.start();
+                btnRecord.style.display = 'none';
+                btnStop.style.display = 'block';
+                status.style.display = 'block';
+
+            } catch (err) {
+                console.error("Accès au microphone refusé ou non supporté :", err);
+                alert("Impossible d'accéder au microphone. Veuillez vérifier vos autorisations.");
+            }
+        });
+
+        btnStop.addEventListener('click', function() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+            btnRecord.style.display = 'block';
+            btnStop.style.display = 'none';
+            status.style.display = 'none';
+        });
+    }
+});
+</script>

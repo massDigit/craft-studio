@@ -30,6 +30,7 @@ services:
           - .:/srv/sylius:rw,cached
           - ./public:/srv/sylius/public:rw,delegated
           - ./public/media:/srv/sylius/public/media:rw
+          - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
     mysql:
         volumes:
             - mysql-data:/var/lib/mysql:rw
@@ -42,6 +43,7 @@ services:
         volumes:
             - ./public:/srv/sylius/public:ro
             - ./public/media:/srv/sylius/public/media:ro
+            - ./nginx-custom.conf:/etc/nginx/conf.d/uploads.conf:ro
         ports:
             - "80:80"
     nodejs:

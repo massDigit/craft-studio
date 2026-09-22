@@ -1,0 +1,89 @@
+<div class="px-4 py-3">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Statistiques des demandes</h1>
+        <div class="dropdown">
+            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Filtrer par période
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item {% if current_period == 'all' %}active{% endif %}" href="?period=all">Toutes les demandes</a></li>
+                <li><a class="dropdown-item {% if current_period == '2_weeks' %}active{% endif %}" href="?period=2_weeks">Bimensuel (15 jours)</a></li>
+                <li><a class="dropdown-item {% if current_period == '1_month' %}active{% endif %}" href="?period=1_month">Mensuel</a></li>
+                <li><a class="dropdown-item {% if current_period == '3_months' %}active{% endif %}" href="?period=3_months">Trimestriel</a></li>
+                <li><a class="dropdown-item {% if current_period == '6_months' %}active{% endif %}" href="?period=6_months">Semestriel</a></li>
+                <li><a class="dropdown-item {% if current_period == '1_year' %}active{% endif %}" href="?period=1_year">Annuel</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row mb-4 gx-4">
+        <div class="col-12 col-md-4">
+            <div class="card bg-primary text-white mb-3 shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title opacity-75 mb-3">Nouvelles Demandes</h5>
+                    <h2 class="mb-0 fw-bold">{{ stats.new }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card bg-success text-white mb-3 shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title opacity-75 mb-3">En Cours de traitement</h5>
+                    <h2 class="mb-0 fw-bold">{{ stats.processing }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-4">
+            <div class="card bg-secondary text-white mb-3 shadow-sm border-0 h-100">
+                <div class="card-body p-4">
+                    <h5 class="card-title opacity-75 mb-3">Réalisées / Archivées</h5>
+                    <h2 class="mb-0 fw-bold">{{ stats.archived }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4 shadow-sm border-0 mt-2">
+        <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+            <h5 class="mb-0 text-gray-800">Dernières Demandes</h5>
+        </div>
+        <div class="card-body p-0 mt-3">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Date</th>
+                            <th>Client</th>
+                            <th>Email</th>
+                            <th>Produit Ciblé</th>
+                            <th>Statut</th>
+                            <th class="pe-4 text-end">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for req in latest_requests %}
+                        <tr>
+                            <td class="ps-4 text-muted">{{ req.createdAt|date('d/m/Y H:i') }}</td>
+                            <td class="fw-medium">{{ req.firstName }} {{ req.lastName }}</td>
+                            <td>{{ req.email }}</td>
+                            <td>{{ req.product ? req.product.name : '-' }}</td>
+                            <td>
+                                {% if req.status == 'new' %}<span class="badge bg-primary">Nouvelle</span>{% endif %}
+                                {% if req.status == 'processing' %}<span class="badge bg-success">En cours</span>{% endif %}
+                                {% if req.status == 'archived' %}<span class="badge bg-secondary">Archivée</span>{% endif %}
+                            </td>
+                            <td class="pe-4 text-end">
+                                <a href="{{ path('app_admin_project_request_update', {'id': req.id}) }}" class="btn btn-sm btn-outline-primary">Voir / Traiter</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center py-5 text-muted">Aucune demande pour le moment.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

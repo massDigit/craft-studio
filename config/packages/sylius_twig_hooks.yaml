@@ -4,16 +4,107 @@ sylius_twig_hooks:
             technical_sheet:
                 template: 'admin/product/form/side_navigation/technical_sheet.html.twig'
                 priority: 150
+            translations:
+                template: 'admin/product/form/side_navigation/translations_and_media.html.twig'
+            channel_pricing:
+                enabled: true
+            taxes:
+                enabled: false
+            shipping:
+                enabled: false
+            inventory:
+                enabled: false
+            attributes:
+                enabled: false
+            associations:
+                enabled: false
+            esd:
+                enabled: false
+            mollie:
+                enabled: false
+            media:
+                enabled: false
+
         'sylius_admin.product.create.content.form.sections':
             technical_sheet:
                 template: 'admin/product/form/sections/technical_sheet.html.twig'
                 priority: 150
+            translations:
+                template: 'admin/product/form/sections/translations_and_media.html.twig'
+            channel_pricing:
+                enabled: true
+            taxes:
+                enabled: false
+            shipping:
+                enabled: false
+            inventory:
+                enabled: false
+            attributes:
+                enabled: false
+            associations:
+                enabled: false
+            esd:
+                enabled: false
+            mollie:
+                enabled: false
+            media:
+                enabled: false
 
         'sylius_admin.product.update.content.form.side_navigation':
             technical_sheet:
                 template: 'admin/product/form/side_navigation/technical_sheet.html.twig'
                 priority: 150
+            translations:
+                template: 'admin/product/form/side_navigation/translations_and_media.html.twig'
+            channel_pricing:
+                enabled: true
+            taxes:
+                enabled: false
+            shipping:
+                enabled: false
+            inventory:
+                enabled: false
+            attributes:
+                enabled: false
+            associations:
+                enabled: false
+            esd:
+                enabled: false
+            mollie:
+                enabled: false
+            media:
+                enabled: false
+
         'sylius_admin.product.update.content.form.sections':
             technical_sheet:
                 template: 'admin/product/form/sections/technical_sheet.html.twig'
                 priority: 150
+            translations:
+                template: 'admin/product/form/sections/translations_and_media.html.twig'
+            channel_pricing:
+                enabled: true
+            taxes:
+                enabled: false
+            shipping:
+                enabled: false
+            inventory:
+                enabled: false
+            attributes:
+                enabled: false
+            associations:
+                enabled: false
+            esd:
+                enabled: false
+            mollie:
+                enabled: false
+            media:
+                enabled: false
+
+        'sylius_admin.dashboard.index.content':
+            statistics:
+                enabled: false
+            latest_statistics:
+                enabled: false
+            project_requests_dashboard:
+                template: 'admin/dashboard/project_requests_wrapper.html.twig'
+                priority: 100

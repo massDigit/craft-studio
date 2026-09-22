@@ -1,0 +1,12 @@
+{% set color = 'gray' %}
+{% if data == 'new' %}{% set color = 'blue' %}{% endif %}
+{% if data == 'processing' %}{% set color = 'green' %}{% endif %}
+{% if data == 'archived' %}{% set color = 'gray' %}{% endif %}
+
+{% set labels = {
+    'new': 'Nouvelle',
+    'processing': 'En cours',
+    'archived': 'Archivée'
+} %}
+
+<span class="ui {{ color }} label">{{ labels[data]|default(data) }}</span>
