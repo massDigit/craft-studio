@@ -189,6 +189,16 @@ class InitZtcCatalogCommand extends Command
             $rootTaxon,
         );
 
+        // 1.1 Sous-taxon Shakuhachi sous Instruments
+        $shakuhachiTaxon = $this->getOrCreateTaxon(
+            'shakuhachi',
+            [
+                'fr' => ['name' => 'Flûtes Shakuhachi', 'slug' => 'flutes-shakuhachi'],
+                'en' => ['name' => 'Shakuhachi Flutes', 'slug' => 'shakuhachi-flutes'],
+            ],
+            $instrumentsTaxon,
+        );
+
         $this->entityManager->flush();
 
         $output->writeln('<comment>Taxons bilingues (fr/en) créés avec succès !</comment>');
@@ -212,6 +222,15 @@ class InitZtcCatalogCommand extends Command
             'flute_shakuhachi.jpeg',
             'demo_shakuhachi.mp3',
         );
+
+        /** @var Product|null $fluteProduct */
+        $fluteProduct = $this->productRepository->findOneBy(['code' => 'flute-shakuhachi-meditative']);
+        if ($fluteProduct && !$fluteProduct->hasTaxon($shakuhachiTaxon)) {
+            $pt = new ProductTaxon();
+            $pt->setProduct($fluteProduct);
+            $pt->setTaxon($shakuhachiTaxon);
+            $fluteProduct->addProductTaxon($pt);
+        }
 
         // Sample Product 2: Luminaire Bambou
         $this->createSampleProduct(

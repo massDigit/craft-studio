@@ -6,6 +6,8 @@
     <div style="max-width: 1400px; margin: 0 auto; width: 100%; padding-bottom: 8rem;">
 
         {% set current_taxon = ztc_current_taxon() %}
+        {% set parent_taxon = (current_taxon and current_taxon.parent and current_taxon.parent.code != 'category') ? current_taxon.parent : current_taxon %}
+        {% set sub_taxons = parent_taxon ? ztc_get_subtaxons_with_products(parent_taxon) : [] %}
         
         <!-- Taxon Hero Cinematic (Option B) -->
         <section class="ztc-taxon-hero">
@@ -37,10 +39,22 @@
 
         <!-- Filters Minimalist Bar -->
         <div class="ztc-filter-bar">
-            <div style="display: flex; gap: 1rem;">
-                <button style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--text-primary); padding: 0.5rem 1.5rem; border-radius: 9999px; font-size: 0.875rem;">Toutes les créations</button>
-                <button style="background: transparent; border: none; color: var(--text-secondary); padding: 0.5rem 1rem; font-size: 0.875rem; cursor: pointer;">Flûtes Shakuhachi</button>
-            </div>
+            {% if sub_taxons|length > 0 %}
+                <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center;">
+                    <a href="{{ path('sylius_shop_product_index', {'slug': parent_taxon.slug, '_locale': sylius.localeCode}) }}" 
+                       class="ztc-filter-pill {{ (not current_taxon or current_taxon.id == parent_taxon.id) ? 'active' : '' }}">
+                        Toutes les créations
+                    </a>
+                    {% for sub_taxon in sub_taxons %}
+                        <a href="{{ path('sylius_shop_product_index', {'slug': sub_taxon.slug, '_locale': sylius.localeCode}) }}" 
+                           class="ztc-filter-pill {{ (current_taxon and current_taxon.id == sub_taxon.id) ? 'active' : '' }}">
+                            {{ sub_taxon.name }}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div></div>
+            {% endif %}
             <div style="font-size: 0.875rem; color: var(--text-secondary);">
                 {{ resources.data|length }} création(s)
             </div>
@@ -167,6 +181,32 @@
 
     .ztc-audio-overlay.is-playing .ztc-play-btn {
         background: #fff;
+    }
+
+    .ztc-filter-pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1.25rem;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        text-decoration: none;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: var(--text-secondary);
+        transition: all 0.3s ease;
+    }
+
+    .ztc-filter-pill:hover {
+        color: var(--text-primary);
+        border-color: rgba(212, 175, 55, 0.4);
+        background: rgba(255, 255, 255, 0.06);
+    }
+
+    .ztc-filter-pill.active {
+        background: rgba(212, 175, 55, 0.15);
+        border-color: var(--gold-accent);
+        color: var(--gold-accent);
+        font-weight: 500;
     }
 </style>
 
