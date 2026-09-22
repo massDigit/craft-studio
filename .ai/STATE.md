@@ -3,7 +3,7 @@
 > **Ce fichier donne une image précise de l'état du projet ZEN TOO Craft.**
 
 **Dernière mise à jour** : 2026-09-22
-**Branche Courante** : `feat/shop-dynamic-taxon-filters`
+**Branche Courante** : `main`
 
 ## 🚀 Phase Actuelle
 Phase 7 : Enrichissement du Catalogue & Pages Éditoriales (EN COURS).
@@ -29,7 +29,7 @@ Enrichissement des visuels de taxons restants et structuration des sous-taxons a
 - [x] Génération de l'image d'art HD `taxon_instruments.jpeg` et association en base de données à la ressource `TaxonImage` de la catégorie Instruments à Vent (ID: 10).
 - [x] Rendu dynamique et contextuel des filtres de sous-taxons (affiche uniquement les pastilles d'enfants ayant des produits rattachés via `ztc_get_subtaxons_with_products`).
 - [x] Refonte ergonomique et responsive de la barre de navigation haute : libellés de taxons épurés via `ztc_short_taxon_name`, bouton « Sur-Mesure » permanent de la DA, icône burger SVG nette, et tiroir mobile dépoli épuré sans bouton redondant.
-- [x] Branche `feat/shop-dynamic-taxon-filters` poussée et Pull Request ouverte : [PR #22](https://github.com/massDigit/craft-studio/pull/22).
+- [x] Branche `feat/shop-dynamic-taxon-filters` intégrée et Pull Request mergée dans `main` : [PR #22](https://github.com/massDigit/craft-studio/pull/22).
 - [x] Internationalisation (FR / EN) complète de la grille Bento de la page d'accueil (univers, titres et encart sur-mesure).
 
 ## 🔄 En Cours / À Reprendre au Prochain Démarrage

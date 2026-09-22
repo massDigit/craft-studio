@@ -43,6 +43,8 @@
 - [x] Optimisation de la barre de navigation haute : libellés concis via `ztc_short_taxon_name`, bouton permanent doré « Sur-Mesure » (`.ztc-btn-gold`) et rupture responsive à 1200px (`xl`).
 - [x] Menu mobile épuré : icône burger SVG vectorielle, tiroir flottant en verre dépoli sans impact sur la géométrie de la barre, liste sobre sans doublon.
 - [x] Internationalisation complète FR/EN de la grille Bento de la page d'accueil (univers et encart sur-mesure).
+- [x] Épuration du menu d'administration : masquage des sections retail inutilisées (*Stock*, *Options*, *Attributs*, *Associations* sous Catalogue, et retrait complet de la section *Marketing*).
+- [x] Harmonisation du vocabulaire d'administration : remplacement universel du terme technique « Taxon » par **« Catalogue »** (menu, fiches produits, arborescence, filtres et messages flash/validation) en FR et EN.
 
 ### Phase 7 : Enrichissement du Catalogue & Pages Éditoriales
 - [ ] Associer des visuels d'art dédiés aux taxons restants (*Luminaires*, *Décoration*).
