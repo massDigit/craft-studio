@@ -32,3 +32,55 @@ ztc:
     product_audio:
         label:
             not_blank: "L'intitulé de la piste est obligatoire."
+
+sylius:
+    menu:
+        admin:
+            main:
+                catalog:
+                    taxons: 'Catalogues'
+    admin:
+        ui:
+            taxon: 'Catalogue'
+            no_main_taxon: 'pas de catalogue principal'
+    ui:
+        taxon: 'Catalogue'
+        taxons: 'Catalogues'
+        new_taxon: 'Nouveau catalogue'
+        create_taxon: 'Créer un catalogue'
+        edit_taxon: 'Modifier le catalogue'
+        editing_taxon: 'Modification d’un catalogue'
+        main_taxon: 'Catalogue principal'
+        manage_taxons: 'Gérer les catalogues'
+        manage_product_positions_in_taxon: 'Gérer les positions des produits dans %taxon_name%'
+        product_taxon: 'Catalogue du produit'
+        product_taxons: 'Catalogues du produit'
+        products_categorized_under_taxon_taxon: 'Produits <small>catégorisés sous le catalogue "%taxon%"</small>'
+        select_taxon: 'Sélectionnez un catalogue'
+        taxonomy: 'Catalogues'
+        taxons_for_which_the_lowest_price_is_not_displayed: 'Catalogues pour lesquels le prix le plus bas n''est pas affiché'
+        there_are_no_taxons_for_this_product: 'Aucun catalogue défini'
+        there_are_no_taxons_to_display: 'Il n''y a pas de catalogues à afficher'
+        there_is_no_main_taxon_for_this_product: 'Il n''y a aucun catalogue principal pour ce produit'
+        for_taxons: 'Pour les catalogues'
+    form:
+        product:
+            main_taxon: 'Catalogue principal'
+            taxons: 'Catalogues'
+        channel:
+            for_taxons: 'Pour les catalogues'
+            menu_taxon: 'Catalogue de menu'
+            taxonomies: 'Catalogues'
+            main_taxon: 'Catalogue principal'
+        taxon:
+            code: 'Code'
+            file: 'Sélectionnez une image'
+            images: 'Images'
+        taxonomy:
+            file: 'Sélectionnez une image'
+        product_filter:
+            taxons: 'Filtre de catalogues'
+            has_taxon:
+                taxons: 'Catalogues'
+            total_of_items_from_taxon:
+                taxon: 'Catalogue'

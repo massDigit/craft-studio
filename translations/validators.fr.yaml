@@ -1,0 +1,22 @@
+sylius:
+    channel:
+        menu_taxon:
+            not_null: 'Veuillez sélectionner un catalogue de menu.'
+    product:
+        main_taxon:
+            invalid: 'Le catalogue principal doit appartenir aux catalogues sélectionnés pour ce produit.'
+    product_taxon:
+        unique: 'Les catalogues de produits ne peuvent pas être dupliqués.'
+        taxon:
+            not_blank: 'Veuillez sélectionner un catalogue.'
+    taxon:
+        code:
+            not_blank: 'Veuillez renseigner le code du catalogue.'
+            regex: 'Le code du catalogue ne peut être composé que de lettres, de chiffres, de tirets et de tirets bas.'
+            unique: 'Le catalogue avec ce code existe déjà.'
+        name:
+            max_length: 'Le nom du catalogue ne doit pas dépasser 255 caractères.'
+            not_blank: 'Veuillez renseigner le nom du catalogue.'
+        slug:
+            not_blank: 'Veuillez renseigner le slug du catalogue.'
+            unique: 'Le slug du catalogue doit être unique.'

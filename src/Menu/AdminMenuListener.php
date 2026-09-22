@@ -49,7 +49,7 @@ final class AdminMenuListener
 
             $taxonsItem = $catalogSubmenu->getChild('taxons');
             if (null !== $taxonsItem) {
-                $taxonsItem->setLabel('Catégories');
+                $taxonsItem->setLabel('Catalogues');
             }
         }
 

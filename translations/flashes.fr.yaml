@@ -1,0 +1,3 @@
+sylius:
+    taxon:
+        menu_taxon_delete: "Vous ne pouvez pas supprimer le catalogue de menu d'un canal."
