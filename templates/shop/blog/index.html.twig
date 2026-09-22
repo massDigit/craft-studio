@@ -28,7 +28,7 @@
                                     <img src="{{ asset('media/image/flute_shakuhachi.jpeg') }}" alt="{{ post.title }}" class="w-100 h-100 object-fit-cover" style="filter: brightness(0.85);">
                                 {% endif %}
                                 <span class="badge position-absolute top-0 end-0 m-3 px-3 py-2" style="background: rgba(10, 12, 11, 0.85); color: #D4AF37; border: 1px solid rgba(212, 175, 55, 0.3); backdrop-filter: blur(4px);">
-                                    Artisanat
+                                    {{ post.topic|default('Artisanat') }}
                                 </span>
                             </div>
 

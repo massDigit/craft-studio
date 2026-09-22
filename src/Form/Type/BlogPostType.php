@@ -33,6 +33,13 @@ class BlogPostType extends AbstractResourceType
             ->add('title', TextType::class, [
                 'label' => 'Titre de l\'article',
             ])
+            ->add('topic', TextType::class, [
+                'label' => 'Thématique / Rubrique (ex: L\'Art du Son, Savoir-Faire, L\'Atelier)',
+                'required' => false,
+                'attr' => [
+                    'placeholder' => 'Ex: L\'Art du Son',
+                ],
+            ])
             ->add('slug', TextType::class, [
                 'label' => 'Slug (URL)',
             ])
