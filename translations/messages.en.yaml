@@ -1,4 +1,11 @@
 app:
+    shop:
+        home:
+            explore_universes: "Explore our Worlds"
+            collection: "Collection"
+            bespoke_title: "The Art of Bespoke Craft."
+            bespoke_description: "Every piece of bamboo holds its own resonance and curvature. Together, we design the instrument or artifact that resonates perfectly with your space or artistic practice."
+            start_project: "Start a bespoke project"
     form:
         product:
             technical_sheet_items: 'Technical Sheet'

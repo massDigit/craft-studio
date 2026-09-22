@@ -1,4 +1,11 @@
 app:
+    shop:
+        home:
+            explore_universes: "Explorez nos Univers"
+            collection: "Collection"
+            bespoke_title: "L'Art du Sur-Mesure."
+            bespoke_description: "Chaque pièce de bambou possède sa propre résonance et courbure. Nous concevons avec vous l'instrument ou l'objet qui correspond parfaitement à votre intérieur ou votre pratique."
+            start_project: "Commencer un projet"
     ui:
         blog_post: "Article du Journal"
         blog_posts: "Journal de l'Artisan"

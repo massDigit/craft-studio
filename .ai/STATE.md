@@ -30,11 +30,11 @@ Optimisation ergonomique et responsive de la barre de navigation et filtres de s
 - [x] Rendu dynamique et contextuel des filtres de sous-taxons (affiche uniquement les pastilles d'enfants ayant des produits rattachés via `ztc_get_subtaxons_with_products`).
 - [x] Refonte ergonomique et responsive de la barre de navigation haute : libellés de taxons épurés via `ztc_short_taxon_name`, bouton « Sur-Mesure » permanent de la DA, icône burger SVG nette, et tiroir mobile dépoli épuré sans bouton redondant.
 - [x] Branche `feat/shop-dynamic-taxon-filters` poussée et Pull Request ouverte : [PR #22](https://github.com/massDigit/craft-studio/pull/22).
+- [x] Internationalisation (FR / EN) complète de la grille Bento de la page d'accueil (univers, titres et encart sur-mesure).
 
 ## 🔄 En Cours / À Reprendre au Prochain Démarrage
 - [ ] Associer des visuels dédiés aux autres taxons principaux (Luminaires Artistiques, Objets Décoratifs) dans la base de données.
 - [ ] Créer des sous-taxons de démonstration (ex: Flûtes Shakuhachi, Flûtes Traversières sous Instruments à Vent) pour alimenter dynamiquement les puces de filtres Apple.
-- [ ] Rendre dynamique ou convertir en bloc CMS l'encart "Savoir-Faire & Philosophie" du bas de la page d'accueil.
 - [ ] Poursuivre la rédaction et la traduction des pages éditoriales CMS (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
 
 ## ⚠️ Points de Vigilance
