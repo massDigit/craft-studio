@@ -10,8 +10,8 @@
 
         <!-- Navigation Desktop (>= 1200px) -->
         <div class="ztc-desktop-nav d-none d-xl-flex align-items-center">
-            <ul class="ztc-nav-list d-flex align-items-center mb-0">
-                <li class="nav-item">
+            <ul class="ztc-nav-list navbar-nav list-unstyled d-flex flex-row align-items-center mb-0" style="list-style: none;">
+                <li class="nav-item" style="list-style: none;">
                     <a class="ztc-nav-link {% if currentRoute == 'sylius_shop_homepage' %}active{% endif %}"
                        href="{{ path('sylius_shop_homepage') }}">
                         Accueil
@@ -19,7 +19,7 @@
                 </li>
 
                 {% for taxonItem in taxonsToDisplay %}
-                    <li class="nav-item">
+                    <li class="nav-item" style="list-style: none;">
                         <a class="ztc-nav-link {% if currentSlug == taxonItem.slug %}active{% endif %}"
                            href="{{ path('sylius_shop_product_index', {'slug': taxonItem.slug}) }}">
                             {{ ztc_short_taxon_name(taxonItem) }}
@@ -27,7 +27,7 @@
                     </li>
                 {% endfor %}
 
-                <li class="nav-item">
+                <li class="nav-item" style="list-style: none;">
                     <a class="ztc-nav-link {% if currentRoute starts with 'app_blog' %}active{% endif %}"
                        href="{{ path('app_blog_index') }}">
                         Journal
@@ -53,8 +53,8 @@
     <!-- Tiroir Mobile Dépoli (< 1200px) -->
     <div class="collapse ztc-mobile-drawer d-xl-none" id="ztcMobileDrawer">
         <div class="ztc-mobile-drawer-inner">
-            <ul class="ztc-mobile-nav-list">
-                <li class="ztc-mobile-nav-item">
+            <ul class="ztc-mobile-nav-list list-unstyled mb-0" style="list-style: none;">
+                <li class="ztc-mobile-nav-item" style="list-style: none;">
                     <a class="ztc-mobile-nav-link {% if currentRoute == 'sylius_shop_homepage' %}active{% endif %}"
                        href="{{ path('sylius_shop_homepage') }}">
                         <span>Accueil</span>
@@ -62,7 +62,7 @@
                 </li>
 
                 {% for taxonItem in taxonsToDisplay %}
-                    <li class="ztc-mobile-nav-item">
+                    <li class="ztc-mobile-nav-item" style="list-style: none;">
                         <a class="ztc-mobile-nav-link {% if currentSlug == taxonItem.slug %}active{% endif %}"
                            href="{{ path('sylius_shop_product_index', {'slug': taxonItem.slug}) }}">
                             <span>{{ taxonItem.name }}</span>
@@ -70,7 +70,7 @@
                     </li>
                 {% endfor %}
 
-                <li class="ztc-mobile-nav-item">
+                <li class="ztc-mobile-nav-item" style="list-style: none;">
                     <a class="ztc-mobile-nav-link {% if currentRoute starts with 'app_blog' %}active{% endif %}"
                        href="{{ path('app_blog_index') }}">
                         <span>Le Journal de l'Artisan</span>

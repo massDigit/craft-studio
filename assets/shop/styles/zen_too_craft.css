@@ -357,7 +357,8 @@ h1, h2, h3, h4, h5, h6, .ui.header {
 }
 
 .ztc-mobile-nav-list {
-    list-style: none;
+    list-style: none !important;
+    list-style-type: none !important;
     margin: 0;
     padding: 0;
     display: flex;
@@ -365,6 +366,8 @@ h1, h2, h3, h4, h5, h6, .ui.header {
 }
 
 .ztc-mobile-nav-item {
+    list-style: none !important;
+    list-style-type: none !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -390,12 +393,6 @@ h1, h2, h3, h4, h5, h6, .ui.header {
 .ztc-mobile-nav-link.active {
     color: var(--gold-accent, #D4AF37) !important;
     padding-left: 0.5rem;
-}
-
-.ztc-mobile-nav-link.active::after {
-    content: '•';
-    color: var(--gold-accent, #D4AF37);
-    font-size: 1.2rem;
 }
 
 .ztc-mobile-drawer-footer {
