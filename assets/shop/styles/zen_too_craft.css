@@ -287,51 +287,50 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     color: #0a0c0b !important;
 }
 
-/* Bouton Burger Minimaliste Style Apple */
+/* Bouton Burger Minimaliste Style Apple avec SVG */
 .ztc-burger-btn {
-    background: transparent;
-    border: none;
-    padding: 0.4rem;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     display: inline-flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
     cursor: pointer;
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    transition: background 0.2s ease;
+    color: #F4EFE6 !important;
+    transition: all 0.25s ease;
+    padding: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .ztc-burger-btn:hover {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(212, 175, 55, 0.15) !important;
+    border-color: rgba(212, 175, 55, 0.45) !important;
+    color: #D4AF37 !important;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
 }
 
-.ztc-burger-btn:focus-visible {
-    outline: 1.5px solid var(--gold-accent);
-    outline-offset: 2px;
-}
-
-.ztc-burger-line {
+.ztc-burger-btn .ztc-burger-icon-bars {
     display: block;
-    width: 22px;
-    height: 1.5px;
-    background-color: var(--text-primary, #F4EFE6);
-    border-radius: 2px;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease;
-    transform-origin: center;
 }
 
-/* Transformation fluide en X au déploiement */
-.ztc-burger-btn[aria-expanded="true"] .ztc-burger-line:first-child {
-    transform: translateY(3.75px) rotate(45deg);
-    background-color: var(--gold-accent, #D4AF37);
+.ztc-burger-btn .ztc-burger-icon-close {
+    display: none;
 }
 
-.ztc-burger-btn[aria-expanded="true"] .ztc-burger-line:last-child {
-    transform: translateY(-3.75px) rotate(-45deg);
-    background-color: var(--gold-accent, #D4AF37);
+.ztc-burger-btn[aria-expanded="true"] {
+    background: rgba(212, 175, 55, 0.18) !important;
+    border-color: #D4AF37 !important;
+    color: #D4AF37 !important;
+}
+
+.ztc-burger-btn[aria-expanded="true"] .ztc-burger-icon-bars {
+    display: none;
+}
+
+.ztc-burger-btn[aria-expanded="true"] .ztc-burger-icon-close {
+    display: block;
 }
 
 /* Tiroir Mobile Épuré Dépoli Flottant (Style Apple) */
@@ -341,19 +340,34 @@ h1, h2, h3, h4, h5, h6, .ui.header {
     left: 0;
     right: 0;
     width: 100%;
-    background: rgba(8, 10, 9, 0.96);
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.85);
+    background: rgba(8, 10, 9, 0.97) !important;
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.25) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.9);
     max-height: calc(100vh - 75px);
     overflow-y: auto;
 }
 
 .ztc-mobile-drawer-inner {
-    max-width: 640px;
+    max-width: 600px;
     margin: 0 auto;
-    padding: 1.5rem 1.5rem 2.5rem;
+    padding: 1.5rem 1.25rem 2.5rem;
+}
+
+.ztc-mobile-drawer-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ztc-mobile-section-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgba(244, 239, 230, 0.5);
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
 }
 
 .ztc-mobile-nav-list {
@@ -368,37 +382,89 @@ h1, h2, h3, h4, h5, h6, .ui.header {
 .ztc-mobile-nav-item {
     list-style: none !important;
     list-style-type: none !important;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    margin-bottom: 0;
 }
 
-.ztc-mobile-nav-item:last-child {
-    border-bottom: none;
-}
-
-.ztc-mobile-nav-link {
+.ztc-mobile-nav-card {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 1.1rem 0.5rem;
-    font-family: var(--font-title, 'Cinzel', serif);
-    font-size: 1.12rem;
-    font-weight: 400;
-    letter-spacing: 0.04em;
-    color: var(--text-secondary, #B8B5AD);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.65rem;
     text-decoration: none;
-    transition: color 0.2s ease, padding-left 0.2s ease;
+    transition: all 0.25s ease;
 }
 
-.ztc-mobile-nav-link:hover,
-.ztc-mobile-nav-link.active {
-    color: var(--gold-accent, #D4AF37) !important;
-    padding-left: 0.5rem;
+.ztc-mobile-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.ztc-mobile-card-title {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #F4EFE6;
+    letter-spacing: 0.02em;
+    transition: color 0.2s ease;
+}
+
+.ztc-mobile-card-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.78rem;
+    color: #8E9290;
+    letter-spacing: 0.01em;
+}
+
+.ztc-mobile-arrow {
+    color: rgba(244, 239, 230, 0.35);
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+}
+
+.ztc-mobile-nav-card:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-color: rgba(212, 175, 55, 0.35);
+}
+
+.ztc-mobile-nav-card:hover .ztc-mobile-card-title {
+    color: #D4AF37;
+}
+
+.ztc-mobile-nav-card:hover .ztc-mobile-arrow {
+    color: #D4AF37;
+    transform: translateX(3px);
+}
+
+.ztc-mobile-nav-card.active {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.45);
+}
+
+.ztc-mobile-nav-card.active .ztc-mobile-card-title {
+    color: #D4AF37;
+    font-weight: 600;
+}
+
+.ztc-mobile-nav-card.active .ztc-mobile-arrow {
+    color: #D4AF37;
 }
 
 .ztc-mobile-drawer-footer {
     margin-top: 1.75rem;
     padding-top: 1.5rem;
     border-top: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.ztc-mobile-footer-text {
+    font-size: 0.75rem;
+    color: rgba(244, 239, 230, 0.45);
+    letter-spacing: 0.04em;
+    font-family: 'Outfit', sans-serif;
 }
 
 @media (max-width: 576px) {
@@ -415,9 +481,8 @@ h1, h2, h3, h4, h5, h6, .ui.header {
         font-size: 0.72rem !important;
     }
     .ztc-burger-btn {
-        width: 36px;
-        height: 36px;
-        padding: 0.35rem;
+        width: 38px;
+        height: 38px;
     }
 }
 
