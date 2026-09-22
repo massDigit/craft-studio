@@ -34,6 +34,7 @@ class TaxonExtension extends AbstractExtension
             new TwigFunction('ztc_current_taxon', $this->getCurrentTaxon(...)),
             new TwigFunction('ztc_get_taxon_by_code', $this->getTaxonByCode(...)),
             new TwigFunction('ztc_get_subtaxons_with_products', $this->getSubtaxonsWithProducts(...)),
+            new TwigFunction('ztc_short_taxon_name', $this->getShortTaxonName(...)),
         ];
     }
 
@@ -91,5 +92,36 @@ class TaxonExtension extends AbstractExtension
         }
 
         return $subtaxonsWithProducts;
+    }
+
+    public function getShortTaxonName(TaxonInterface $taxon): string
+    {
+        $code = (string) $taxon->getCode();
+        $name = (string) $taxon->getName();
+
+        $mapping = [
+            'instruments' => 'Instruments à Vent',
+            'luminaires' => 'Luminaires',
+            'decorations' => 'Décoration',
+            'luce' => 'Lumière',
+        ];
+
+        if (isset($mapping[$code])) {
+            return $mapping[$code];
+        }
+
+        // Split on '&' if present (take first part)
+        if (str_contains($name, '&')) {
+            $parts = explode('&', $name);
+            return trim($parts[0]);
+        }
+
+        // Split on '/' if present
+        if (str_contains($name, '/')) {
+            $parts = explode('/', $name);
+            return trim($parts[0]);
+        }
+
+        return $name;
     }
 }
