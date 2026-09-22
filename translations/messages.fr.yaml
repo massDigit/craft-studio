@@ -1,4 +1,10 @@
 app:
+    ui:
+        blog_post: "Article du Journal"
+        blog_posts: "Journal de l'Artisan"
+        new_blog_post: "Nouvel article du Journal"
+        edit_blog_post: "Modifier l'article"
+        manage_blog_posts: "Gérer les articles du Journal"
     form:
         product:
             technical_sheet_items: 'Fiche technique'
