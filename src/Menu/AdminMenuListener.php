@@ -22,6 +22,11 @@ final class AdminMenuListener
 
         $cmsSubmenu = $menu->getChild('sylius_cms');
         if (null !== $cmsSubmenu) {
+            // Masquer les sections CMS inutilisées pour l'artisanat
+            $cmsSubmenu->removeChild('templates');
+            $cmsSubmenu->removeChild('blocks');
+            $cmsSubmenu->removeChild('media');
+
             $cmsSubmenu
                 ->addChild('blog_posts', [
                     'route' => 'app_admin_blog_post_index',
