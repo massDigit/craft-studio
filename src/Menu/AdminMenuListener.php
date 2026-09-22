@@ -39,6 +39,20 @@ final class AdminMenuListener
                 ->setLabelAttribute('icon', 'tabler:article');
         }
 
+        $catalogSubmenu = $menu->getChild('catalog');
+        if (null !== $catalogSubmenu) {
+            // Masquer les sections catalogue inutilisées pour des créations artisanales / pièces uniques
+            $catalogSubmenu->removeChild('inventory');
+            $catalogSubmenu->removeChild('attributes');
+            $catalogSubmenu->removeChild('options');
+            $catalogSubmenu->removeChild('association_types');
+
+            $taxonsItem = $catalogSubmenu->getChild('taxons');
+            if (null !== $taxonsItem) {
+                $taxonsItem->setLabel('Catégories');
+            }
+        }
+
         // Désactiver (masquer) la section "Ventes" (Sales) car on n'utilise plus le pipeline e-commerce classique
         if (null !== $menu->getChild('sales')) {
             $menu->removeChild('sales');
