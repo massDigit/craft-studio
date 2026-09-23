@@ -3,13 +3,13 @@
 > **Ce fichier donne une image précise de l'état du projet ZEN TOO Craft.**
 
 **Dernière mise à jour** : 2026-09-23
-**Branche Courante** : `feat/production-docker-configuration`
+**Branche Courante** : `main`
 
 ## 🚀 Phase Actuelle
-Phase 9 : Pré-production, Messagerie & Déploiement VPS (Configuration Docker finalisée).
+Phase 9 : Pré-production, Messagerie & Déploiement VPS (Déploiement VPS Validé & Opérationnel ✅).
 
 ## 🎯 Focus Courant
-Configuration Docker de production (`compose.prod.yml`), variables d'environnement (`.env.prod.example`) et préparation du fichier de routage dynamique Traefik (`zentoocraft.yml`).
+Finalisation de la messagerie transactionnelle (activation de Zimbra Starter OVH, création de `contact@zentoo-craft.fr`, configuration Brevo SMTP & fusion SPF).
 
 ## ✅ Réalisé
 - [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
@@ -21,31 +21,31 @@ Configuration Docker de production (`compose.prod.yml`), variables d'environneme
 - [x] Intégration du formulaire WYSIWYG (Quill.js) sur les champs de description de produit et les pages CMS.
 - [x] Implémentation du service IA Ollama (Qwen 2.5 local) avec les boutons `Générer la description` (FR) et `Générer la traduction` (EN) dans Sylius Admin.
 - [x] Nettoyage strict des langues système en base et en cache pour restreindre l'application uniquement au Français (`fr`) et à l'Anglais (`en`).
-- [x] Simplification & harmonisation du menu Admin : masquage des sous-sections superflues (Stock, Options, Attributs, Associations, Marketing) et remplacement universel du terme technique "Taxon" par "Catalogue" sur l'ensemble de l'interface d'administration (menu, listes, formulaires, filtres, messages).
-- [x] Raccordement dynamique du menu principal du haut (Navbar) pour afficher les catégories de premier niveau rattachées au canal (`sylius.channel.menuTaxon.children`).
-- [x] Désactivation du hook natif d'en-tête Sylius (`sylius_shop.base.header#content`) pour éviter le doublon d'en-tête.
-- [x] Adoption de la direction artistique style Apple : ajout des classes `.ztc-apple-card` et `.ztc-apple-pill` dans `assets/shop/styles/zen_too_craft.css` et build Encore.
-- [x] Refonte du template de listing de catégorie `templates/bundles/SyliusShopBundle/product/index.html.twig` (bannière dépolie avec image du taxon, puces de sous-catégories et grille d'exposition).
-- [x] Génération de l'image d'art HD `taxon_instruments.jpeg` et association en base de données à la ressource `TaxonImage` de la catégorie Instruments à Vent (ID: 10).
-- [x] Rendu dynamique et contextuel des filtres de sous-taxons (affiche uniquement les pastilles d'enfants ayant des produits rattachés via `ztc_get_subtaxons_with_products`).
-- [x] Refonte ergonomique et responsive de la barre de navigation haute : libellés de taxons épurés via `ztc_short_taxon_name`, bouton « Sur-Mesure » permanent de la DA, icône burger SVG nette, et tiroir mobile dépoli épuré sans bouton redondant.
-- [x] Branche `feat/shop-dynamic-taxon-filters` intégrée et Pull Request mergée dans `main` : [PR #22](https://github.com/massDigit/craft-studio/pull/22).
-- [x] Internationalisation (FR / EN) complète de la grille Bento de la page d'accueil (univers, titres et encart sur-mesure).
-- [x] Intégration et harmonisation du design de la page Contact (`/fr/contact/`) au thème Obsidienne & Or avec token CSRF, alertes flash et formulaire épuré centré.
-- [x] Formalisation du document d'audit et de préparation à la mise en production dans [`docs/PRODUCTION_READINESS.md`](file:///docs/PRODUCTION_READINESS.md) et mise à jour de [`docs/DEPLOYMENT.md`](file:///docs/DEPLOYMENT.md).
-- [x] Rédaction et validation empirique de `compose.prod.yml` (isolation stricte, persistance `/srv/sylius/public/media` et volume SQL, exclusion dev/MailHog) et de `.env.prod.example`.
+- [x] Simplification & harmonisation du menu Admin : masquage des sous-sections superflues et remplacement du terme "Taxon" par "Catalogue".
+- [x] Raccordement dynamique du menu principal du haut (Navbar) pour afficher les catégories du canal.
+- [x] Refonte ergonomique et responsive style Apple (bannières dépolies, pastilles de sous-catégories, filtres contextuels).
+- [x] Fiche produit avec lecteur audio HTML5 sur-mesure et formulaire de contact Obsidienne & Or.
+- [x] Configuration Docker de production (`compose.prod.yml`) avec réseau interne `ztc_internal`, isolation des ports MySQL/PHP/Ollama, et raccordement Nginx au réseau externe `traefik_app-network`.
+- [x] Configuration du routage dynamique Traefik File Provider (`dynamic_conf/prod/zentoocraft.yml`) dans le dépôt Traefik du VPS.
+- [x] Clé SSH dédiée `id_ed25519_mrz_ovh` configurée et déployée sur le VPS avec alias `mrz-vps` et agent forwarding GitHub.
+- [x] Déploiement initial automatisé sur le VPS OVH (`51.178.50.217`) dans `/home/project/craft-studio`.
+- [x] Téléchargement et intégration du modèle IA Ollama `qwen2.5:1.5b` (986 Mo) dans le conteneur `ztc-ollama`.
+- [x] Synchronisation des mappings Doctrine, génération des clés JWT de production, et transfert physique des médias dans le volume persistant `ztc_media_data`.
+- [x] Délivrance automatique du certificat SSL Let's Encrypt pour `zentoo-craft.fr` via Traefik.
+- [x] Vérification de bout en bout (HTTP/2 200 sur l'accueil, catalogues, fiches produits, contact, admin, et redirections 301/308 HTTP->HTTPS et WWW->Apex).
+- [x] Zéro perturbation sur les conteneurs et services existants du projet Korning.
 
 ## 🔄 En Cours / À Reprendre au Prochain Démarrage
-- [ ] Préparer le fichier de routage dynamique Traefik File Provider (`zentoocraft.yml`) dans le repo Traefik.
 - [ ] Suivre le provisionnement de l'offre Zimbra Starter chez OVH pour créer `contact@zentoo-craft.fr`.
 - [ ] Créer le compte Brevo avec l'adresse professionnelle, authentifier le domaine (DKIM, DMARC, fusion SPF OVH/Brevo).
+- [ ] Renseigner le `MAILER_DSN` réel dans `/home/project/craft-studio/.env.local` sur le VPS.
 - [ ] Poursuivre la rédaction finale des contenus éditoriaux CMS (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
 
 ## ⚠️ Points de Vigilance
-- **Cohabitation Traefik sur VPS** : Utiliser le File Provider (`zentoocraft.yml`) sans modifier `--providers.docker=false` pour ne pas perturber le projet Korning existant.
+- **Permissions du volume `/srv/sylius/var`** : Le cache et les logs doivent toujours appartenir à `www-data:www-data` (UID 82).
 - **Délivrabilité e-mail (SPF)** : Ne jamais ajouter une deuxième entrée SPF dans OVH ; fusionner les directives dans l'enregistrement unique (`include:mx.ovh.com include:spf.brevo.com -all`).
-- **Persistance des données** : Toujours préserver le volume des médias `/srv/sylius/public/media` et le volume SQL lors des montées de version.
-- **Cache Symfony** : Toujours purger le cache Symfony (`docker compose exec php bin/console cache:clear`) après modification de templates ou de hooks Twig.
+- **Persistance des données** : Les volumes nommés `ztc_mysql_data`, `ztc_media_data` et `ztc_var_data` préservent l'état applicatif.
+- **Routage Traefik** : Traefik utilise le File Provider rechargé à chaud sans toucher à `traefik.yml`.
 
 ## 🏁 Prochaine Étape / Milestone
-Création de la boîte mail professionnelle dès activation OVH Zimbra, configuration Brevo et rédaction de `compose.prod.yml`.
+Activation de Zimbra Starter OVH dès réception du quota, paramétrage du compte Brevo et validation de la chaîne d'envoi d'e-mails en conditions réelles.
