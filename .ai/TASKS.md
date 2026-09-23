@@ -60,3 +60,15 @@
 - [ ] Optimisation des filtres LiipImagineBundle pour le rendu WebP mobile
 - [ ] Recette mobile & tablette complète (streaming audio HTML5 et ergonomie tactile)
 - [ ] Audit SEO sémantique (Schema.org/Product, OpenGraph, meta-tags)
+
+### Phase 9 : Pré-production, Messagerie & Déploiement VPS (Réf: `docs/PRODUCTION_READINESS.md`)
+- [x] Réservation nom de domaine `zentoo-craft.fr` (OVHcloud) et pointage DNS `@` + `www` vers VPS (`51.178.50.217`).
+- [x] Conservation des entrées DNS e-mail initiales (MX et SPF OVH).
+- [ ] Provisionnement et activation de Zimbra Starter (OVH).
+- [ ] Création et validation de la boîte professionnelle `contact@zentoo-craft.fr`.
+- [ ] Création du compte Brevo avec `contact@zentoo-craft.fr`.
+- [ ] Authentification du domaine dans Brevo (clés DKIM, DMARC et fusion de l'enregistrement SPF OVH/Brevo).
+- [ ] Rédaction et validation du fichier `compose.prod.yml` (isolation stricte, persistance `/srv/sylius/public/media` et volume SQL, exclusion dev/MailHog).
+- [ ] Configuration du routage Traefik File Provider (`zentoocraft.yml` raccordé au réseau partagé `traefik_app-network`).
+- [ ] Déploiement initial sur VPS, application des migrations et tests de bout en bout (SSL Let's Encrypt, formulaires, emails).
+- [ ] Documentation des procédures de sauvegarde et de rollback en conditions réelles.

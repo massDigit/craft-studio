@@ -8,18 +8,28 @@
 
 ---
 
-## 🐳 Déploiement & Execution Docker Compose
+## 🐳 Exécution & Déploiement Docker
 
+### Développement Local
 ```bash
-# Démarrage des conteneurs
+# Démarrage avec compose.override.yml automatique (Xdebug, MailHog, volumes dev)
 docker compose up -d
 
 # Migrations Doctrine
 docker compose exec php bin/console doctrine:migrations:migrate --no-interaction
 
-# Vidage et réchauffement du cache Symfony
+# Vidage du cache Symfony
 docker compose exec php bin/console cache:clear
-
-# Installation des assets du thème Sylius
-docker compose exec php bin/console sylius:install:assets
 ```
+
+### Production sur le VPS (51.178.50.217)
+> 📋 **Document de référence complet** : voir [`docs/PRODUCTION_READINESS.md`](file:///docs/PRODUCTION_READINESS.md).
+
+- **Reverse proxy** : Traefik v3.2.1 en **File Provider** (`/home/project/traefik/dynamic_conf/prod/zentoocraft.yml`).
+- **Réseau partagé** : `traefik_app-network`.
+- **Commande de démarrage** (exclusion absolue de `compose.override.yml`) :
+```bash
+docker compose -f compose.yml -f compose.prod.yml up -d --build
+```
+- **Persistance requise** : Volumes `mysql_prod_data` et `ztc_media_data` (`/srv/sylius/public/media`).
+

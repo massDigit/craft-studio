@@ -2,14 +2,14 @@
 
 > **Ce fichier donne une image précise de l'état du projet ZEN TOO Craft.**
 
-**Dernière mise à jour** : 2026-09-22
-**Branche Courante** : `feat/phase-7-catalog-enrichment-editorial`
+**Dernière mise à jour** : 2026-09-23
+**Branche Courante** : `docs/pre-production-readiness-plan`
 
 ## 🚀 Phase Actuelle
-Phase 7 : Enrichissement du Catalogue & Pages Éditoriales (EN COURS / AUDITÉ).
+Phase 7 : Enrichissement du Catalogue (Finalisé) & Phase 9 : Pré-production et Déploiement VPS (Cadrage documenté).
 
 ## 🎯 Focus Courant
-Audit de l'insertion des données de catalogue et de pages éditoriales, résolution des 5 anomalies détectées, et nettoyage du jeu de données de test.
+Cadrage de pré-production, intégration du plan de préparation au déploiement VPS ([`docs/PRODUCTION_READINESS.md`](file:///docs/PRODUCTION_READINESS.md)) et suivi des dépendances e-mail (Zimbra Starter OVH ➔ Brevo).
 
 ## ✅ Réalisé
 - [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
@@ -31,16 +31,21 @@ Audit de l'insertion des données de catalogue et de pages éditoriales, résolu
 - [x] Refonte ergonomique et responsive de la barre de navigation haute : libellés de taxons épurés via `ztc_short_taxon_name`, bouton « Sur-Mesure » permanent de la DA, icône burger SVG nette, et tiroir mobile dépoli épuré sans bouton redondant.
 - [x] Branche `feat/shop-dynamic-taxon-filters` intégrée et Pull Request mergée dans `main` : [PR #22](https://github.com/massDigit/craft-studio/pull/22).
 - [x] Internationalisation (FR / EN) complète de la grille Bento de la page d'accueil (univers, titres et encart sur-mesure).
-- [x] Intégration et harmonisation du design de la page Contact (`/fr/contact/`) au thème Obsidienne & Or avec token CSRF et alertes flash.
+- [x] Intégration et harmonisation du design de la page Contact (`/fr/contact/`) au thème Obsidienne & Or avec token CSRF, alertes flash et formulaire épuré centré.
+- [x] Formalisation du document d'audit et de préparation à la mise en production dans [`docs/PRODUCTION_READINESS.md`](file:///docs/PRODUCTION_READINESS.md) et mise à jour de [`docs/DEPLOYMENT.md`](file:///docs/DEPLOYMENT.md).
 
 ## 🔄 En Cours / À Reprendre au Prochain Démarrage
-- [ ] Associer des visuels dédiés aux autres taxons principaux (Luminaires Artistiques, Objets Décoratifs) dans la base de données.
-- [ ] Créer des sous-taxons de démonstration (ex: Flûtes Shakuhachi, Flûtes Traversières sous Instruments à Vent) pour alimenter dynamiquement les puces de filtres Apple.
-- [ ] Poursuivre la rédaction et la traduction des pages éditoriales CMS (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
+- [ ] Suivre le provisionnement de l'offre Zimbra Starter chez OVH pour créer `contact@zentoo-craft.fr`.
+- [ ] Créer le compte Brevo avec l'adresse professionnelle, authentifier le domaine (DKIM, DMARC, fusion SPF OVH/Brevo).
+- [ ] Rédiger le fichier `compose.prod.yml` (exclusion stricte du dev, persistance `/srv/sylius/public/media` et volume DB).
+- [ ] Préparer le fichier de routage dynamique Traefik File Provider (`zentoocraft.yml`).
+- [ ] Poursuivre la rédaction finale des contenus éditoriaux CMS (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
 
 ## ⚠️ Points de Vigilance
-- Toujours purger le cache Symfony (`docker compose exec php bin/console cache:clear`) après toute modification de configuration Twig ou de hooks.
-- Recompiler les assets avec `npm run build` si de nouvelles classes CSS sont ajoutées à `assets/shop/styles/zen_too_craft.css`.
+- **Cohabitation Traefik sur VPS** : Utiliser le File Provider (`zentoocraft.yml`) sans modifier `--providers.docker=false` pour ne pas perturber le projet Korning existant.
+- **Délivrabilité e-mail (SPF)** : Ne jamais ajouter une deuxième entrée SPF dans OVH ; fusionner les directives dans l'enregistrement unique (`include:mx.ovh.com include:spf.brevo.com -all`).
+- **Persistance des données** : Toujours préserver le volume des médias `/srv/sylius/public/media` et le volume SQL lors des montées de version.
+- **Cache Symfony** : Toujours purger le cache Symfony (`docker compose exec php bin/console cache:clear`) après modification de templates ou de hooks Twig.
 
 ## 🏁 Prochaine Étape / Milestone
-Finaliser la structure hiérarchique des sous-catégories et associer les visuels de taxons restants.
+Création de la boîte mail professionnelle dès activation OVH Zimbra, configuration Brevo et rédaction de `compose.prod.yml`.
