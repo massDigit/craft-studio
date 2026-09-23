@@ -1,0 +1,85 @@
+services:
+  php:
+    image: ghcr.io/sylius/sylius-php:8.4-alpine
+    container_name: ztc-php
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      APP_SECRET: ${APP_SECRET}
+      DATABASE_URL: "mysql://${MYSQL_USER:-sylius}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE:-sylius_prod}?serverVersion=8.4&charset=utf8mb4"
+      MAILER_DSN: ${MAILER_DSN}
+      MESSENGER_TRANSPORT_DSN: doctrine://default
+      SYLIUS_MESSENGER_TRANSPORT_MAIN_DSN: doctrine://default
+      SYLIUS_MESSENGER_TRANSPORT_MAIN_FAILED_DSN: doctrine://default?queue_name=main_failed
+      SYLIUS_MESSENGER_TRANSPORT_CATALOG_PROMOTION_REMOVAL_DSN: doctrine://default?queue_name=catalog_promotion_removal
+      SYLIUS_MESSENGER_TRANSPORT_CATALOG_PROMOTION_REMOVAL_FAILED_DSN: doctrine://default?queue_name=catalog_promotion_removal_failed
+      SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_DSN: sync://
+      SYLIUS_MESSENGER_TRANSPORT_PAYMENT_REQUEST_FAILED_DSN: sync://
+      JWT_SECRET_KEY: "%kernel.project_dir%/config/jwt/private.pem"
+      JWT_PUBLIC_KEY: "%kernel.project_dir%/config/jwt/public.pem"
+      JWT_PASSPHRASE: ${JWT_PASSPHRASE}
+      DEFAULT_URI: "https://zentoo-craft.fr"
+      PHP_DATE_TIMEZONE: ${PHP_DATE_TIMEZONE:-Europe/Paris}
+    volumes:
+      - .:/srv/sylius:ro
+      - ztc_media_data:/srv/sylius/public/media:rw
+      - ztc_var_cache:/srv/sylius/var/cache:rw
+      - ztc_var_log:/srv/sylius/var/log:rw
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
+    networks:
+      - ztc_internal
+
+  nginx:
+    image: ghcr.io/sylius/sylius-nginx:latest
+    container_name: ztc-nginx
+    restart: unless-stopped
+    depends_on:
+      php:
+        condition: service_started
+    volumes:
+      - ./public:/srv/sylius/public:ro
+      - ztc_media_data:/srv/sylius/public/media:ro
+      - ./nginx-custom.conf:/etc/nginx/conf.d/uploads.conf:ro
+    networks:
+      - ztc_internal
+      - traefik_app-network
+
+  mysql:
+    container_name: ztc-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-sylius_prod}
+      MYSQL_USER: ${MYSQL_USER:-sylius}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ztc_mysql_data:/var/lib/mysql:rw
+    networks:
+      - ztc_internal
+
+  mailhog:
+    profiles: ["disabled"]
+
+  ollama:
+    container_name: ztc-ollama
+    restart: unless-stopped
+    ports: !reset []
+    networks:
+      - ztc_internal
+
+networks:
+  ztc_internal:
+    driver: bridge
+  traefik_app-network:
+    external: true
+
+volumes:
+  ztc_mysql_data:
+  ztc_media_data:
+  ztc_var_cache:
+  ztc_var_log:
+  ollama_data:
