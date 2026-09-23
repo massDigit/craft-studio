@@ -63,6 +63,33 @@ class BlogPostType extends AbstractResourceType
                 'label' => 'Publier immédiatement cet article sur le site',
                 'required' => false,
             ]);
+
+        $builder->addEventListener(\Symfony\Component\Form\FormEvents::POST_SET_DATA, function (\Symfony\Component\Form\FormEvent $event): void {
+            /** @var BlogPost|null $blogPost */
+            $blogPost = $event->getData();
+            $form = $event->getForm();
+            if (!$blogPost instanceof BlogPost) {
+                return;
+            }
+
+            $helpHtml = null;
+            if ($blogPost->getCoverImage()) {
+                $helpHtml = sprintf(
+                    '<div class="mt-2 p-2 bg-light rounded border text-center" style="max-width: 320px;">' .
+                    '<span class="small text-muted d-block mb-1">Image actuelle enregistrée :</span>' .
+                    '<img src="/media/image/%s" class="img-fluid rounded" style="max-height: 140px; object-fit: cover;" alt="Aperçu">' .
+                    '</div>',
+                    htmlspecialchars($blogPost->getCoverImage(), ENT_QUOTES, 'UTF-8')
+                );
+            }
+
+            $form->add('coverImageFile', FileType::class, [
+                'label' => 'Téléverser l\'image de couverture (Fichier JPG, PNG, WebP)',
+                'required' => false,
+                'help' => $helpHtml,
+                'help_html' => true,
+            ]);
+        });
     }
 
     public function getBlockPrefix(): string
