@@ -68,7 +68,7 @@
 - [ ] Création et validation de la boîte professionnelle `contact@zentoo-craft.fr`.
 - [ ] Création du compte Brevo avec `contact@zentoo-craft.fr`.
 - [ ] Authentification du domaine dans Brevo (clés DKIM, DMARC et fusion de l'enregistrement SPF OVH/Brevo).
-- [ ] Rédaction et validation du fichier `compose.prod.yml` (isolation stricte, persistance `/srv/sylius/public/media` et volume SQL, exclusion dev/MailHog).
+- [x] Rédaction et validation du fichier `compose.prod.yml` (isolation stricte, persistance `/srv/sylius/public/media` et volume SQL, exclusion dev/MailHog) et modèle d'environnement `.env.prod.example`.
 - [ ] Configuration du routage Traefik File Provider (`zentoocraft.yml` raccordé au réseau partagé `traefik_app-network`).
 - [ ] Déploiement initial sur VPS, application des migrations et tests de bout en bout (SSL Let's Encrypt, formulaires, emails).
 - [ ] Documentation des procédures de sauvegarde et de rollback en conditions réelles.

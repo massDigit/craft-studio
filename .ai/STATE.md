@@ -3,13 +3,13 @@
 > **Ce fichier donne une image précise de l'état du projet ZEN TOO Craft.**
 
 **Dernière mise à jour** : 2026-09-23
-**Branche Courante** : `docs/pre-production-readiness-plan`
+**Branche Courante** : `feat/production-docker-configuration`
 
 ## 🚀 Phase Actuelle
-Phase 7 : Enrichissement du Catalogue (Finalisé) & Phase 9 : Pré-production et Déploiement VPS (Cadrage documenté).
+Phase 9 : Pré-production, Messagerie & Déploiement VPS (Configuration Docker finalisée).
 
 ## 🎯 Focus Courant
-Cadrage de pré-production, intégration du plan de préparation au déploiement VPS ([`docs/PRODUCTION_READINESS.md`](file:///docs/PRODUCTION_READINESS.md)) et suivi des dépendances e-mail (Zimbra Starter OVH ➔ Brevo).
+Configuration Docker de production (`compose.prod.yml`), variables d'environnement (`.env.prod.example`) et préparation du fichier de routage dynamique Traefik (`zentoocraft.yml`).
 
 ## ✅ Réalisé
 - [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
@@ -33,12 +33,12 @@ Cadrage de pré-production, intégration du plan de préparation au déploiement
 - [x] Internationalisation (FR / EN) complète de la grille Bento de la page d'accueil (univers, titres et encart sur-mesure).
 - [x] Intégration et harmonisation du design de la page Contact (`/fr/contact/`) au thème Obsidienne & Or avec token CSRF, alertes flash et formulaire épuré centré.
 - [x] Formalisation du document d'audit et de préparation à la mise en production dans [`docs/PRODUCTION_READINESS.md`](file:///docs/PRODUCTION_READINESS.md) et mise à jour de [`docs/DEPLOYMENT.md`](file:///docs/DEPLOYMENT.md).
+- [x] Rédaction et validation empirique de `compose.prod.yml` (isolation stricte, persistance `/srv/sylius/public/media` et volume SQL, exclusion dev/MailHog) et de `.env.prod.example`.
 
 ## 🔄 En Cours / À Reprendre au Prochain Démarrage
+- [ ] Préparer le fichier de routage dynamique Traefik File Provider (`zentoocraft.yml`) dans le repo Traefik.
 - [ ] Suivre le provisionnement de l'offre Zimbra Starter chez OVH pour créer `contact@zentoo-craft.fr`.
 - [ ] Créer le compte Brevo avec l'adresse professionnelle, authentifier le domaine (DKIM, DMARC, fusion SPF OVH/Brevo).
-- [ ] Rédiger le fichier `compose.prod.yml` (exclusion stricte du dev, persistance `/srv/sylius/public/media` et volume DB).
-- [ ] Préparer le fichier de routage dynamique Traefik File Provider (`zentoocraft.yml`).
 - [ ] Poursuivre la rédaction finale des contenus éditoriaux CMS (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
 
 ## ⚠️ Points de Vigilance
