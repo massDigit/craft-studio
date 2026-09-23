@@ -53,6 +53,7 @@
 - [x] Robustesse visuelle du Hero Taxon : héritage de l'image du catalogue parent pour les sous-catalogues et dégradé radial de secours Obsidian & Gold (suppression des dépendances Unsplash externes défaillantes).
 - [x] Maintien de l'état actif dans la Navbar (desktop & mobile) lors de la navigation dans les sous-catalogues (`ztc_is_taxon_active`).
 - [x] Nettoyage du catalogue doublon obsolète (`lumiere` / ID 13) et assainissement du jeu de données de test en base.
+- [x] Harmonisation du design de la page Contact (`/fr/contact/`) au thème Obsidienne & Or (`templates/bundles/SyliusShopBundle/contact/contact_request.html.twig`), inclusion du jeton CSRF et gestion des alertes flash.
 - [ ] Rédaction finale des contenus éditoriaux officiels (*Histoire du Savoir-Faire*, *Charte Éco-Responsable*).
 
 ### Phase 8 : Recette Finale, Performance & SEO

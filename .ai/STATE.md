@@ -31,6 +31,7 @@ Audit de l'insertion des données de catalogue et de pages éditoriales, résolu
 - [x] Refonte ergonomique et responsive de la barre de navigation haute : libellés de taxons épurés via `ztc_short_taxon_name`, bouton « Sur-Mesure » permanent de la DA, icône burger SVG nette, et tiroir mobile dépoli épuré sans bouton redondant.
 - [x] Branche `feat/shop-dynamic-taxon-filters` intégrée et Pull Request mergée dans `main` : [PR #22](https://github.com/massDigit/craft-studio/pull/22).
 - [x] Internationalisation (FR / EN) complète de la grille Bento de la page d'accueil (univers, titres et encart sur-mesure).
+- [x] Intégration et harmonisation du design de la page Contact (`/fr/contact/`) au thème Obsidienne & Or avec token CSRF et alertes flash.
 
 ## 🔄 En Cours / À Reprendre au Prochain Démarrage
 - [ ] Associer des visuels dédiés aux autres taxons principaux (Luminaires Artistiques, Objets Décoratifs) dans la base de données.
