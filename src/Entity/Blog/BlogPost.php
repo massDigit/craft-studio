@@ -76,6 +76,14 @@ class BlogPost implements ResourceInterface
                 mkdir($uploadDir, 0777, true);
             }
 
+            // Supprimer l'ancienne image si elle existe et n'est pas une ressource par défaut
+            if ($this->coverImage && !in_array($this->coverImage, ['flute_shakuhachi.jpeg', 'luminaire_ombre.jpeg', 'taxon_instruments.jpeg'], true)) {
+                $oldFilePath = $uploadDir . '/' . $this->coverImage;
+                if (file_exists($oldFilePath) && is_file($oldFilePath)) {
+                    @unlink($oldFilePath);
+                }
+            }
+
             $extension = $this->coverImageFile->guessExtension() ?? 'jpg';
             $filename = sprintf('%s_%s.%s', $this->slug ?? 'post', md5(uniqid('', true)), $extension);
 
@@ -85,6 +93,18 @@ class BlogPost implements ResourceInterface
         }
 
         $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PostRemove]
+    public function removeCoverImage(): void
+    {
+        if ($this->coverImage && !in_array($this->coverImage, ['flute_shakuhachi.jpeg', 'luminaire_ombre.jpeg', 'taxon_instruments.jpeg'], true)) {
+            $uploadDir = __DIR__ . '/../../../public/media/image';
+            $filePath = $uploadDir . '/' . $this->coverImage;
+            if (file_exists($filePath) && is_file($filePath)) {
+                @unlink($filePath);
+            }
+        }
     }
 
     public function getId(): ?int
@@ -160,6 +180,10 @@ class BlogPost implements ResourceInterface
     public function setCoverImageFile(?File $coverImageFile): void
     {
         $this->coverImageFile = $coverImageFile;
+
+        if ($coverImageFile !== null) {
+            $this->updatedAt = new \DateTime();
+        }
     }
 
     public function getExcerpt(): ?string
