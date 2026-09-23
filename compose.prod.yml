@@ -27,8 +27,7 @@ services:
     volumes:
       - .:/srv/sylius:ro
       - ztc_media_data:/srv/sylius/public/media:rw
-      - ztc_var_cache:/srv/sylius/var/cache:rw
-      - ztc_var_log:/srv/sylius/var/log:rw
+      - ztc_var_data:/srv/sylius/var:rw
       - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini:ro
     networks:
       - ztc_internal
@@ -51,6 +50,11 @@ services:
   mysql:
     container_name: ztc-mysql
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u $${MYSQL_USER:-sylius} -p$${MYSQL_PASSWORD} || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE:-sylius_prod}
@@ -80,6 +84,5 @@ networks:
 volumes:
   ztc_mysql_data:
   ztc_media_data:
-  ztc_var_cache:
-  ztc_var_log:
+  ztc_var_data:
   ollama_data:
