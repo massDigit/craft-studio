@@ -3,13 +3,13 @@
 > **Ce fichier donne une image précise de l'état du projet ZEN TOO Craft.**
 
 **Dernière mise à jour** : 2026-09-22
-**Branche Courante** : `main`
+**Branche Courante** : `feat/phase-7-catalog-enrichment-editorial`
 
 ## 🚀 Phase Actuelle
-Phase 7 : Enrichissement du Catalogue & Pages Éditoriales (EN COURS).
+Phase 7 : Enrichissement du Catalogue & Pages Éditoriales (EN COURS / AUDITÉ).
 
 ## 🎯 Focus Courant
-Enrichissement des visuels de taxons restants et structuration des sous-taxons avec produits rattachés.
+Audit de l'insertion des données de catalogue et de pages éditoriales, résolution des 5 anomalies détectées, et nettoyage du jeu de données de test.
 
 ## ✅ Réalisé
 - [x] Initialisation du socle Sylius 2.2 / Symfony 7.4 et installation du plugin CMS officiel (`sylius/cms-plugin` ^1.1).
@@ -31,6 +31,7 @@ Enrichissement des visuels de taxons restants et structuration des sous-taxons a
 - [x] Refonte ergonomique et responsive de la barre de navigation haute : libellés de taxons épurés via `ztc_short_taxon_name`, bouton « Sur-Mesure » permanent de la DA, icône burger SVG nette, et tiroir mobile dépoli épuré sans bouton redondant.
 - [x] Branche `feat/shop-dynamic-taxon-filters` intégrée et Pull Request mergée dans `main` : [PR #22](https://github.com/massDigit/craft-studio/pull/22).
 - [x] Internationalisation (FR / EN) complète de la grille Bento de la page d'accueil (univers, titres et encart sur-mesure).
+- [x] Intégration et harmonisation du design de la page Contact (`/fr/contact/`) au thème Obsidienne & Or avec token CSRF et alertes flash.
 
 ## 🔄 En Cours / À Reprendre au Prochain Démarrage
 - [ ] Associer des visuels dédiés aux autres taxons principaux (Luminaires Artistiques, Objets Décoratifs) dans la base de données.

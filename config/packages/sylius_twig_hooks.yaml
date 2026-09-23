@@ -108,3 +108,15 @@ sylius_twig_hooks:
             project_requests_dashboard:
                 template: 'admin/dashboard/project_requests_wrapper.html.twig'
                 priority: 100
+
+        'sylius_cms.admin.page.create.content.header.title_block':
+            title:
+                template: '@SyliusAdmin/shared/crud/create/content/header/title_block/title.html.twig'
+                configuration:
+                    header: 'sylius.ui.new_page'
+
+        'sylius_cms.admin.page.update.content.header.title_block':
+            title:
+                template: '@SyliusAdmin/shared/crud/update/content/header/title_block/title.html.twig'
+                configuration:
+                    header: 'sylius.ui.edit_page'

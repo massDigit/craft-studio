@@ -6,6 +6,7 @@
 /var/
 /public/bundles/
 /public/media/cache/
+/public/media/audio/
 /.phpunit.result.cache
 
 # Build outputs

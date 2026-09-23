@@ -20,7 +20,7 @@
 
                 {% for taxonItem in taxonsToDisplay %}
                     <li class="nav-item" style="list-style: none;">
-                        <a class="ztc-nav-link {% if currentSlug == taxonItem.slug %}active{% endif %}"
+                        <a class="ztc-nav-link {% if ztc_is_taxon_active(taxonItem) %}active{% endif %}"
                            href="{{ path('sylius_shop_product_index', {'slug': taxonItem.slug}) }}">
                             {{ ztc_short_taxon_name(taxonItem) }}
                         </a>
@@ -72,7 +72,7 @@
 
                 {% for taxonItem in taxonsToDisplay %}
                     <li class="ztc-mobile-nav-item" style="list-style: none;">
-                        <a class="ztc-mobile-nav-link {% if currentSlug == taxonItem.slug %}active{% endif %}"
+                        <a class="ztc-mobile-nav-link {% if ztc_is_taxon_active(taxonItem) %}active{% endif %}"
                            href="{{ path('sylius_shop_product_index', {'slug': taxonItem.slug}) }}">
                             {{ ztc_short_taxon_name(taxonItem) }}
                         </a>

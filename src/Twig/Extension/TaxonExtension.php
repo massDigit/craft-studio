@@ -35,7 +35,30 @@ class TaxonExtension extends AbstractExtension
             new TwigFunction('ztc_get_taxon_by_code', $this->getTaxonByCode(...)),
             new TwigFunction('ztc_get_subtaxons_with_products', $this->getSubtaxonsWithProducts(...)),
             new TwigFunction('ztc_short_taxon_name', $this->getShortTaxonName(...)),
+            new TwigFunction('ztc_is_taxon_active', $this->isTaxonActive(...)),
         ];
+    }
+
+    public function isTaxonActive(\Sylius\Component\Taxonomy\Model\TaxonInterface $menuTaxon): bool
+    {
+        $currentTaxon = $this->getCurrentTaxon();
+        if (null === $currentTaxon) {
+            return false;
+        }
+
+        if ($currentTaxon->getId() === $menuTaxon->getId()) {
+            return true;
+        }
+
+        $parent = $currentTaxon->getParent();
+        while (null !== $parent) {
+            if ($parent->getId() === $menuTaxon->getId()) {
+                return true;
+            }
+            $parent = $parent->getParent();
+        }
+
+        return false;
     }
 
     public function getTaxonByCode(string $code): ?TaxonInterface
