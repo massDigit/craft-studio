@@ -30,233 +30,224 @@
     </div>
 
     {{ form_end(form, {render_rest: hookable.configuration.render_rest|default(false)}) }}
-</div>
 
-<style>
-    .btn-ai-generate {
-        background: linear-gradient(135deg, #6f42c1, #8A2BE2);
-        color: white;
-        border: none;
-        font-size: 0.85rem;
-        font-weight: 500;
-        padding: 0.4rem 0.75rem;
-        border-radius: 0.25rem;
-        transition: all 0.2s;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 15px;
-        cursor: pointer;
-    }
-    .btn-ai-generate:hover {
-        background: linear-gradient(135deg, #59339d, #6b21b0);
-        color: white;
-        transform: translateY(-1px);
-    }
-    .ai-loading {
-        display: none;
-        font-size: 0.85rem;
-        color: #6f42c1;
-        font-weight: 500;
-        margin-bottom: 15px;
-    }
-    .ai-loading.active {
-        display: inline-block;
-    }
-</style>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const container = document.getElementById('faq-items-container');
-        const addBtn = document.getElementById('add-faq-btn');
-        let index = container.children.length;
-
-        if (addBtn) {
-            addBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                let prototype = container.dataset.prototype;
-                let newForm = prototype.replace(/__name__/g, index);
-                
-                // On crée un élément div temporaire pour transformer la string en noeud DOM
-                let div = document.createElement('div');
-                div.innerHTML = newForm;
-                
-                container.appendChild(div.firstElementChild || div);
-                index++;
-            });
+    <style>
+        .btn-ai-generate {
+            background: linear-gradient(135deg, #6f42c1, #8A2BE2);
+            color: white;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 15px;
+            cursor: pointer;
         }
-    });
-
-    document.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('btn-ai-generate')) {
-            e.preventDefault();
-            const btnElement = e.target;
-            const container = btnElement.closest('[data-form-collection-item]');
-            if (!container) return;
-            
-            // Trouver les inputs question et answer (en assumant qu'ils sont dans le premier onglet)
-            const questionInput = container.querySelector('.faq-input-question');
-            const answerInput = container.querySelector('.faq-input-answer');
-            const loader = container.querySelector('.ai-loading');
-            
-            if(!questionInput || !answerInput) {
-                alert('Champs introuvables.');
-                return;
-            }
-
-            // Récupérer le nom du taxon actuel
-            let taxonName = '';
-            const nameInputs = document.querySelectorAll('input[name*="[translations]"][name*="[name]"]');
-            if (nameInputs.length > 0) {
-                taxonName = nameInputs[0].value;
-            }
-            if(!taxonName) {
-                taxonName = 'Général';
-            }
-            
-            btnElement.style.display = 'none';
-            if (loader) loader.classList.add('active');
-            questionInput.disabled = true;
-            answerInput.disabled = true;
-
-            fetch('/admin/ajax/ai/generate-faq', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ taxonName: taxonName })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    questionInput.value = data.question;
-                    answerInput.value = data.answer;
-                } else {
-                    alert('Erreur IA : ' + data.error);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                alert('Erreur de communication avec l\'IA.');
-            })
-            .finally(() => {
-                if (loader) loader.classList.remove('active');
-                btnElement.style.display = 'inline-flex';
-                questionInput.disabled = false;
-                answerInput.disabled = false;
-            });
+        .btn-ai-generate:hover {
+            background: linear-gradient(135deg, #59339d, #6b21b0);
+            color: white;
+            transform: translateY(-1px);
         }
-    });
-</script>
+        .btn-ai-translate {
+            background: linear-gradient(135deg, #0d6efd, #0dcaf0);
+            color: white;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 0.4rem 0.75rem;
+            border-radius: 0.25rem;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .btn-ai-translate:hover {
+            background: linear-gradient(135deg, #0b5ed7, #0bacce);
+            color: white;
+            transform: translateY(-1px);
+        }
+        .ai-loading {
+            display: none;
+            font-size: 0.85rem;
+            color: #6f42c1;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+        .ai-loading.active {
+            display: inline-block;
+        }
+    </style>
 
-<style>
-    .btn-ai-translate {
-        background: linear-gradient(135deg, #0d6efd, #0dcaf0);
-        color: white;
-        border: none;
-        font-size: 0.85rem;
-        font-weight: 500;
-        padding: 0.4rem 0.75rem;
-        border-radius: 0.25rem;
-        transition: all 0.2s;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-    }
-    .btn-ai-translate:hover {
-        background: linear-gradient(135deg, #0b5ed7, #0bacce);
-        color: white;
-        transform: translateY(-1px);
-    }
-</style>
-
-<script>
-    document.addEventListener('click', function(e) {
-        if (e.target && e.target.classList.contains('btn-ai-translate')) {
-            e.preventDefault();
-            const btnElement = e.target;
-            const container = btnElement.closest('[data-form-collection-item]');
-            if (!container) return;
-            
-            const qInputs = container.querySelectorAll('.faq-input-question');
-            const aInputs = container.querySelectorAll('.faq-input-answer');
-            
-            if (qInputs.length <= 1) {
-                alert("Votre boutique ne semble avoir qu'une seule langue configurée.");
+    <script>
+        (function() {
+            if (window._ztcFaqInitialized) {
                 return;
             }
+            window._ztcFaqInitialized = true;
 
-            // Trouver la langue source (on prend la première remplie, généralement fr_FR)
-            let sourceIndex = -1;
-            for (let i = 0; i < qInputs.length; i++) {
-                if (qInputs[i].value.trim() !== '') {
-                    sourceIndex = i;
-                    break;
+            document.addEventListener('click', function(e) {
+                // 1. Bouton Ajouter une FAQ (supporte les re-renders du Live Component)
+                const addBtn = e.target.closest('#add-faq-btn');
+                if (addBtn) {
+                    e.preventDefault();
+                    const container = document.getElementById('faq-items-container');
+                    if (!container) return;
+                    const index = container.querySelectorAll('[data-form-collection-item]').length;
+                    const prototype = container.dataset.prototype;
+                    if (!prototype) return;
+                    const newForm = prototype.replace(/__name__/g, index);
+                    const div = document.createElement('div');
+                    div.innerHTML = newForm;
+                    container.appendChild(div.firstElementChild || div);
+                    return;
                 }
-            }
 
-            if (sourceIndex === -1) {
-                alert("Veuillez d'abord rédiger (ou générer) la question dans au moins une langue avant de traduire.");
-                return;
-            }
-
-            const sourceQ = qInputs[sourceIndex].value;
-            const sourceA = aInputs[sourceIndex].value;
-            
-            // Extraire la locale de l'input source (ex: sylius_taxon[faqItems][0][translations][fr_FR][question])
-            const sourceMatch = qInputs[sourceIndex].name.match(/\[translations\]\[([^\]]+)\]/);
-            const sourceLocale = sourceMatch ? sourceMatch[1] : null;
-
-            const loader = container.querySelector('.ai-loading');
-            const generateBtn = container.querySelector('.btn-ai-generate');
-            
-            btnElement.style.display = 'none';
-            if (generateBtn) generateBtn.style.display = 'none';
-            if (loader) {
-                loader.innerText = "🌐 L'IA traduit dans toutes les langues...";
-                loader.classList.add('active');
-            }
-
-            let promises = [];
-
-            qInputs.forEach((input, index) => {
-                if (index === sourceIndex) return; // on saute la source
-                
-                const match = input.name.match(/\[translations\]\[([^\]]+)\]/);
-                if (!match) return;
-                const targetLocale = match[1];
-
-                let p = fetch('/admin/ajax/ai/translate-document', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        fields: { q: sourceQ, a: sourceA },
-                        targetLocale: targetLocale
-                    })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success && data.fields) {
-                        qInputs[index].value = data.fields.q;
-                        aInputs[index].value = data.fields.a;
+                // 2. Bouton Générer FAQ par IA
+                const genBtn = e.target.closest('.btn-ai-generate');
+                if (genBtn) {
+                    e.preventDefault();
+                    const container = genBtn.closest('[data-form-collection-item]');
+                    if (!container) return;
+                    
+                    const questionInput = container.querySelector('.faq-input-question');
+                    const answerInput = container.querySelector('.faq-input-answer');
+                    const loader = container.querySelector('.ai-loading');
+                    
+                    if (!questionInput || !answerInput) {
+                        alert('Champs introuvables.');
+                        return;
                     }
-                });
 
-                promises.push(p);
-            });
+                    let taxonName = '';
+                    const nameInputs = document.querySelectorAll('input[name*="[translations]"][name*="[name]"]');
+                    if (nameInputs.length > 0) {
+                        taxonName = nameInputs[0].value;
+                    }
+                    if (!taxonName) {
+                        taxonName = 'Général';
+                    }
+                    
+                    genBtn.style.display = 'none';
+                    if (loader) loader.classList.add('active');
+                    questionInput.disabled = true;
+                    answerInput.disabled = true;
 
-            Promise.all(promises).then(() => {
-                if (loader) loader.classList.remove('active');
-                if (generateBtn) generateBtn.style.display = 'inline-flex';
-                btnElement.style.display = 'inline-flex';
-                btnElement.innerText = "✅ Traductions terminées";
-                setTimeout(() => btnElement.innerText = "🌐 Traduire les autres langues", 3000);
-            }).catch(err => {
-                console.error(err);
-                alert("Une erreur de traduction s'est produite.");
-                if (loader) loader.classList.remove('active');
-                if (generateBtn) generateBtn.style.display = 'inline-flex';
-                btnElement.style.display = 'inline-flex';
+                    fetch('/admin/ajax/ai/generate-faq', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ taxonName: taxonName })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            questionInput.value = data.question;
+                            answerInput.value = data.answer;
+                        } else {
+                            alert('Erreur IA : ' + data.error);
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('Erreur de communication avec l\'IA.');
+                    })
+                    .finally(() => {
+                        if (loader) loader.classList.remove('active');
+                        genBtn.style.display = 'inline-flex';
+                        questionInput.disabled = false;
+                        answerInput.disabled = false;
+                    });
+                    return;
+                }
+
+                // 3. Bouton Traduire la FAQ par IA
+                const transBtn = e.target.closest('.btn-ai-translate');
+                if (transBtn) {
+                    e.preventDefault();
+                    const container = transBtn.closest('[data-form-collection-item]');
+                    if (!container) return;
+                    
+                    const qInputs = container.querySelectorAll('.faq-input-question');
+                    const aInputs = container.querySelectorAll('.faq-input-answer');
+                    
+                    if (qInputs.length <= 1) {
+                        alert("Votre boutique ne semble avoir qu'une seule langue configurée.");
+                        return;
+                    }
+
+                    let sourceIndex = -1;
+                    for (let i = 0; i < qInputs.length; i++) {
+                        if (qInputs[i].value.trim() !== '') {
+                            sourceIndex = i;
+                            break;
+                        }
+                    }
+
+                    if (sourceIndex === -1) {
+                        alert("Veuillez d'abord rédiger (ou générer) la question dans au moins une langue avant de traduire.");
+                        return;
+                    }
+
+                    const sourceQ = qInputs[sourceIndex].value;
+                    const sourceA = aInputs[sourceIndex].value;
+
+                    const loader = container.querySelector('.ai-loading');
+                    const generateBtn = container.querySelector('.btn-ai-generate');
+                    
+                    transBtn.style.display = 'none';
+                    if (generateBtn) generateBtn.style.display = 'none';
+                    if (loader) {
+                        loader.innerText = "🌐 L'IA traduit dans toutes les langues...";
+                        loader.classList.add('active');
+                    }
+
+                    let promises = [];
+
+                    qInputs.forEach((input, index) => {
+                        if (index === sourceIndex) return;
+                        
+                        const match = input.name.match(/\[translations\]\[([^\]]+)\]/);
+                        if (!match) return;
+                        const targetLocale = match[1];
+
+                        let p = fetch('/admin/ajax/ai/translate-document', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                fields: { q: sourceQ, a: sourceA },
+                                targetLocale: targetLocale
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success && data.fields) {
+                                qInputs[index].value = data.fields.q;
+                                aInputs[index].value = data.fields.a;
+                            }
+                        });
+
+                        promises.push(p);
+                    });
+
+                    Promise.all(promises).then(() => {
+                        if (loader) loader.classList.remove('active');
+                        if (generateBtn) generateBtn.style.display = 'inline-flex';
+                        transBtn.style.display = 'inline-flex';
+                        transBtn.innerText = "✅ Traductions terminées";
+                        setTimeout(() => transBtn.innerText = "🌐 Traduire les autres langues", 3000);
+                    }).catch(err => {
+                        console.error(err);
+                        alert("Une erreur de traduction s'est produite.");
+                        if (loader) loader.classList.remove('active');
+                        if (generateBtn) generateBtn.style.display = 'inline-flex';
+                        transBtn.style.display = 'inline-flex';
+                    });
+                }
             });
-        }
-    });
-</script>
+        })();
+    </script>
+</div>
