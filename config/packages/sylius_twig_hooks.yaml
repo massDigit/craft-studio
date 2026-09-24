@@ -120,3 +120,27 @@ sylius_twig_hooks:
                 template: '@SyliusAdmin/shared/crud/update/content/header/title_block/title.html.twig'
                 configuration:
                     header: 'sylius.ui.edit_page'
+
+        'sylius_admin.blog_post.create.content.header.title_block.actions':
+            ai_assistant:
+                template: 'admin/blog_post/header/ai_button.html.twig'
+                priority: 50
+
+        'sylius_admin.blog_post.create.content.form.sections':
+            form:
+                template: 'admin/blog_post/_form.html.twig'
+                priority: 100
+            general:
+                enabled: false
+
+        'sylius_admin.blog_post.update.content.header.title_block.actions':
+            ai_assistant:
+                template: 'admin/blog_post/header/ai_button.html.twig'
+                priority: 50
+
+        'sylius_admin.blog_post.update.content.form.sections':
+            form:
+                template: 'admin/blog_post/_form.html.twig'
+                priority: 100
+            general:
+                enabled: false

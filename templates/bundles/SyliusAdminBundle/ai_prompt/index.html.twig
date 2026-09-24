@@ -1,0 +1,129 @@
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
+
+{% block title %}Prompts IA | {{ parent() }}{% endblock %}
+
+{% block body %}
+    {% include '@SyliusAdmin/shared/crud/common/sidebar.html.twig' %}
+    {% include '@SyliusAdmin/shared/crud/common/navbar.html.twig' %}
+
+    <div class="page-wrapper">
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <ol class="breadcrumb" aria-label="breadcrumbs">
+                            <li class="breadcrumb-item"><a href="{{ path('sylius_admin_dashboard') }}">Tableau de bord</a></li>
+                            <li class="breadcrumb-item">Configuration</li>
+                            <li class="breadcrumb-item active">Prompts IA</li>
+                        </ol>
+                        <h1 class="page-title">
+                            Prompts IA
+                        </h1>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                            <a href="{{ path('app_admin_ai_prompt_create') }}" class="btn" id="btn-create-prompt">
+                                {{ ux_icon('tabler:plus') }}
+                                Créer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-body">
+            <div class="container-xl">
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible shadow-sm mb-3" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
+                <div class="card">
+                    <div class="table-responsive">
+                        <table class="table card-table table-vcenter datatable" id="ai-prompts-table">
+                            <thead>
+                                <tr>
+                                    <th>Libellé</th>
+                                    <th>Type</th>
+                                    <th style="width: 34%;">Contenu du Prompt</th>
+                                    <th class="text-center" style="width: 120px;">Statut</th>
+                                    <th style="width: 140px;">Créé le</th>
+                                    <th style="width: 140px;">Mis à jour le</th>
+                                    <th class="text-end" style="width: 110px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prompt in prompts %}
+                                    <tr id="prompt-row-{{ prompt.id }}">
+                                        <td>
+                                            <div class="fw-semibold text-dark">{{ prompt.label }}</div>
+                                            <small class="text-muted">#{{ prompt.id }}</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge {{ prompt.type.badgeClass }} px-2 py-1">
+                                                {{ prompt.type.label }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <span class="text-muted text-truncate d-inline-block" style="max-width: 360px;" title="{{ prompt.content }}">
+                                                {{ prompt.content|slice(0, 140) }}{% if prompt.content|length > 140 %}...{% endif %}
+                                            </span>
+                                        </td>
+                                        <td class="text-center">
+                                            <form method="POST" action="{{ path('app_admin_ai_prompt_toggle_active', {id: prompt.id}) }}" class="d-inline">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('toggle_active_' ~ prompt.id) }}">
+                                                {% if prompt.isActive %}
+                                                    <button type="submit" class="btn btn-sm btn-outline-success active-status-btn d-inline-flex align-items-center gap-1" title="Actif pour ce type. Cliquez pour désactiver.">
+                                                        {{ ux_icon('tabler:check', {'class': 'icon icon-xs'}) }}
+                                                        Actif
+                                                    </button>
+                                                {% else %}
+                                                    <button type="submit" class="btn btn-sm btn-outline-secondary active-status-btn" title="Inactif. Cliquez pour activer ce prompt pour ce type.">
+                                                        Activer
+                                                    </button>
+                                                {% endif %}
+                                            </form>
+                                        </td>
+                                        <td class="small text-muted" data-field="created-at">
+                                            {{ prompt.createdAt|date('d/m/Y H:i') }}
+                                        </td>
+                                        <td class="small text-muted" data-field="updated-at">
+                                            {{ prompt.updatedAt|date('d/m/Y H:i') }}
+                                        </td>
+                                        <td class="text-end">
+                                            <div class="btn-list justify-content-end">
+                                                <a href="{{ path('app_admin_ai_prompt_update', {id: prompt.id}) }}" class="btn btn-icon btn-edit-prompt" title="Modifier ce prompt">
+                                                    {{ ux_icon('tabler:pencil') }}
+                                                </a>
+                                                <form method="POST" action="{{ path('app_admin_ai_prompt_delete', {id: prompt.id}) }}" class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer le prompt « {{ prompt.label|e('js') }} » ?');">
+                                                    <input type="hidden" name="_token" value="{{ csrf_token('delete_' ~ prompt.id) }}">
+                                                    <button type="submit" class="btn btn-icon btn-delete-prompt text-danger" title="Supprimer ce prompt">
+                                                        {{ ux_icon('tabler:trash') }}
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="7" class="text-center py-4 text-muted">
+                                            Aucun prompt configuré pour le moment. Cliquez sur « Créer » pour en ajouter un.
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer d-flex align-items-center">
+                        <p class="m-0 text-muted">Affichage de <span>{{ prompts|length }}</span> prompt(s)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

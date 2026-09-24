@@ -1,0 +1,104 @@
+{% form_theme form '@SyliusAdmin/shared/form_theme.html.twig' %}
+
+{% set default_prompts = {
+    'brand_context': constant('App\\Service\\Ai\\OllamaAiService::DEFAULT_BRAND_CONTEXT'),
+    'product_description': constant('App\\Service\\Ai\\OllamaAiService::DEFAULT_PRODUCT_PROMPT'),
+    'taxon_description': constant('App\\Service\\Ai\\OllamaAiService::DEFAULT_TAXON_PROMPT'),
+    'faq': constant('App\\Service\\Ai\\OllamaAiService::DEFAULT_FAQ_PROMPT'),
+    'blog': constant('App\\Service\\Ai\\OllamaAiService::DEFAULT_BLOG_PROMPT'),
+    'translation': constant('App\\Service\\Ai\\OllamaAiService::DEFAULT_TRANSLATION_PROMPT')
+} %}
+
+{{ form_start(form, {'attr': {'novalidate': 'novalidate', 'id': 'ai-prompt-form'}}) }}
+
+<div class="row">
+    <!-- Colonne Principale: Informations Générales -->
+    <div class="col-12 col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">Informations Générales</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    {{ form_row(form.label) }}
+                </div>
+                <div class="mb-3">
+                    {{ form_row(form.type) }}
+                </div>
+                <div class="mb-2">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        {{ form_label(form.content, null, {'label_attr': {'class': 'form-label mb-0'}}) }}
+                        <button type="button" class="btn btn-sm btn-link text-decoration-none p-0 text-muted" id="btn-reset-default-prompt" title="Réinitialiser avec le texte par défaut pour ce type">
+                            {{ ux_icon('tabler:rotate-clockwise', {'class': 'icon icon-xs me-1'}) }}
+                            Rétablir le texte d'origine
+                        </button>
+                    </div>
+                    {{ form_widget(form.content, {
+                        'attr': {
+                            'class': 'form-control font-monospace',
+                            'rows': 14,
+                            'style': 'font-size: 0.875rem; line-height: 1.6;'
+                        }
+                    }) }}
+                    {{ form_errors(form.content) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <button type="submit" class="btn btn-primary" id="btn-save-prompt-bottom">
+                {{ ux_icon('tabler:check') }}
+                Enregistrer les modifications
+            </button>
+            <a href="{{ path('app_admin_ai_prompt_index') }}" class="btn btn-outline-secondary">
+                Annuler
+            </a>
+        </div>
+    </div>
+
+    <!-- Colonne Latérale: Statut & Activation -->
+    <div class="col-12 col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h3 class="card-title">Statut & Activation</h3>
+            </div>
+            <div class="card-body">
+                <div class="form-check form-switch mb-3">
+                    {{ form_widget(form.isActive, {'attr': {'class': 'form-check-input', 'role': 'switch'}}) }}
+                    {{ form_label(form.isActive, null, {'label_attr': {'class': 'form-check-label fw-semibold text-dark'}}) }}
+                </div>
+                <div class="alert alert-success-subtle border-0 small text-success-emphasis d-flex align-items-center gap-2 mb-3">
+                    {{ ux_icon('tabler:info-circle', {'class': 'icon flex-shrink-0 fs-5'}) }}
+                    <div>
+                        Activer ce prompt en fait le modèle <strong>actif par défaut</strong> pour ce type de tâche.
+                    </div>
+                </div>
+                <div class="text-muted small">
+                    <span class="text-warning me-1">&bull;</span> <strong>Règle d'exclusivité :</strong> Activer ce prompt désactivera automatiquement tout autre prompt actif du même type.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ form_end(form) }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const defaults = {{ default_prompts|json_encode|raw }};
+        const resetBtn = document.getElementById('btn-reset-default-prompt');
+        const typeSelect = document.getElementById('ai_prompt_type_form_type');
+        const contentTextarea = document.getElementById('ai_prompt_type_form_content');
+
+        if (resetBtn && typeSelect && contentTextarea) {
+            resetBtn.addEventListener('click', function() {
+                const currentType = typeSelect.value;
+                if (defaults && defaults[currentType]) {
+                    if (contentTextarea.value.trim() === '' || confirm('Voulez-vous remplacer le texte actuel par le texte d\'origine par défaut ?')) {
+                        contentTextarea.value = defaults[currentType];
+                    }
+                }
+            });
+        }
+    });
+</script>
