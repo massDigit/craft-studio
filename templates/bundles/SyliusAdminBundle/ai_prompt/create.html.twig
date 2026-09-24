@@ -1,0 +1,46 @@
+{% extends '@SyliusAdmin/shared/layout/base.html.twig' %}
+
+{% block title %}Nouveau Prompt IA | {{ parent() }}{% endblock %}
+
+{% block body %}
+    {% include '@SyliusAdmin/shared/crud/common/sidebar.html.twig' %}
+    {% include '@SyliusAdmin/shared/crud/common/navbar.html.twig' %}
+
+    <div class="page-wrapper">
+        <div class="page-header d-print-none">
+            <div class="container-xl">
+                <div class="row g-2 align-items-center">
+                    <div class="col">
+                        <ol class="breadcrumb" aria-label="breadcrumbs">
+                            <li class="breadcrumb-item"><a href="{{ path('sylius_admin_dashboard') }}">Tableau de bord</a></li>
+                            <li class="breadcrumb-item">Configuration</li>
+                            <li class="breadcrumb-item"><a href="{{ path('app_admin_ai_prompt_index') }}">Prompts IA</a></li>
+                            <li class="breadcrumb-item active">Nouveau prompt</li>
+                        </ol>
+                        <h1 class="page-title">
+                            Créer un prompt IA
+                        </h1>
+                    </div>
+                    <div class="col-auto ms-auto d-print-none">
+                        <div class="btn-list">
+                            <a href="{{ path('app_admin_ai_prompt_index') }}" class="btn btn-outline-secondary">
+                                {{ ux_icon('tabler:arrow-left') }}
+                                Retour à la liste
+                            </a>
+                            <button type="submit" form="ai-prompt-form" class="btn btn-primary" id="btn-save-prompt">
+                                {{ ux_icon('tabler:check') }}
+                                Enregistrer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-body">
+            <div class="container-xl">
+                {% include '@SyliusAdmin/ai_prompt/_form.html.twig' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

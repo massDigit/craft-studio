@@ -62,5 +62,19 @@ final class AdminMenuListener
         if (null !== $menu->getChild('sales')) {
             $menu->removeChild('sales');
         }
+
+        $configSubmenu = $menu->getChild('configuration');
+        if (null !== $configSubmenu) {
+            $configSubmenu
+                ->addChild('ai_prompts', [
+                    'route' => 'app_admin_ai_prompt_index',
+                    'extras' => ['routes' => [
+                        ['route' => 'app_admin_ai_prompt_create'],
+                        ['route' => 'app_admin_ai_prompt_update'],
+                    ]],
+                ])
+                ->setLabel('Prompts Assistant IA')
+                ->setLabelAttribute('icon', 'tabler:sparkles');
+        }
     }
 }

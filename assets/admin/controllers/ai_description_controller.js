@@ -46,32 +46,44 @@ export default class extends Controller {
             const pageHeader = document.querySelector('.page-title, h1, .breadcrumb-item.active, .card-title');
             if (pageHeader && pageHeader.textContent) {
                 const headerText = pageHeader.textContent.replace('Éditer', '').replace('Edit', '').trim();
-                if (headerText !== '' && !headerText.includes('Créations') && !headerText.includes('Produits')) {
+                if (headerText !== '' && !headerText.includes('Créations') && !headerText.includes('Produits') && !headerText.includes('Catalogues') && !headerText.includes('Taxons')) {
                     nameValue = headerText;
                 }
             }
         }
 
         if (!nameValue) {
-            alert('Veuillez d\'abord remplir le champ Nom de la Création.');
+            alert('Veuillez d\'abord remplir le champ Nom.');
             return;
         }
 
-        const originalText = button.innerHTML;
+        const originalHtml = button.innerHTML;
         button.disabled = true;
-        button.innerHTML = 'Génération IA en cours (Qwen 2.5)...';
+        button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> L\'IA façonne votre description...';
 
         try {
-            const response = await fetch('/admin/ajax/ai/generate-description', {
+            // 3. Détecter si une image est présente dans le formulaire
+            let imagePath = null;
+            const imgEl = document.querySelector('img[src*="/media/image/"], .sylius-image img, [data-form-collection="images"] img, img.img-fluid');
+            if (imgEl && imgEl.src && !imgEl.src.includes('avatar') && !imgEl.src.includes('logo')) {
+                imagePath = imgEl.src;
+            }
+
+            const isTaxon = document.querySelector('form[name="sylius_taxon"], [name*="sylius_taxon"]') !== null || window.location.pathname.includes('/taxons');
+            const endpoint = isTaxon ? '/admin/ajax/ai/generate-taxon-description' : '/admin/ajax/ai/generate-description';
+            const payload = isTaxon ? { taxonName: nameValue, imagePath: imagePath } : { name: nameValue, imagePath: imagePath };
+
+            const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: nameValue }),
+                body: JSON.stringify(payload),
             });
 
             const data = await response.json();
-            if (data.success && data.content) {
+            const content = data.description || data.content;
+            if (data.success && content) {
                 // Nettoyage de sécurité JS contre les blocs markdown ```html ... ```
-                let cleanedHtml = data.content.trim();
+                let cleanedHtml = content.trim();
                 cleanedHtml = cleanedHtml.replace(/^```(?:html)?\s*/i, '').replace(/\s*```$/, '').trim();
 
                 // Mise à jour de la valeur sous-jacente du textarea
@@ -82,12 +94,67 @@ export default class extends Controller {
                 if (quillEditor) {
                     quillEditor.innerHTML = cleanedHtml;
                 }
+
+                this.showToast('Description générée et injectée avec succès !', 'success');
+            } else if (data.error) {
+                this.showToast('Erreur IA : ' + data.error, 'danger');
             }
         } catch (error) {
             console.error('Erreur Génération IA:', error);
+            this.showToast('Erreur de communication avec le service IA.', 'danger');
         } finally {
             button.disabled = false;
-            button.innerHTML = originalText;
+            button.innerHTML = originalHtml;
         }
+    }
+
+    showToast(message, type = 'success') {
+        let container = document.getElementById('ztc-toast-container');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'ztc-toast-container';
+            container.style.position = 'fixed';
+            container.style.top = '1.5rem';
+            container.style.right = '1.5rem';
+            container.style.zIndex = '99999';
+            container.style.display = 'flex';
+            container.style.flexDirection = 'column';
+            container.style.gap = '0.5rem';
+            container.style.pointerEvents = 'none';
+            document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible shadow fade show mb-0`;
+        toast.style.pointerEvents = 'auto';
+        toast.style.minWidth = '300px';
+        toast.style.maxWidth = '420px';
+        toast.style.borderRadius = '8px';
+        toast.style.border = type === 'success' ? '1px solid #2fb344' : '1px solid #d63939';
+        toast.style.backgroundColor = type === 'success' ? '#edfbf0' : '#fdeded';
+        toast.style.color = '#1e293b';
+        toast.innerHTML = `
+            <div class="d-flex align-items-center">
+                <span class="fs-3 me-2">${type === 'success' ? '✨' : '⚠️'}</span>
+                <div>
+                    <strong class="d-block text-${type === 'success' ? 'success' : 'danger'}">${type === 'success' ? 'IA ZEN TOO' : 'Erreur IA'}</strong>
+                    <div class="small text-muted">${message}</div>
+                </div>
+                <button type="button" class="btn-close ms-auto" aria-label="Close"></button>
+            </div>
+        `;
+
+        toast.querySelector('.btn-close').addEventListener('click', () => {
+            toast.remove();
+        });
+
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateY(-10px)';
+            toast.style.transition = 'all 0.4s ease-out';
+            setTimeout(() => toast.remove(), 400);
+        }, 4000);
     }
 }

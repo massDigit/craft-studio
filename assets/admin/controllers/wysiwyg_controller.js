@@ -39,6 +39,22 @@ export default class extends Controller {
             this.element.value = quill.root.innerHTML;
         });
 
+        wrapper.__quill = quill;
+        this.element.__quill = quill;
+
+        const syncFromElement = () => {
+            if (this.element.value !== quill.root.innerHTML) {
+                if (quill.clipboard && typeof quill.clipboard.dangerouslyPasteHTML === 'function') {
+                    quill.clipboard.dangerouslyPasteHTML(this.element.value || '');
+                } else {
+                    quill.root.innerHTML = this.element.value || '';
+                }
+            }
+        };
+
+        this.element.addEventListener('input', syncFromElement);
+        this.element.addEventListener('change', syncFromElement);
+
         const form = this.element.closest('form');
         if (form) {
             form.addEventListener('submit', () => {

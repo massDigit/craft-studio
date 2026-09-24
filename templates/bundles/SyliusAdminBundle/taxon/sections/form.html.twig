@@ -131,29 +131,86 @@
                     if (!taxonName) {
                         taxonName = 'Général';
                     }
+
+                    let taxonDescription = '';
+                    const descInputs = document.querySelectorAll('textarea[name*="[translations]"][name*="[description]"], input[name*="[translations]"][name*="[description]"]');
+                    if (descInputs.length > 0) {
+                        taxonDescription = descInputs[0].value || '';
+                    }
                     
                     genBtn.style.display = 'none';
                     if (loader) loader.classList.add('active');
                     questionInput.disabled = true;
                     answerInput.disabled = true;
 
+                    const showToast = function(message, type = 'success') {
+                        let container = document.getElementById('ztc-toast-container');
+                        if (!container) {
+                            container = document.createElement('div');
+                            container.id = 'ztc-toast-container';
+                            container.style.position = 'fixed';
+                            container.style.top = '1.5rem';
+                            container.style.right = '1.5rem';
+                            container.style.zIndex = '99999';
+                            container.style.display = 'flex';
+                            container.style.flexDirection = 'column';
+                            container.style.gap = '0.5rem';
+                            container.style.pointerEvents = 'none';
+                            document.body.appendChild(container);
+                        }
+
+                        const toast = document.createElement('div');
+                        toast.className = `alert alert-${type === 'success' ? 'success' : 'danger'} alert-dismissible shadow fade show mb-0`;
+                        toast.style.pointerEvents = 'auto';
+                        toast.style.minWidth = '300px';
+                        toast.style.maxWidth = '420px';
+                        toast.style.borderRadius = '8px';
+                        toast.style.border = type === 'success' ? '1px solid #2fb344' : '1px solid #d63939';
+                        toast.style.backgroundColor = type === 'success' ? '#edfbf0' : '#fdeded';
+                        toast.style.color = '#1e293b';
+                        toast.innerHTML = `
+                            <div class="d-flex align-items-center">
+                                <span class="fs-3 me-2">${type === 'success' ? '✨' : '⚠️'}</span>
+                                <div>
+                                    <strong class="d-block text-${type === 'success' ? 'success' : 'danger'}">${type === 'success' ? 'IA ZEN TOO' : 'Erreur IA'}</strong>
+                                    <div class="small text-muted">${message}</div>
+                                </div>
+                                <button type="button" class="btn-close ms-auto" aria-label="Close"></button>
+                            </div>
+                        `;
+
+                        toast.querySelector('.btn-close').addEventListener('click', () => {
+                            toast.remove();
+                        });
+
+                        container.appendChild(toast);
+
+                        setTimeout(() => {
+                            toast.style.opacity = '0';
+                            toast.style.transform = 'translateY(-10px)';
+                            toast.style.transition = 'all 0.4s ease-out';
+                            setTimeout(() => toast.remove(), 400);
+                        }, 4000);
+                    };
+
                     fetch('/admin/ajax/ai/generate-faq', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ taxonName: taxonName })
+                        body: JSON.stringify({ taxonName: taxonName, taxonDescription: taxonDescription })
                     })
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
                             questionInput.value = data.question;
                             answerInput.value = data.answer;
+                            showToast('Question & réponse FAQ générées avec succès !', 'success');
                         } else {
-                            alert('Erreur IA : ' + data.error);
+                            showToast('Erreur IA : ' + data.error, 'danger');
                         }
                     })
                     .catch(error => {
                         console.error(error);
-                        alert('Erreur de communication avec l\'IA.');
+                        showToast('Erreur de communication avec le service IA.', 'danger');
                     })
                     .finally(() => {
                         if (loader) loader.classList.remove('active');
@@ -201,7 +258,7 @@
                     transBtn.style.display = 'none';
                     if (generateBtn) generateBtn.style.display = 'none';
                     if (loader) {
-                        loader.innerText = "🌐 L'IA traduit dans toutes les langues...";
+                        loader.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> L\'IA traduit votre FAQ dans les autres langues...';
                         loader.classList.add('active');
                     }
 
@@ -239,6 +296,18 @@
                         transBtn.style.display = 'inline-flex';
                         transBtn.innerText = "✅ Traductions terminées";
                         setTimeout(() => transBtn.innerText = "🌐 Traduire les autres langues", 3000);
+                        
+                        let showToastFn = window._ztcShowToast || function(msg) {
+                            let c = document.getElementById('ztc-toast-container');
+                            if (c) {
+                                const t = document.createElement('div');
+                                t.className = 'alert alert-success alert-dismissible shadow fade show mb-0';
+                                t.innerHTML = '<div class="d-flex align-items-center"><span class="fs-3 me-2">✨</span><div><strong class="d-block text-success">IA ZEN TOO</strong><div class="small text-muted">' + msg + '</div></div></div>';
+                                c.appendChild(t);
+                                setTimeout(() => t.remove(), 4000);
+                            }
+                        };
+                        showToastFn('FAQ bilingue synchronisée avec succès !');
                     }).catch(err => {
                         console.error(err);
                         alert("Une erreur de traduction s'est produite.");
