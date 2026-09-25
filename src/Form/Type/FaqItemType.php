@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Form\Type;
 
+use App\Entity\Taxonomy\FaqItem;
 use Sylius\Bundle\ResourceBundle\Form\Type\AbstractResourceType;
 use Sylius\Bundle\ResourceBundle\Form\Type\ResourceTranslationsType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use App\Entity\Taxonomy\FaqItem;
+use Symfony\Component\Form\FormBuilderInterface;
 
 class FaqItemType extends AbstractResourceType
 {
@@ -23,6 +23,11 @@ class FaqItemType extends AbstractResourceType
             ->add('position', IntegerType::class, [
                 'label' => 'Position',
                 'required' => false,
+                'empty_data' => '0',
+                'attr' => [
+                    'class' => 'faq-input-position form-control',
+                    'min' => 0,
+                ],
             ])
             ->add('translations', ResourceTranslationsType::class, [
                 'entry_type' => FaqItemTranslationType::class,

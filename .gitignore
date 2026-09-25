@@ -8,6 +8,7 @@
 /public/media/cache/
 /public/media/audio/
 /.phpunit.result.cache
+/.phpunit.cache/
 
 # Build outputs
 /public/build/

@@ -1,11 +1,24 @@
 {% block app_faq_item_widget %}
-    <div data-form-collection-item="item" style="position: relative; padding: 1rem; border: 1px solid #e9ecef; margin-bottom: 1rem; background: #fff; border-radius: 6px;">
+    <div data-form-collection-item="item" class="card mb-3 p-3 bg-white border shadow-sm" style="border-radius: 8px;">
         
-        <button type="button" class="btn btn-sm btn-outline-danger" style="position: absolute; top: 1rem; right: 1rem;" onclick="this.closest('[data-form-collection-item]').remove()">
-            Supprimer
-        </button>
+        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom flex-wrap gap-2">
+            <div class="d-flex align-items-center gap-3">
+                <span class="badge bg-secondary text-white px-2 py-1" style="font-size: 0.75rem;">Question FAQ</span>
+                <div class="d-flex align-items-center gap-2">
+                    <label class="form-label mb-0 fw-bold small text-muted" style="white-space: nowrap;">Position :</label>
+                    <div style="width: 80px;">
+                        {{ form_widget(form.position, {'attr': {'class': 'form-control form-control-sm faq-input-position text-center fw-bold', 'min': 0}}) }}
+                    </div>
+                    <span class="text-muted small" style="font-size: 0.75rem;">(Ordre croissant : 0, 1, 2...)</span>
+                </div>
+            </div>
 
-        <div style="margin-bottom: 15px; display: flex; gap: 10px;">
+            <button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest('[data-form-collection-item]').remove()">
+                <i class="ti ti-trash me-1"></i> Supprimer
+            </button>
+        </div>
+
+        <div style="margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
             <button type="button" class="btn-ai-generate">
                 ✨ Générer une FAQ par IA
             </button>
@@ -15,6 +28,7 @@
             <div class="ai-loading">✨ L'IA réfléchit...</div>
         </div>
 
-        {{ form_widget(form) }}
+        {{ form_widget(form.translations) }}
+        {{ form_rest(form) }}
     </div>
 {% endblock %}

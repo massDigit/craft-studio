@@ -100,10 +100,28 @@
                     const index = container.querySelectorAll('[data-form-collection-item]').length;
                     const prototype = container.dataset.prototype;
                     if (!prototype) return;
+
+                    // Calculer la prochaine position maximale
+                    let maxPos = -1;
+                    container.querySelectorAll('.faq-input-position').forEach(input => {
+                        const val = parseInt(input.value, 10);
+                        if (!isNaN(val) && val > maxPos) {
+                            maxPos = val;
+                        }
+                    });
+                    const nextPos = maxPos + 1;
+
                     const newForm = prototype.replace(/__name__/g, index);
                     const div = document.createElement('div');
                     div.innerHTML = newForm;
-                    container.appendChild(div.firstElementChild || div);
+                    const newItem = div.firstElementChild || div;
+                    
+                    const newPosInput = newItem.querySelector('.faq-input-position');
+                    if (newPosInput) {
+                        newPosInput.value = nextPos;
+                    }
+
+                    container.appendChild(newItem);
                     return;
                 }
 
