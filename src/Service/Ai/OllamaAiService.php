@@ -603,7 +603,7 @@ L'axe de notre maison est purement artistique, technique, acoustique, lumineux e
                     'stream' => false,
                     'options' => $options,
                 ],
-                'timeout' => 180,
+                'timeout' => 600,
             ]);
 
             $data = $response->toArray();
